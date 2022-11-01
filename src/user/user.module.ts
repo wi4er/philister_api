@@ -1,14 +1,25 @@
 import { Module } from '@nestjs/common';
-import { UserQueryResolver } from './resolver/user-query/user-query.resolver';
-import { UserResolver } from "./resolver/user/user.resolver";
 import { UserRootResolver } from './resolver/user-root/user-root.resolver';
+import { UserResolver } from "./resolver/user/user.resolver";
+import { UserQueryResolver } from './resolver/user-query/user-query.resolver';
 import { UserMutationResolver } from './resolver/user-mutation/user-mutation.resolver';
 import { UserGroupResolver } from './resolver/user-group/user-group.resolver';
-import { UserPropertyResolver } from './resolver/user-property/user-property.resolver';
-import { UserPropertyQueryResolver } from './resolver/user-property-query/user-property-query.resolver';
-import { UserPropertyMutationResolver } from './resolver/user-property-mutation/user-property-mutation.resolver';
+import { UserGroupMutationResolver } from './resolver/user-group-mutation/user-group-mutation.resolver';
+import { UserGroupQueryResolver } from './resolver/user-group-query/user-group-query.resolver';
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { UserEntity } from "./model/User.entity";
 
 @Module({
-  providers: [UserRootResolver, UserQueryResolver, UserResolver, UserMutationResolver, UserGroupResolver, UserPropertyResolver, UserPropertyQueryResolver, UserPropertyMutationResolver]
+  imports: [ TypeOrmModule.forFeature([ UserEntity ]) ],
+  providers: [
+    UserRootResolver,
+    UserResolver,
+    UserQueryResolver,
+    UserMutationResolver,
+    UserGroupResolver,
+    UserGroupQueryResolver,
+    UserGroupMutationResolver,
+  ]
 })
-export class UserModule {}
+export class UserModule {
+}

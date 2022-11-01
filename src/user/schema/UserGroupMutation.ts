@@ -1,14 +1,14 @@
 import { Field, ObjectType,  } from "@nestjs/graphql";
-import { User } from "./User";
+import { UserGroup } from "./UserGroup";
 
 @ObjectType()
-export class UserMutation {
-  @Field(type => User, {description: "Adding new user"})
-  add: User
+export class UserGroupMutation {
+  @Field(type => UserGroup, {description: "Adding new user group"})
+  add: UserGroup
 
-  @Field(type => User)
-  delete: User
+  @Field(type => UserGroup)
+  delete: UserGroup
 
-  @Field(type => User)
-  update: User
+  @Field(type => UserGroup)
+  update: UserGroup
 }

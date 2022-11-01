@@ -1,11 +1,11 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { User } from "./User";
+import { UserGroup } from "./UserGroup";
 
 @ObjectType()
-export class UserQuery {
-  @Field(type => [User])
-  list: [User]
+export class UserGroupQuery {
+  @Field(type => [UserGroup])
+  list: [UserGroup]
 
-  @Field(type => User)
-  item: User
+  @Field(type => UserGroup)
+  item: UserGroup
 }

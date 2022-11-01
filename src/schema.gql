@@ -17,14 +17,37 @@ type UserQuery {
 type UserMutation {
   """Adding new user"""
   add: User!
+
+  """Deletion existent user"""
   delete: User!
+
+  """Updating existent user"""
   update: User!
+}
+
+type UserGroup {
+  id: Int!
+  name: String!
+}
+
+type UserGroupQuery {
+  list: [UserGroup!]!
+  item: UserGroup!
+}
+
+type UserGroupMutation {
+  """Adding new user group"""
+  add: UserGroup!
+  delete: UserGroup!
+  update: UserGroup!
 }
 
 type Query {
   user: UserQuery!
+  userGroup: UserGroupQuery!
 }
 
 type Mutation {
   user: UserMutation!
+  userGroup: UserGroupMutation!
 }

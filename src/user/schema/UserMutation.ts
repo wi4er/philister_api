@@ -6,9 +6,9 @@ export class UserMutation {
   @Field(type => User, {description: "Adding new user"})
   add: User
 
-  @Field(type => User)
+  @Field(type => User, {description: "Deletion existent user"})
   delete: User
 
-  @Field(type => User)
+  @Field(type => User, {description: "Updating existent user"})
   update: User
 }
