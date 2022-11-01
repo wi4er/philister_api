@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  login: String
+  hash: String
+  group: [User!]!
+}
+
+type UserQuery {
+  list: [User!]!
+  item: User!
+}
+
+type UserMutation {
+  """Adding new user"""
+  add: User!
+  delete: User!
+  update: User!
+}
+
+type Query {
+  user: UserQuery!
+}
+
+type Mutation {
+  user: UserMutation!
+}
