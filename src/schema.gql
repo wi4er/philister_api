@@ -2,14 +2,25 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Property {
+  id: String!
+}
+
+type UserProperty {
+  id: Int!
+  value: String!
+  property: Property!
+}
+
 type User {
   id: Int!
   login: String
   hash: String
   group: [User!]!
+  property: [UserProperty!]!
 }
 
-type UserQuery {
+type UserQuerySchema {
   list: [User!]!
   item: User!
 }
@@ -42,12 +53,30 @@ type UserGroupMutation {
   update: UserGroup!
 }
 
+type PropertyQuerySchema {
+  list: [Property!]!
+  item: Property!
+}
+
+type PropertyMutation {
+  """Adding new property"""
+  add: Property!
+
+  """Deletion existent property"""
+  delete: Property!
+
+  """Updating existent property"""
+  update: Property!
+}
+
 type Query {
-  user: UserQuery!
+  user: UserQuerySchema!
   userGroup: UserGroupQuery!
+  property: PropertyQuerySchema!
 }
 
 type Mutation {
   user: UserMutation!
   userGroup: UserGroupMutation!
+  property: PropertyMutation!
 }

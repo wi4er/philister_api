@@ -1,28 +1,28 @@
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserQuery } from "../../schema/UserQuery";
-import { UserMutation } from "../../schema/UserMutation";
-import { UserGroupQuery } from "../../schema/UserGroupQuery";
-import { UserGroupMutation } from "../../schema/UserGroupMutation";
+import { UserQuerySchema } from "../../schema/user-query.schema";
+import { UserMutationSchema } from "../../schema/user-mutation.schema";
+import { UserGroupQuerySchema } from "../../schema/user-group-query.schema";
+import { UserGroupMutationSchema } from "../../schema/user-group-mutation.schema";
 
 @Resolver()
 export class UserRootResolver {
 
-  @Query(returns => UserQuery, {name: "user"})
+  @Query(returns => UserQuerySchema, {name: "user"})
   async getUser() {
     return {};
   }
 
-  @Mutation(returns => UserMutation, {name: "user"})
+  @Mutation(returns => UserMutationSchema, {name: "user"})
   async setUser() {
     return {}
   }
 
-  @Query(returns => UserGroupQuery, {name: "userGroup"})
+  @Query(returns => UserGroupQuerySchema, {name: "userGroup"})
   async geGroup() {
     return {};
   }
 
-  @Mutation(returns => UserGroupMutation, {name: "userGroup"})
+  @Mutation(returns => UserGroupMutationSchema, {name: "userGroup"})
   async setGroup() {
     return {}
   }

@@ -1,8 +1,8 @@
 import { Query, Resolver } from '@nestjs/graphql';
-import { UserQuery } from "../../schema/UserQuery";
-import { User } from "../../schema/User";
+import { UserQuerySchema } from "../../schema/user-query.schema";
+import { UserSchema } from "../../schema/user.schema";
 
-@Resolver(of => User)
+@Resolver(of => UserSchema)
 export class UserResolver {
 
 }

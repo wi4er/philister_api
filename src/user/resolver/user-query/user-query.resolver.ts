@@ -1,11 +1,11 @@
 import { ResolveField, Resolver } from '@nestjs/graphql';
-import { User } from "../../schema/User";
-import { UserQuery } from "../../schema/UserQuery";
+import { UserSchema } from "../../schema/user.schema";
+import { UserQuerySchema } from "../../schema/user-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "../../model/User.entity";
 import { Repository } from "typeorm";
 
-@Resolver(of => UserQuery)
+@Resolver(of => UserQuerySchema)
 export class UserQueryResolver {
 
   constructor(
@@ -14,12 +14,12 @@ export class UserQueryResolver {
   ) {
   }
 
-  @ResolveField("list", returns => [ User ])
+  @ResolveField("list", returns => [ UserSchema ])
   async list() {
     return this.userRepo.find({});
   }
 
-  @ResolveField("item", returns => [ User ])
+  @ResolveField("item", returns => [ UserSchema ])
   async item() {
     return { id: 22 };
   }

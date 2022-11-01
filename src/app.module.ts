@@ -8,6 +8,8 @@ import { ElementModule } from './element/element.module';
 import { FileModule } from './file/file.module';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "./user/model/User.entity";
+import { PropertyModule } from './property/property.module';
+import { PropertyEntity } from "./property/model/property.entity";
 
 @Module({
   imports: [
@@ -22,12 +24,13 @@ import { UserEntity } from "./user/model/User.entity";
       username: 'postgres',
       password: 'example',
       database: 'postgres',
-      entities: [ UserEntity ],
+      entities: [ UserEntity, PropertyEntity ],
       synchronize: true,
     }),
     UserModule,
     ElementModule,
     FileModule,
+    PropertyModule,
   ],
   controllers: [ AppController ],
   providers: [],

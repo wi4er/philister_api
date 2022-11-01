@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
-@ObjectType()
-export class UserGroup {
+@ObjectType('UserGroup')
+export class UserGroupSchema {
   @Field(type => Int)
   id: number;
 

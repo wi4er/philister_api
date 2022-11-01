@@ -8,6 +8,7 @@ import { UserGroupMutationResolver } from './resolver/user-group-mutation/user-g
 import { UserGroupQueryResolver } from './resolver/user-group-query/user-group-query.resolver';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "./model/User.entity";
+import { UserPropertyResolver } from './resolver/user-property/user-property.resolver';
 
 @Module({
   imports: [ TypeOrmModule.forFeature([ UserEntity ]) ],
@@ -19,6 +20,7 @@ import { UserEntity } from "./model/User.entity";
     UserGroupResolver,
     UserGroupQueryResolver,
     UserGroupMutationResolver,
+    UserPropertyResolver,
   ]
 })
 export class UserModule {

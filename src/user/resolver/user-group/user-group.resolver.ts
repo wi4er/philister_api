@@ -1,5 +1,5 @@
 import { Resolver } from '@nestjs/graphql';
-import { UserGroup } from "../../schema/UserGroup";
+import { UserGroupSchema } from "../../schema/user-group.schema";
 
-@Resolver(of => UserGroup)
+@Resolver(of => UserGroupSchema)
 export class UserGroupResolver {}
