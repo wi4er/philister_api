@@ -1,4 +1,4 @@
-import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserSchema } from "../../schema/user.schema";
 import { AuthMutationSchema } from "../../schema/auth-mutation.schema";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -25,9 +25,13 @@ export class AuthMutationResolver {
       'password',
       { type: () => String }
     ) password: string,
+
+    @Context()
+    context?: Request
   ) {
     const user = await this.userRepo.findOne({where: {login}});
 
+    console.log(context)
     if (
       !user
       || user.hash !== toSha256(password)
