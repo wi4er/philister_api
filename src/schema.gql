@@ -20,7 +20,7 @@ type User {
   property: [UserProperty!]!
 }
 
-type UserQuerySchema {
+type UserQuery {
   list: [User!]!
   item: User!
 }
@@ -53,7 +53,11 @@ type UserGroupMutation {
   update: UserGroup!
 }
 
-type PropertyQuerySchema {
+type AuthMutation {
+  authByPassword(login: String!, password: String!): User
+}
+
+type PropertyQuery {
   list: [Property!]!
   item: Property!
 }
@@ -70,13 +74,14 @@ type PropertyMutation {
 }
 
 type Query {
-  user: UserQuerySchema!
+  user: UserQuery!
   userGroup: UserGroupQuery!
-  property: PropertyQuerySchema!
+  property: PropertyQuery!
 }
 
 type Mutation {
   user: UserMutation!
+  auth: AuthMutation
   userGroup: UserGroupMutation!
   property: PropertyMutation!
 }

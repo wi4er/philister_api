@@ -2,7 +2,7 @@ import { ResolveField, Resolver } from '@nestjs/graphql';
 import { UserSchema } from "../../schema/user.schema";
 import { UserQuerySchema } from "../../schema/user-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserEntity } from "../../model/User.entity";
+import { UserEntity } from "../../model/user/user.entity";
 import { Repository } from "typeorm";
 
 @Resolver(of => UserQuerySchema)

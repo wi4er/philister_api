@@ -1,7 +1,7 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from '@nestjs/graphql';
 import { UserSchema } from "./user.schema";
 
-@ObjectType()
+@ObjectType('UserQuery')
 export class UserQuerySchema {
   @Field(type => [UserSchema])
   list: [UserSchema]

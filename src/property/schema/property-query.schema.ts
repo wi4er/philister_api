@@ -1,7 +1,7 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from '@nestjs/graphql';
 import { PropertySchema } from "./property.schema";
 
-@ObjectType()
+@ObjectType('PropertyQuery')
 export class PropertyQuerySchema {
 
   @Field(type => [PropertySchema])

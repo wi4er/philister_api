@@ -1,12 +1,13 @@
-import { ObjectType } from "@nestjs/graphql";
-import { Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({
   name: "property"
 })
-export class PropertyEntity {
+export class PropertyEntity extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn({
+    type: "varchar"
+  })
   id: string
 
 }

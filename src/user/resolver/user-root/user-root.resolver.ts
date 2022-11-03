@@ -3,6 +3,7 @@ import { UserQuerySchema } from "../../schema/user-query.schema";
 import { UserMutationSchema } from "../../schema/user-mutation.schema";
 import { UserGroupQuerySchema } from "../../schema/user-group-query.schema";
 import { UserGroupMutationSchema } from "../../schema/user-group-mutation.schema";
+import { AuthMutationSchema } from "../../schema/auth-mutation.schema";
 
 @Resolver()
 export class UserRootResolver {
@@ -14,6 +15,11 @@ export class UserRootResolver {
 
   @Mutation(returns => UserMutationSchema, {name: "user"})
   async setUser() {
+    return {}
+  }
+
+  @Mutation(returns => AuthMutationSchema, {name: "auth", nullable: true})
+  async setAuth() {
     return {}
   }
 

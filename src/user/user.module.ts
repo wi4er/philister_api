@@ -7,11 +7,16 @@ import { UserGroupResolver } from './resolver/user-group/user-group.resolver';
 import { UserGroupMutationResolver } from './resolver/user-group-mutation/user-group-mutation.resolver';
 import { UserGroupQueryResolver } from './resolver/user-group-query/user-group-query.resolver';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UserEntity } from "./model/User.entity";
+import { UserEntity } from "./model/user/user.entity";
 import { UserPropertyResolver } from './resolver/user-property/user-property.resolver';
+import { UserPropertyEntity } from "./model/user-property.entity";
+import { PropertyEntity } from "../property/model/property.entity";
+import { AuthMutationResolver } from './resolver/auth-mutation/auth-mutation.resolver';
 
 @Module({
-  imports: [ TypeOrmModule.forFeature([ UserEntity ]) ],
+  imports: [
+    TypeOrmModule.forFeature([ UserEntity, UserPropertyEntity, PropertyEntity ])
+  ],
   providers: [
     UserRootResolver,
     UserResolver,
@@ -21,6 +26,7 @@ import { UserPropertyResolver } from './resolver/user-property/user-property.res
     UserGroupQueryResolver,
     UserGroupMutationResolver,
     UserPropertyResolver,
+    AuthMutationResolver,
   ]
 })
 export class UserModule {
