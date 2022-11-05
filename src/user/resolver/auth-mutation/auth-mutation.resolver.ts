@@ -5,6 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "../../model/user/user.entity";
 import { Repository } from "typeorm";
 import { toSha256 } from "../../../encode/toSha256";
+import { Session } from "@nestjs/common";
 
 @Resolver(of => AuthMutationSchema)
 export class AuthMutationResolver {
@@ -15,7 +16,7 @@ export class AuthMutationResolver {
   ) {
   }
 
-  @ResolveField("authByPassword", returns => UserSchema, {nullable: true} )
+  @ResolveField("authByPassword", returns => UserSchema, { nullable: true })
   async getAuth(
     @Args(
       'login',
@@ -25,17 +26,21 @@ export class AuthMutationResolver {
       'password',
       { type: () => String }
     ) password: string,
-
     @Context()
-    context?: Request
+      context: { req: Request },
   ) {
-    const user = await this.userRepo.findOne({where: {login}});
+    const user = await this.userRepo.findOne({ where: { login } });
 
-    console.log(context)
     if (
       !user
       || user.hash !== toSha256(password)
     ) return null;
+
+    context.req['session'].user = {
+      id: user.id,
+    };
+
+    context.req['session']['user'] = {id: user.id};
 
     return user;
   }

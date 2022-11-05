@@ -9,22 +9,30 @@ import { AppModule } from "../../../app.module";
 import { gql } from "apollo-server-express";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import { Test } from "@nestjs/testing";
+import redisPermission from "../../../permission/redis.permission";
+
+const query = gql`
+  mutation Auth($login: String!, $password: String!) {
+    auth {
+      authByPassword(login: $login, password: $password) {
+        id
+        login
+        hash
+      }
+    }
+  }
+`;
 
 describe('AuthMutationResolver', () => {
   let source;
   let app;
 
   beforeAll(async () => {
-    await NestFactory.create(AppModule, new ExpressAdapter(app));
+    await NestFactory.create(AppModule, new ExpressAdapter());
 
-    const moduleBuilder = await Test.createTestingModule({
-      imports: [ AppModule ],
-    }).compile();
-
-    app = moduleBuilder.createNestApplication(undefined, {
-      logger: false,
-    })
-
+    const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
+    app = moduleBuilder.createNestApplication();
+    app.use(redisPermission());
     app.init()
 
     source = await createConnection({
@@ -44,37 +52,41 @@ describe('AuthMutationResolver', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  it('should be defined', () => {
+  test('Should auth', async () => {
+    await Object.assign(
+      new UserEntity(),
+      {
+        login: 'admin',
+        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
+      }
+    ).save();
 
+    const res = await request(app.getHttpServer())
+      .query(query, {
+        login: 'admin',
+        password: 'qwerty',
+      })
+      .expectNoErrors();
+
+    expect(res.data['auth']['authByPassword']['login']).toBe('admin');
   });
 
-    test("Shouldn't auth without user", async () => {
-        const query = gql`
-            {
-                user {
-                    item {
-                        id
-                    }
-                }
-            }
-        `;
+  test('Shouldn`t auth with wrong password', async () => {
+    await Object.assign(
+      new UserEntity(),
+      {
+        login: 'admin',
+        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
+      }
+    ).save();
 
-      const res = await request(app.getHttpServer())
-        .query(query)
-        .expectNoErrors();
+    const res = await request(app.getHttpServer())
+      .query(query, {
+        login: 'admin',
+        password: 'wrong',
+      })
+      .expectNoErrors();
 
-      // expect(res.data['user'])
-      console.log(res.data['user']);
-    });
-
-  test('Should auth', async () => {
-    // await Object.assign(new UserEntity(), {
-    //   login: 'USER',
-    //   hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
-    // }).save();
-    //
-    // const user = await resolver.getAuth('USER', 'qwerty')
-    //
-    // expect(user.login).toBe('USER');
+    expect(res.data['auth']['authByPassword']).toBe(null);
   });
 });

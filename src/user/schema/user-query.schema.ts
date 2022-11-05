@@ -8,4 +8,7 @@ export class UserQuerySchema {
 
   @Field(type => UserSchema)
   item: UserSchema
+
+  @Field(type => UserSchema, {nullable: true})
+  myself: UserSchema
 }

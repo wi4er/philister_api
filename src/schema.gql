@@ -23,6 +23,7 @@ type User {
 type UserQuery {
   list: [User!]!
   item: User!
+  myself: User
 }
 
 type UserMutation {
