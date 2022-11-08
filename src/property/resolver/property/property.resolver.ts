@@ -1,4 +1,11 @@
-import { Resolver } from '@nestjs/graphql';
+import { ResolveField, Resolver } from '@nestjs/graphql';
+import { PropertySchema } from "../../schema/property.schema";
 
-@Resolver()
-export class PropertyResolver {}
+@Resolver(of => PropertySchema)
+export class PropertyResolver {
+
+  @ResolveField("property", type => PropertySchema)
+  async property() {
+
+  }
+}

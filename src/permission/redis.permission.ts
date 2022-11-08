@@ -11,7 +11,7 @@ const redisClient = redis.createClient({
 redisClient.connect()
   .then(
     conn => {
-      console.log('Redis connection successful!');
+      // console.log('Redis connection successful!');
     },
     err => {
       console.log('Redis error!!!');
@@ -23,9 +23,10 @@ export default function redisPermission() {
   return session({
     store: new RedisStore({ client: redisClient }),
     secret: 'secret$%^134',
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     cookie: {
+
       secure: false, // if true only transmit cookie over https
       httpOnly: false, // if true prevent client side JS from reading the cookie
       maxAge: 1000 * 60 * 60 * 24 // session max age in miliseconds

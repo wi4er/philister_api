@@ -1,9 +1,10 @@
-import { Context, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserSchema } from "../../schema/user.schema";
 import { UserQuerySchema } from "../../schema/user-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserEntity } from "../../model/user/user.entity";
+import { UserEntity } from "../../model/user.entity";
 import { Repository } from "typeorm";
+import { ServerResponse } from "http";
 
 @Resolver(of => UserQuerySchema)
 export class UserQueryResolver {
@@ -21,12 +22,12 @@ export class UserQueryResolver {
 
   @ResolveField("item", returns => [ UserSchema ])
   async item(
+    @Args('id', { type: () => Int })
+      id: number,
     @Context()
       context: { req: Request },
   ) {
-    context.req['session'].user = { user: 1 }
-
-    return { id: 22 };
+    return this.userRepo.findOne({where: {id}});
   }
 
   @ResolveField("myself", returns => [ UserSchema ])
@@ -38,6 +39,6 @@ export class UserQueryResolver {
 
     if (!id) return null;
 
-    return await this.userRepo.findOne({ where: { id } });
+    return this.userRepo.findOne({ where: { id } });
   }
 }

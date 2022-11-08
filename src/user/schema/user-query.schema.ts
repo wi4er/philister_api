@@ -6,7 +6,7 @@ export class UserQuerySchema {
   @Field(type => [UserSchema])
   list: [UserSchema]
 
-  @Field(type => UserSchema)
+  @Field(type => UserSchema, {nullable: true})
   item: UserSchema
 
   @Field(type => UserSchema, {nullable: true})

@@ -1,8 +1,9 @@
 import { UserEntity } from './user.entity';
 import { createConnection, Repository } from 'typeorm';
-import { UserPropertyEntity } from '../user-property.entity';
-import { PropertyEntity } from '../../../property/model/property.entity';
+import { UserPropertyEntity } from './user-property.entity';
 import { DataSource } from "typeorm/data-source/DataSource";
+import { PropertyEntity } from "../../property/model/property.entity";
+import { PropertyPropertyEntity } from "../../property/model/property-property.entity";
 
 describe('User entity', () => {
 
@@ -18,7 +19,7 @@ describe('User entity', () => {
       database: 'postgres',
       synchronize: true,
       // logging: true,
-      entities: [ UserEntity, UserPropertyEntity, PropertyEntity ],
+      entities: [ UserEntity, UserPropertyEntity, PropertyEntity, PropertyPropertyEntity ],
       subscribers: [],
       migrations: [],
     });
@@ -73,16 +74,20 @@ describe('User entity', () => {
           property: [
             await Object.assign(new UserPropertyEntity(), { value: "TEST_1", property: prop1 }).save(),
             await Object.assign(new UserPropertyEntity(), { value: "TEST_2", property: prop2 }).save(),
-            await Object.assign(new UserPropertyEntity(), { value: "TEST_3", property: prop2 }).save(),
+            await Object.assign(new UserPropertyEntity(), { value: "TEST_3", property: prop3 }).save(),
           ]
         }
       ).save();
 
       expect(user.property).toHaveLength(3);
       expect(user.property[0].value).toBe("TEST_1");
-      expect(user.property[1].value).toBe("TEST_2");
-      expect(user.property[2].value).toBe("TEST_3");
       expect(user.property[0].property.id).toBe("PROP_1");
+
+      expect(user.property[1].value).toBe("TEST_2");
+      expect(user.property[1].property.id).toBe("PROP_2");
+
+      expect(user.property[2].value).toBe("TEST_3");
+      expect(user.property[2].property.id).toBe("PROP_3");
     });
   });
 });

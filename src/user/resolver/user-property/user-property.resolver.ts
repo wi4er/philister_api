@@ -12,6 +12,7 @@ export class UserPropertyResolver {
     private propertyRepo: Repository<PropertyEntity>,
   ) {
   }
+
   @ResolveField("property", returns => [ UserPropertySchema ])
   async property(@Parent() userProperty: UserPropertySchema) {
     return userProperty.property;

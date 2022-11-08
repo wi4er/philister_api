@@ -1,6 +1,6 @@
 import { AuthMutationResolver } from './auth-mutation.resolver';
 import { createConnection } from "typeorm";
-import { UserEntity } from "../../model/user/user.entity";
+import { UserEntity } from "../../model/user.entity";
 import { UserPropertyEntity } from "../../model/user-property.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { NestFactory } from "@nestjs/core";

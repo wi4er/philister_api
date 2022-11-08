@@ -2,8 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type PropertyProperty {
+  id: String!
+  value: String!
+  property: Property!
+}
+
 type Property {
   id: String!
+  property: [PropertyProperty!]
 }
 
 type UserProperty {
@@ -16,13 +23,13 @@ type User {
   id: Int!
   login: String
   hash: String
-  group: [User!]!
-  property: [UserProperty!]!
+  group: [User!]
+  property: [UserProperty!]
 }
 
 type UserQuery {
   list: [User!]!
-  item: User!
+  item(id: Int!): User
   myself: User
 }
 
@@ -60,7 +67,7 @@ type AuthMutation {
 
 type PropertyQuery {
   list: [Property!]!
-  item: Property!
+  item(id: String!): Property!
 }
 
 type PropertyMutation {

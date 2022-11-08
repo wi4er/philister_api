@@ -4,16 +4,28 @@ import { AppModule } from "../../../app.module";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import redisPermission from "../../../permission/redis.permission";
 import { createConnection } from "typeorm";
-import { UserEntity } from "../../model/user/user.entity";
+import { UserEntity } from "../../model/user.entity";
 import { UserPropertyEntity } from "../../model/user-property.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { gql } from "apollo-server-express";
 import request from "supertest-graphql";
+import { PropertyPropertyEntity } from "../../../property/model/property-property.entity";
 
 const userListQuery = gql`
   {
     user {
       list {
+        id
+        login
+      }
+    }
+  }
+`;
+
+const userItemQuery = gql`
+  query getUser($id: Int!) {
+    user {
+      item(id: $id) {
         id
         login
       }
@@ -65,7 +77,7 @@ describe('UserRootQueryResolver', () => {
       database: 'postgres',
       synchronize: true,
       // logging: true,
-      entities: [ UserEntity, UserPropertyEntity, PropertyEntity ],
+      entities: [ UserEntity, UserPropertyEntity, PropertyEntity, PropertyPropertyEntity ],
       subscribers: [],
       migrations: [],
     });
@@ -91,15 +103,45 @@ describe('UserRootQueryResolver', () => {
     });
 
     test('Should get user list with many users', async () => {
-      for (let i = 0; i <= 10; i++) {
-        await Object.assign(new UserEntity(), {login: `myself_${i}`}).save();
+      for (let i = 0; i < 10; i++) {
+        await Object.assign(new UserEntity(), { login: `myself_${i}` }).save();
       }
+
+      await Object.assign(
+        new UserEntity(),
+        {
+          login: 'admin',
+          hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
+        }
+      ).save();
 
       const res = await request(app.getHttpServer())
         .query(userListQuery)
         .expectNoErrors();
 
       expect(res.data['user']['list']).toHaveLength(11);
+    });
+  });
+
+  describe('User item', () => {
+    test("Should get user item", async () => {
+      const user = await Object.assign(new UserEntity(),{login: 'user'}).save();
+
+      const res = await request(app.getHttpServer())
+        .query(userItemQuery, {id: user.id})
+        .expectNoErrors();
+
+      expect(res.data['user']['item']['login']).toBe('user');
+    });
+
+    test("Shouldn't get item with wrong id", async () => {
+      const user = await Object.assign(new UserEntity(),{login: 'user'}).save();
+
+      const res = await request(app.getHttpServer())
+        .query(userItemQuery, {id: user.id + 1})
+        .expectNoErrors();
+
+      expect(res.data['user']['item']).toBe(null);
     });
   });
 

@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BaseEntity } from 'typeorm';
-import { UserPropertyEntity } from "../user-property.entity";
+import { UserPropertyEntity } from "./user-property.entity";
 
 @Entity({
   name: "user"

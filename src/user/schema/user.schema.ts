@@ -13,9 +13,9 @@ export class UserSchema {
   @Field({ nullable: true })
   hash?: string;
 
-  @Field(type => [UserSchema])
-  group?: [UserGroupMutationSchema]
+  @Field(type => [ UserSchema ], { nullable: true })
+  group?: [ UserGroupMutationSchema ]
 
-  @Field(type => [UserPropertySchema])
-  property?: [UserPropertySchema]
+  @Field(type => [ UserPropertySchema ], { nullable: true })
+  property?: [ UserPropertySchema ]
 }

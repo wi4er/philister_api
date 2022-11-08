@@ -1,5 +1,6 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 import { Context } from "@nestjs/graphql";
+import { ServerResponse } from "http";
 
 @Controller()
 export class AppController {
@@ -7,20 +8,16 @@ export class AppController {
 
   @Get()
   getHello(
-
-    @Req() request: Request
-  ): string {
-
-    console.log(request['session']);
-
+    @Req() request: Request,
+  ) {
     if (request['session'].user) {
       request['session'].user.id = request['session'].user.id + 1;
     } else {
       request['session'].user = {
         id: 1
       };
-    }
 
-    return `Hello world ${request['session'].user.id}`;
+    }
+    return `"Hello world ${request['session'].user.id}"`;
   }
 }
