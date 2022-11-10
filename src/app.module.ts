@@ -7,12 +7,11 @@ import { UserModule } from './user/user.module';
 import { ElementModule } from './element/element.module';
 import { FileModule } from './file/file.module';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UserEntity } from "./user/model/user.entity";
 import { PropertyModule } from './property/property.module';
-import { PropertyEntity } from "./property/model/property.entity";
-import { UserPropertyEntity } from "./user/model/user-property.entity";
 import { GraphQLRequestContext, GraphQLResponse } from "apollo-server-types";
-import { PropertyPropertyEntity } from "./property/model/property-property.entity";
+import { createConnectionOptions } from "./createConnectionOptions";
+import redisPermission from "./permission/redis.permission";
+import * as cors from "cors";
 
 @Module({
   imports: [
@@ -25,16 +24,7 @@ import { PropertyPropertyEntity } from "./property/model/property-property.entit
         return response;
       },
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'example',
-      database: 'postgres',
-      entities: [ UserEntity, PropertyEntity, PropertyPropertyEntity, UserPropertyEntity ],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(createConnectionOptions()),
     UserModule,
     ElementModule,
     FileModule,
@@ -44,4 +34,16 @@ import { PropertyPropertyEntity } from "./property/model/property-property.entit
   providers: [],
 })
 export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(redisPermission())
+      .forRoutes('/');
+
+    consumer
+      .apply(cors({
+        credentials: true,
+        origin: true,
+      }))
+      .forRoutes('/');
+  }
 }

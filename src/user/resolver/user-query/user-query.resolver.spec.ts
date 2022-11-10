@@ -1,15 +1,10 @@
 import { Test } from '@nestjs/testing';
-import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../../../app.module";
-import { ExpressAdapter } from "@nestjs/platform-express";
-import redisPermission from "../../../permission/redis.permission";
 import { createConnection } from "typeorm";
 import { UserEntity } from "../../model/user.entity";
-import { UserPropertyEntity } from "../../model/user-property.entity";
-import { PropertyEntity } from "../../../property/model/property.entity";
 import { gql } from "apollo-server-express";
 import request from "supertest-graphql";
-import { PropertyPropertyEntity } from "../../../property/model/property-property.entity";
+import { createConnectionOptions } from "../../../createConnectionOptions";
 
 const userListQuery = gql`
   {
@@ -61,26 +56,11 @@ describe('UserRootQueryResolver', () => {
   let app;
 
   beforeAll(async () => {
-    await NestFactory.create(AppModule, new ExpressAdapter());
-
     const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
     app = moduleBuilder.createNestApplication();
-    app.use(redisPermission());
     app.init()
 
-    source = await createConnection({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'example',
-      database: 'postgres',
-      synchronize: true,
-      // logging: true,
-      entities: [ UserEntity, UserPropertyEntity, PropertyEntity, PropertyPropertyEntity ],
-      subscribers: [],
-      migrations: [],
-    });
+    source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));
@@ -125,20 +105,20 @@ describe('UserRootQueryResolver', () => {
 
   describe('User item', () => {
     test("Should get user item", async () => {
-      const user = await Object.assign(new UserEntity(),{login: 'user'}).save();
+      const user = await Object.assign(new UserEntity(), { login: 'user' }).save();
 
       const res = await request(app.getHttpServer())
-        .query(userItemQuery, {id: user.id})
+        .query(userItemQuery, { id: user.id })
         .expectNoErrors();
 
       expect(res.data['user']['item']['login']).toBe('user');
     });
 
     test("Shouldn't get item with wrong id", async () => {
-      const user = await Object.assign(new UserEntity(),{login: 'user'}).save();
+      const user = await Object.assign(new UserEntity(), { login: 'user' }).save();
 
       const res = await request(app.getHttpServer())
-        .query(userItemQuery, {id: user.id + 1})
+        .query(userItemQuery, { id: user.id + 1 })
         .expectNoErrors();
 
       expect(res.data['user']['item']).toBe(null);

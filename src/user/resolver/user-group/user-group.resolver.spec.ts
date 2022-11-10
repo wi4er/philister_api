@@ -1,15 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { UserGroupResolver } from './user-group.resolver';
-import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../../../app.module";
-import { ExpressAdapter } from "@nestjs/platform-express";
-import redisPermission from "../../../permission/redis.permission";
 import { createConnection } from "typeorm";
 import { UserEntity } from "../../model/user.entity";
 import { UserPropertyEntity } from "../../model/user-property.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { gql } from "apollo-server-express";
 import request from "supertest-graphql";
+import { createConnectionOptions } from "../../../createConnectionOptions";
 
 const userPropertyQuery = gql`
   {
@@ -33,32 +31,17 @@ describe('UserGroupResolver', () => {
   let app;
 
   beforeAll(async () => {
-    await NestFactory.create(AppModule, new ExpressAdapter());
-
     const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
     app = moduleBuilder.createNestApplication();
-    app.use(redisPermission());
     app.init()
 
-    source = await createConnection({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'example',
-      database: 'postgres',
-      synchronize: true,
-      // logging: true,
-      entities: [ UserEntity, UserPropertyEntity, PropertyEntity ],
-      subscribers: [],
-      migrations: [],
-    });
+    source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));
 
   it('Should get with property', async () => {
-    const prop = await Object.assign(new PropertyEntity(), {id: 'name'}).save();
+    const prop = await Object.assign(new PropertyEntity(), { id: 'name' }).save();
     await Object.assign(new UserEntity(), {
       login: 'myself',
       property: [
@@ -76,11 +59,11 @@ describe('UserGroupResolver', () => {
   });
 
   it('Should get with list of properties', async () => {
-    const prop1 = await Object.assign(new PropertyEntity(), {id: 'PROP_1'}).save();
-    const prop2 = await Object.assign(new PropertyEntity(), {id: 'PROP_2'}).save();
-    const prop3 = await Object.assign(new PropertyEntity(), {id: 'PROP_3'}).save();
-    const prop4 = await Object.assign(new PropertyEntity(), {id: 'PROP_4'}).save();
-    const prop5 = await Object.assign(new PropertyEntity(), {id: 'PROP_5'}).save();
+    const prop1 = await Object.assign(new PropertyEntity(), { id: 'PROP_1' }).save();
+    const prop2 = await Object.assign(new PropertyEntity(), { id: 'PROP_2' }).save();
+    const prop3 = await Object.assign(new PropertyEntity(), { id: 'PROP_3' }).save();
+    const prop4 = await Object.assign(new PropertyEntity(), { id: 'PROP_4' }).save();
+    const prop5 = await Object.assign(new PropertyEntity(), { id: 'PROP_5' }).save();
 
     await Object.assign(
       new UserEntity(),

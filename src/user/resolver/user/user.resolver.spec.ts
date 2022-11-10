@@ -1,16 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { UserResolver } from './user.resolver';
-import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../../../app.module";
-import { ExpressAdapter } from "@nestjs/platform-express";
-import redisPermission from "../../../permission/redis.permission";
 import { createConnection } from "typeorm";
 import { UserPropertyEntity } from "../../model/user-property.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { UserEntity } from "../../model/user.entity";
-import { PropertyPropertyEntity } from "../../../property/model/property-property.entity";
 import { gql } from "apollo-server-express";
 import request from "supertest-graphql";
+import { createConnectionOptions } from "../../../createConnectionOptions";
 
 const userItemQuery = gql`
   query GetUser($id: Int!){
@@ -35,26 +32,11 @@ describe('UserResolver', () => {
   let app;
 
   beforeAll(async () => {
-    await NestFactory.create(AppModule, new ExpressAdapter());
-
     const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
     app = moduleBuilder.createNestApplication();
-    app.use(redisPermission());
     app.init()
 
-    source = await createConnection({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'example',
-      database: 'postgres',
-      synchronize: true,
-      // logging: true,
-      entities: [ UserEntity, UserPropertyEntity, PropertyEntity, PropertyPropertyEntity ],
-      subscribers: [],
-      migrations: [],
-    });
+    source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));

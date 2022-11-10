@@ -1,15 +1,11 @@
 import { Test } from '@nestjs/testing';
 import { PropertyPropertyResolver } from './property-property.resolver';
-import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../../../app.module";
-import { ExpressAdapter } from "@nestjs/platform-express";
-import redisPermission from "../../../permission/redis.permission";
 import { createConnection } from "typeorm";
-import { UserEntity } from "../../../user/model/user.entity";
-import { UserPropertyEntity } from "../../../user/model/user-property.entity";
 import { PropertyEntity } from "../../model/property.entity";
 import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
+import { createConnectionOptions } from "../../../createConnectionOptions";
 
 const propertyPropertyListQuery = gql`
   {
@@ -33,26 +29,11 @@ describe('PropertyPropertyResolver', () => {
   let app;
 
   beforeAll(async () => {
-    await NestFactory.create(AppModule, new ExpressAdapter());
-
     const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
     app = moduleBuilder.createNestApplication();
-    app.use(redisPermission());
     app.init()
 
-    source = await createConnection({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'example',
-      database: 'postgres',
-      synchronize: true,
-      // logging: true,
-      entities: [ UserEntity, UserPropertyEntity, PropertyEntity ],
-      subscribers: [],
-      migrations: [],
-    });
+    source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));
@@ -69,7 +50,7 @@ describe('PropertyPropertyResolver', () => {
         .query(propertyPropertyListQuery)
         .expectNoErrors();
 
-      expect(res.data['property']['list']).toHaveLength(0);
+      expect(res.data['property']['list']).toHaveLength(2);
     });
   });
 });

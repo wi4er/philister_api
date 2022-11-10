@@ -7,6 +7,6 @@ export class PropertyQuerySchema {
   @Field(type => [PropertySchema])
   list: [PropertySchema]
 
-  @Field(type => PropertySchema)
+  @Field(type => PropertySchema, {nullable: true})
   item: PropertySchema
 }

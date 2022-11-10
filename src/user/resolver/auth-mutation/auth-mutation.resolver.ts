@@ -4,9 +4,7 @@ import { AuthMutationSchema } from "../../schema/auth-mutation.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "../../model/user.entity";
 import { Repository } from "typeorm";
-import { toSha256 } from "../../../encode/toSha256";
-import { Session } from "@nestjs/common";
-import { ServerResponse } from "http";
+import { EncodeService } from "../../service/encode/encode.service";
 
 @Resolver(of => AuthMutationSchema)
 export class AuthMutationResolver {
@@ -14,6 +12,7 @@ export class AuthMutationResolver {
   constructor(
     @InjectRepository(UserEntity)
     private userRepo: Repository<UserEntity>,
+    private encodeService: EncodeService,
   ) {
   }
 
@@ -34,7 +33,7 @@ export class AuthMutationResolver {
 
     if (
       !user
-      || user.hash !== toSha256(password)
+      || user.hash !== this.encodeService.toSha256(password)
     ) return null;
 
     context.req['session']['user'] = {id: user.id};

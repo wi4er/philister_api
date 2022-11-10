@@ -1,28 +1,13 @@
 import { DataSource } from "typeorm/data-source/DataSource";
 import { createConnection } from "typeorm";
-import { UserEntity } from "../../user/model/user.entity";
-import { UserPropertyEntity } from "../../user/model/user-property.entity";
 import { PropertyEntity } from "./property.entity";
-import { PropertyPropertyEntity } from "./property-property.entity";
+import { createConnectionOptions } from "../../createConnectionOptions";
 
 describe("Property entity", () => {
-
   let source: DataSource;
 
   beforeAll(async () => {
-    source = await createConnection({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'example',
-      database: 'postgres',
-      synchronize: true,
-      // logging: true,
-      entities: [ UserEntity, UserPropertyEntity, PropertyEntity, PropertyPropertyEntity ],
-      subscribers: [],
-      migrations: [],
-    });
+    source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));

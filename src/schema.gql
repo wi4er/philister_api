@@ -67,7 +67,7 @@ type AuthMutation {
 
 type PropertyQuery {
   list: [Property!]!
-  item(id: String!): Property!
+  item(id: String!): Property
 }
 
 type PropertyMutation {

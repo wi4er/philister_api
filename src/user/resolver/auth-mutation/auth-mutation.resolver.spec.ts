@@ -1,15 +1,11 @@
 import { AuthMutationResolver } from './auth-mutation.resolver';
 import { createConnection } from "typeorm";
 import { UserEntity } from "../../model/user.entity";
-import { UserPropertyEntity } from "../../model/user-property.entity";
-import { PropertyEntity } from "../../../property/model/property.entity";
-import { NestFactory } from "@nestjs/core";
 import request from 'supertest-graphql';
 import { AppModule } from "../../../app.module";
 import { gql } from "apollo-server-express";
-import { ExpressAdapter } from "@nestjs/platform-express";
 import { Test } from "@nestjs/testing";
-import redisPermission from "../../../permission/redis.permission";
+import { createConnectionOptions } from "../../../createConnectionOptions";
 
 const query = gql`
   mutation Auth($login: String!, $password: String!) {
@@ -28,26 +24,11 @@ describe('AuthMutationResolver', () => {
   let app;
 
   beforeAll(async () => {
-    await NestFactory.create(AppModule, new ExpressAdapter());
-
     const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
     app = moduleBuilder.createNestApplication();
-    app.use(redisPermission());
     app.init()
 
-    source = await createConnection({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'example',
-      database: 'postgres',
-      synchronize: true,
-      // logging: true,
-      entities: [ UserEntity, UserPropertyEntity, PropertyEntity ],
-      subscribers: [],
-      migrations: [],
-    });
+    source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));

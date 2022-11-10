@@ -12,12 +12,13 @@ import { UserPropertyResolver } from './resolver/user-property/user-property.res
 import { UserPropertyEntity } from "./model/user-property.entity";
 import { PropertyEntity } from "../property/model/property.entity";
 import { AuthMutationResolver } from './resolver/auth-mutation/auth-mutation.resolver';
-import { EncodeService } from './service/encode/encode.service';
 import { UserService } from './service/user/user.service';
+import { EncodeService } from "./service/encode/encode.service";
+import { PropertyPropertyEntity } from "../property/model/property-property.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ UserEntity, UserPropertyEntity, PropertyEntity ])
+    TypeOrmModule.forFeature([ UserEntity, UserPropertyEntity, PropertyEntity, PropertyPropertyEntity ])
   ],
   providers: [
     UserRootResolver,

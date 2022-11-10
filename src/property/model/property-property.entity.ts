@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { PropertyEntity } from "./property.entity";
 
 @Entity({
@@ -8,6 +8,10 @@ export class PropertyPropertyEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
+
+  // @Column({nullable: true})
+  @Column()
+  value: string
 
   @ManyToOne(
     () => PropertyEntity,

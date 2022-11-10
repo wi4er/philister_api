@@ -17,9 +17,6 @@ export class UserResolver {
 
   @ResolveField("property", returns => [ UserPropertySchema ])
   async property(@Parent() user: UserEntity) {
-
-    console.log(user)
-
     const list = await this.userPropertyRepo.find({
       where: {
         user: {id: user.id}
