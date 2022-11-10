@@ -1,11 +1,11 @@
 import { Test } from '@nestjs/testing';
 import { PropertyResolver } from './property.resolver';
-import { AppModule } from "../../../app.module";
-import { createConnection } from "typeorm";
-import { createConnectionOptions } from "../../../createConnectionOptions";
-import request from "supertest-graphql";
-import { gql } from "apollo-server-express";
-import { PropertyEntity } from "../../model/property.entity";
+import { AppModule } from '../../../app.module';
+import { createConnection } from 'typeorm';
+import { createConnectionOptions } from '../../../createConnectionOptions';
+import request from 'supertest-graphql';
+import { gql } from 'apollo-server-express';
+import { PropertyEntity } from '../../model/property.entity';
 
 const propertyPropertyQuery = gql`
   query PropertyPropertyQuery ($id: String!){

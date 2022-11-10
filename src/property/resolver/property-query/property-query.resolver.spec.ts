@@ -1,11 +1,11 @@
 import { Test } from '@nestjs/testing';
 import { PropertyQueryResolver } from './property-query.resolver';
-import { AppModule } from "../../../app.module";
-import { createConnection } from "typeorm";
-import { PropertyEntity } from "../../model/property.entity";
-import request from "supertest-graphql";
-import { gql } from "apollo-server-express";
-import { createConnectionOptions } from "../../../createConnectionOptions";
+import { AppModule } from '../../../app.module';
+import { createConnection } from 'typeorm';
+import { PropertyEntity } from '../../model/property.entity';
+import request from 'supertest-graphql';
+import { gql } from 'apollo-server-express';
+import { createConnectionOptions } from '../../../createConnectionOptions';
 
 const propertyListQuery = gql`
   {
@@ -40,7 +40,7 @@ describe('PropertyQueryResolver', () => {
       expect(res.data['property']['list']).toHaveLength(0);
     });
 
-    test("Should get single element list", async () => {
+    test('Should get single element list', async () => {
       await Object.assign(new PropertyEntity(), {id: 'NAME'}).save();
 
       const res = await request(app.getHttpServer())

@@ -72,13 +72,23 @@ type PropertyQuery {
 
 type PropertyMutation {
   """Adding new property"""
-  add: Property!
+  add(item: PropertyInput!): Property!
 
   """Deletion existent property"""
   delete: Property!
 
   """Updating existent property"""
   update: Property!
+}
+
+input PropertyInput {
+  id: String!
+  property: [PropertyPropertyInput!]
+}
+
+input PropertyPropertyInput {
+  property: String!
+  value: String!
 }
 
 type Query {
