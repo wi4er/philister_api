@@ -1,4 +1,4 @@
-import { Args, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { PropertyEntity } from "../../model/property.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -14,15 +14,23 @@ export class PropertyQueryResolver {
   }
 
   @ResolveField('list', type => [ PropertyEntity ])
-  list() {
-    return this.propertyRepo.find()
+  list(
+    @Args('limit', {nullable: true, type: () => Int})
+      limit: number,
+    @Args('offset', {nullable: true, type: () => Int})
+      offset: number,
+  ) {
+    return this.propertyRepo.find({
+      skip: offset,
+      take: limit,
+    });
   }
 
   @ResolveField('item', type => PropertyEntity)
   item(
-    @Args('id', { type: () => String})
+    @Args('id', { type: () => String })
       id: string
   ) {
-    return this.propertyRepo.findOne({where: {id}})
+    return this.propertyRepo.findOne({ where: { id } })
   }
 }

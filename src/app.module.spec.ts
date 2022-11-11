@@ -1,36 +1,21 @@
-import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { ExpressAdapter } from "@nestjs/platform-express";
 import { Test } from "@nestjs/testing";
 import { createConnection } from "typeorm";
 import { UserEntity } from "./user/model/user.entity";
-import { UserPropertyEntity } from "./user/model/user-property.entity";
 import { PropertyEntity } from "./property/model/property.entity";
 import { PropertyPropertyEntity } from "./property/model/property-property.entity";
+import { createConnectionOptions } from "./createConnectionOptions";
+
 
 let source;
 let app;
 
 beforeAll(async () => {
-  await NestFactory.create(AppModule, new ExpressAdapter());
-
   const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
   app = moduleBuilder.createNestApplication();
   app.init()
 
-  source = await createConnection({
-    type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: 'example',
-    database: 'postgres',
-    synchronize: true,
-    // logging: true,
-    entities: [ UserEntity, UserPropertyEntity, PropertyEntity, PropertyPropertyEntity ],
-    subscribers: [],
-    migrations: [],
-  });
+  source = await createConnection(createConnectionOptions());
 });
 
 beforeEach(() => source.synchronize(true));

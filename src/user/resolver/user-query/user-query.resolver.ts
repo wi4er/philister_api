@@ -16,8 +16,16 @@ export class UserQueryResolver {
   }
 
   @ResolveField("list", returns => [ UserSchema ])
-  async list() {
-    return this.userRepo.find({});
+  async list(
+    @Args('limit', {nullable: true, type: () => Int})
+      limit: number,
+    @Args('offset', {nullable: true, type: () => Int})
+      offset: number,
+  ) {
+    return this.userRepo.find({
+      skip: offset,
+      take: limit,
+    });
   }
 
   @ResolveField("item", returns => [ UserSchema ])
