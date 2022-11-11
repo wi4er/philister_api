@@ -67,6 +67,7 @@ type AuthMutation {
 
 type PropertyQuery {
   list(limit: Int, offset: Int): [Property!]!
+  count(limit: Int, offset: Int): Int!
   item(id: String!): Property
 }
 

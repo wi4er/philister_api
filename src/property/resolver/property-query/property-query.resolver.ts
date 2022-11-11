@@ -26,6 +26,19 @@ export class PropertyQueryResolver {
     });
   }
 
+  @ResolveField('count', type => Int)
+  count(
+    @Args('limit', {nullable: true, type: () => Int})
+      limit: number,
+    @Args('offset', {nullable: true, type: () => Int})
+      offset: number,
+  ) {
+    return this.propertyRepo.count({
+      skip: offset,
+      take: limit,
+    });
+  }
+
   @ResolveField('item', type => PropertyEntity)
   item(
     @Args('id', { type: () => String })

@@ -17,6 +17,14 @@ const propertyListQuery = gql`
   }
 `;
 
+const propertyCountQuery = gql`
+  query getPropertyList($limit: Int, $offset: Int){
+    property {
+      count(limit: $limit, offset: $offset)
+    }
+  }
+`;
+
 describe('PropertyQueryResolver', () => {
   let source;
   let app;
@@ -41,7 +49,7 @@ describe('PropertyQueryResolver', () => {
     });
 
     test('Should get single element list', async () => {
-      await Object.assign(new PropertyEntity(), {id: 'NAME'}).save();
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
 
       const res = await request(app.getHttpServer())
         .query(propertyListQuery)
@@ -53,7 +61,7 @@ describe('PropertyQueryResolver', () => {
 
     test("Should get list", async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new PropertyEntity(), {id: `NAME_${i}`}).save();
+        await Object.assign(new PropertyEntity(), { id: `NAME_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
@@ -67,11 +75,11 @@ describe('PropertyQueryResolver', () => {
 
     test('Should get list with limit', async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new PropertyEntity(), {id: `NAME_${i}`}).save();
+        await Object.assign(new PropertyEntity(), { id: `NAME_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
-        .query(propertyListQuery, {limit: 6})
+        .query(propertyListQuery, { limit: 6 })
         .expectNoErrors();
 
       expect(res.data['property']['list']).toHaveLength(6);
@@ -80,11 +88,11 @@ describe('PropertyQueryResolver', () => {
 
     test('Should get list with offset', async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new PropertyEntity(), {id: `NAME_${i}`}).save();
+        await Object.assign(new PropertyEntity(), { id: `NAME_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
-        .query(propertyListQuery, {offset: 5})
+        .query(propertyListQuery, { offset: 5 })
         .expectNoErrors();
 
       expect(res.data['property']['list']).toHaveLength(5);
@@ -93,15 +101,47 @@ describe('PropertyQueryResolver', () => {
 
     test('Should get list with limit and offset', async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new PropertyEntity(), {id: `NAME_${i}`}).save();
+        await Object.assign(new PropertyEntity(), { id: `NAME_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
-        .query(propertyListQuery, {offset: 3, limit: 3})
+        .query(propertyListQuery, { offset: 3, limit: 3 })
         .expectNoErrors();
 
       expect(res.data['property']['list']).toHaveLength(3);
       expect(res.data['property']['list'][0]['id']).toBe('NAME_3');
+    });
+  });
+
+  describe('Property count', () => {
+    test("Should get count for empty list", async () => {
+      const res = await request(app.getHttpServer())
+        .query(propertyCountQuery)
+        .expectNoErrors();
+
+      expect(res.data['property']['count']).toBe(0);
+    });
+
+    test('Should get single property count', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(propertyCountQuery)
+        .expectNoErrors();
+
+      expect(res.data['property']['count']).toBe(1);
+    });
+
+    test('Should get property count', async () => {
+      for (let i = 1; i <= 10; i++) {
+        await Object.assign(new PropertyEntity(), { id: `NAME_${i}` }).save();
+      }
+
+      const res = await request(app.getHttpServer())
+        .query(propertyCountQuery)
+        .expectNoErrors();
+
+      expect(res.data['property']['count']).toBe(10);
     });
   });
 });
