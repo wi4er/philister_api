@@ -21,7 +21,14 @@ const propertyAddMutation = gql`
       }
     }
   }
+`;
 
+const propertyDeleteMutation = gql`
+  mutation addProperty($id: [String!]!) {
+    property {
+      delete(id: $id)
+    }
+  }
 `;
 
 describe('PropertyMutationResolver', () => {
@@ -71,6 +78,33 @@ describe('PropertyMutationResolver', () => {
       expect(res.data['property']['add']['id']).toBe('NAME');
       expect(res.data['property']['add']['property'][0]['property']['id']).toBe('PROP');
       expect(res.data['property']['add']['property'][0]['value']).toBe('VALUE');
+    });
+  });
+
+  describe('Property deletion', () => {
+    test('Should delete property', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'PROP' }).save();
+      const res = await request(app.getHttpServer())
+        .mutate(propertyDeleteMutation, {
+          id: 'PROP'
+        })
+        .expectNoErrors();
+
+      expect(res.data['property']['delete']).toEqual([ 'PROP' ]);
+    });
+
+    test('Should delete property list', async () => {
+      for (let i = 1; i <= 10; i++) {
+        await Object.assign(new PropertyEntity(), { id: `PROP_${i}` }).save();
+      }
+
+      const res = await request(app.getHttpServer())
+        .mutate(propertyDeleteMutation, {
+          id: ['PROP_1', 'PROP_3', 'PROP_5']
+        })
+        .expectNoErrors();
+
+      expect(res.data['property']['delete']).toEqual([ 'PROP_1', 'PROP_3', 'PROP_5' ]);
     });
   });
 });

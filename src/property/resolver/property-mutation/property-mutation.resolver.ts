@@ -3,7 +3,7 @@ import { PropertySchema } from "../../schema/property.schema";
 import { PropertyMutationSchema } from "../../schema/property-mutation.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PropertyPropertyEntity } from "../../model/property-property.entity";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { PropertyEntity } from "../../model/property.entity";
 import { PropertyInput } from "../../schema/property-input";
 
@@ -11,8 +11,8 @@ import { PropertyInput } from "../../schema/property-input";
 export class PropertyMutationResolver {
 
   constructor(
-    @InjectRepository(PropertyPropertyEntity)
-    private propertyRepo: Repository<PropertyPropertyEntity>,
+    @InjectRepository(PropertyEntity)
+    private propertyRepo: Repository<PropertyEntity>,
   ) {
   }
 
@@ -29,11 +29,27 @@ export class PropertyMutationResolver {
       for (const value of item.property) {
         inst.property.push(await Object.assign(
           new PropertyPropertyEntity(),
-          {value: value.value, property: value.property}
+          { value: value.value, property: value.property }
         ).save());
       }
     }
 
     return await inst.save();
+  }
+
+  @ResolveField('delete', type => [PropertySchema])
+  async delete(
+    @Args('id', {type: () => [String]})
+      id: string[]
+  ) {
+    const result = [];
+    const list = await this.propertyRepo.find({where: {id: In(id)}});
+
+    for (const item of list) {
+      await this.propertyRepo.delete(item.id);
+      result.push(item.id);
+    }
+
+    return result;
   }
 }

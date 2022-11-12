@@ -9,9 +9,9 @@ export class PropertyMutationSchema {
   ) add: PropertySchema
 
   @Field(
-    type => PropertySchema,
+    type => [String],
     { description: 'Deletion existent property' }
-  ) delete: PropertySchema
+  ) delete: String[]
 
   @Field(
     type => PropertySchema,
