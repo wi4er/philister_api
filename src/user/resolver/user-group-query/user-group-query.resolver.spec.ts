@@ -1,18 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserGroupQueryResolver } from './user-group-query.resolver';
+import { AppModule } from "../../../app.module";
+import { createConnection } from "typeorm";
+import { createConnectionOptions } from "../../../createConnectionOptions";
 
 describe('UserGroupQueryResolver', () => {
-  let resolver: UserGroupQueryResolver;
+  let source;
+  let app;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UserGroupQueryResolver],
-    }).compile();
+  beforeAll(async () => {
+    const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
+    app = moduleBuilder.createNestApplication();
+    app.init()
 
-    resolver = module.get<UserGroupQueryResolver>(UserGroupQueryResolver);
+    source = await createConnection(createConnectionOptions());
   });
 
+  beforeEach(() => source.synchronize(true));
+
   it('should be defined', () => {
-    expect(resolver).toBeDefined();
+
   });
 });

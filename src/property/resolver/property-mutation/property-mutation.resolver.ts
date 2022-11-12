@@ -5,7 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { PropertyPropertyEntity } from "../../model/property-property.entity";
 import { In, Repository } from "typeorm";
 import { PropertyEntity } from "../../model/property.entity";
-import { PropertyInput } from "../../schema/property-input";
+import { PropertyInputSchema } from "../../schema/property-input.schema";
 
 @Resolver(of => PropertyMutationSchema)
 export class PropertyMutationResolver {
@@ -19,7 +19,7 @@ export class PropertyMutationResolver {
   @ResolveField('add', type => PropertySchema)
   async add(
     @Args('item')
-      item: PropertyInput
+      item: PropertyInputSchema
   ) {
     const inst = new PropertyEntity();
     inst.id = item.id;

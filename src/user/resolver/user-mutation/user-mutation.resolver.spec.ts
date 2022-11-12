@@ -1,18 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserMutationResolver } from './user-mutation.resolver';
+import { AppModule } from "../../../app.module";
+import { createConnection } from "typeorm";
+import { createConnectionOptions } from "../../../createConnectionOptions";
 
 describe('UserRootMutationResolver', () => {
-  let resolver: UserMutationResolver;
+  let source;
+  let app;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UserMutationResolver],
-    }).compile();
+  beforeAll(async () => {
+    const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
+    app = moduleBuilder.createNestApplication();
+    app.init()
 
-    resolver = module.get<UserMutationResolver>(UserMutationResolver);
+    source = await createConnection(createConnectionOptions());
   });
 
+  beforeEach(() => source.synchronize(true));
+
   it('should be defined', () => {
-    expect(resolver).toBeDefined();
   });
 });

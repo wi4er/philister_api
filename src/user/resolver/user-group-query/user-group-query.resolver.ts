@@ -4,6 +4,7 @@ import { UserGroupQuerySchema } from "../../schema/user-group-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserGroupEntity } from "../../model/user-group.entity";
+import { UserGroupSchema } from "../../schema/user-group.schema";
 
 @Resolver(of => UserGroupQuerySchema)
 export class UserGroupQueryResolver {
@@ -13,7 +14,7 @@ export class UserGroupQueryResolver {
   ) {
   }
 
-  @ResolveField('list', type => [ PropertyEntity ])
+  @ResolveField('list', type => [ UserGroupSchema ])
   list(
     @Args('limit', {nullable: true, type: () => Int})
       limit: number,
@@ -26,7 +27,7 @@ export class UserGroupQueryResolver {
     });
   }
 
-  @ResolveField('item', type => PropertyEntity)
+  @ResolveField('item', type => UserGroupSchema)
   item(
     @Args('id', { type: () => String })
       id: number

@@ -1,9 +1,9 @@
 import { DataSource } from "typeorm/data-source/DataSource";
 import { createConnection } from "typeorm";
-import { PropertyEntity } from "./property.entity";
 import { createConnectionOptions } from "../../createConnectionOptions";
+import { DirectoryEntity } from "./directory.entity";
 
-describe("Property entity", () => {
+describe("Directory entity", () => {
   let source: DataSource;
 
   beforeAll(async () => {
@@ -12,18 +12,18 @@ describe("Property entity", () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('Property fields', () => {
+  describe('Directory fields', () => {
     test('Should get empty list', async () => {
-      const repo = source.getRepository(PropertyEntity);
+      const repo = source.getRepository(DirectoryEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(0);
     });
 
     test('Should get single element list', async () => {
-      await Object.assign(new PropertyEntity(), {id: 'NAME'}).save();
+      await Object.assign(new DirectoryEntity(), {id: 'NAME'}).save();
 
-      const repo = source.getRepository(PropertyEntity);
+      const repo = source.getRepository(DirectoryEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(1);

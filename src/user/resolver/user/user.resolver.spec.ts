@@ -67,8 +67,6 @@ describe('UserResolver', () => {
       const res = await request(app.getHttpServer())
         .query(userItemQuery, {id: user.id})
         .expectNoErrors();
-
-      console.log(res.data['user']['item'])
     });
   });
 });

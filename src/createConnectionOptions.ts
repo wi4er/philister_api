@@ -3,6 +3,9 @@ import { UserPropertyEntity } from "./user/model/user-property.entity";
 import { PropertyEntity } from "./property/model/property.entity";
 import { PropertyPropertyEntity } from "./property/model/property-property.entity";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
+import { DirectoryEntity } from "./directory/model/directory.entity";
+import { DirectoryPropertyEntity } from "./directory/model/directory-property.entity";
+import { UserGroupEntity } from "./user/model/user-group.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -14,7 +17,11 @@ export function createConnectionOptions(): DataSourceOptions {
     database: 'postgres',
     synchronize: true,
     // logging: true,
-    entities: [ UserEntity, UserPropertyEntity, PropertyEntity, PropertyPropertyEntity ],
+    entities: [
+      UserEntity, UserGroupEntity, UserPropertyEntity,
+      PropertyEntity, PropertyPropertyEntity,
+      DirectoryEntity, DirectoryPropertyEntity,
+    ],
     subscribers: [],
     migrations: [],
   }

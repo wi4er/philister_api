@@ -19,7 +19,6 @@ export class PropertyResolver {
     @Parent()
       prop: PropertyEntity
   ) {
-
     return this.propertyRepo.find({
       where: {parent: {id: prop.id}},
       relations: {property: true},
