@@ -1,8 +1,8 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PropertyEntity } from "./property.entity";
 
 @Entity({
-  name: "property-property"
+  name: 'property-property'
 })
 export class PropertyPropertyEntity extends BaseEntity {
 
@@ -15,13 +15,16 @@ export class PropertyPropertyEntity extends BaseEntity {
   @ManyToOne(
     () => PropertyEntity,
     property => property.property,
-    {onDelete: "CASCADE"},
+    {
+      onDelete: 'CASCADE',
+      onUpdate: 'RESTRICT'
+    },
   )
   parent: PropertyEntity;
 
   @ManyToOne(
     () => PropertyEntity,
-    {onDelete: "CASCADE"},
+    {onDelete: 'CASCADE'},
   )
   property: PropertyEntity;
 

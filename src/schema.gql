@@ -79,7 +79,7 @@ type PropertyMutation {
   delete(id: [String!]!): [String!]!
 
   """Updating existent property"""
-  update: Property!
+  update(item: PropertyInput!): Property!
 }
 
 input PropertyInput {
