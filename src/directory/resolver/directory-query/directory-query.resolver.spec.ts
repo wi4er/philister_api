@@ -24,6 +24,14 @@ const directoryListQuery = gql`
   }
 `;
 
+const directoryCountQuery = gql`
+  query getDirectoryList($limit: Int, $offset: Int) {
+    directory {
+      count(limit: $limit, offset: $offset)
+    }
+  }
+`;
+
 const directoryItemQuery = gql`
   query getDirectoryList($id: String!) {
     directory {
@@ -55,7 +63,7 @@ describe('DirectoryQueryResolver', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('Property list', () => {
+  describe('Directory list', () => {
     test("Should get empty list", async () => {
       const res = await request(app.getHttpServer())
         .query(directoryListQuery)
@@ -87,6 +95,30 @@ describe('DirectoryQueryResolver', () => {
       expect(res.data['directory']['list']).toHaveLength(10);
       expect(res.data['directory']['list'][0]['id']).toBe('CITY_0');
       expect(res.data['directory']['list'][9]['id']).toBe('CITY_9');
+    });
+  });
+
+  describe('Directory count', () => {
+    test('Should get directory count', async () => {
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(directoryCountQuery, { id: 'CITY' })
+        .expectNoErrors();
+
+      expect(res.data['directory']['count']).toBe(1);
+    });
+
+    test('Should get directory list count', async () => {
+      for (let i = 0; i < 15; i++) {
+        await Object.assign(new DirectoryEntity(), { id: `CITY_${i}` }).save();
+      }
+
+      const res = await request(app.getHttpServer())
+        .query(directoryCountQuery, { id: 'CITY' })
+        .expectNoErrors();
+
+      expect(res.data['directory']['count']).toBe(15);
     });
   });
 

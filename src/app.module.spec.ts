@@ -7,6 +7,7 @@ import { PropertyPropertyEntity } from "./property/model/property-property.entit
 import { createConnectionOptions } from "./createConnectionOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
 import { DirectoryPropertyEntity } from "./directory/model/directory-property.entity";
+import { ValueEntity } from "./directory/model/value.entity";
 
 let source;
 let app;
@@ -46,6 +47,13 @@ describe('Property list', () => {
           await Object.assign(new DirectoryPropertyEntity(), { value: `SECOND_${i}`, property: second }).save(),
           await Object.assign(new DirectoryPropertyEntity(), { value: `DESCRIPTION_${i}`, property: descr }).save(),
         ]
+      }).save();
+    }
+
+    for (let i = 0; i < 100; i++) {
+      await Object.assign(new ValueEntity(), {
+        id: `DIRECT_${i}`,
+        directory: `DIRECT_${Math.random() * 100 >> 0}`,
       }).save();
     }
 

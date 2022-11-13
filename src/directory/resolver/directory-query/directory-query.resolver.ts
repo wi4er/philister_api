@@ -34,7 +34,7 @@ export class DirectoryQueryResolver {
     @Args('offset', {nullable: true, type: () => Int})
       offset: number,
   ) {
-    return this.directoryRepo.find({
+    return this.directoryRepo.count({
       skip: offset,
       take: limit,
     });
@@ -45,6 +45,7 @@ export class DirectoryQueryResolver {
     @Args('id', { type: () => String })
       id: string
   ) {
-    return this.directoryRepo.findOne({ where: { id } })
+    return this.directoryRepo.findOne({ where: { id } });
   }
+
 }

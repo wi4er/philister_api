@@ -10,19 +10,18 @@ export class DirectoryPropertyEntity extends BaseEntity {
   id: number;
 
   @Column()
-  value: string
+  value: string;
 
   @ManyToOne(
     () => DirectoryEntity,
     directory => directory.property,
     {onDelete: "CASCADE"},
   )
-  parent: DirectoryEntity
+  parent: DirectoryEntity;
 
   @ManyToOne(
     () => PropertyEntity,
-    property => property.property,
     {onDelete: "CASCADE"},
   )
-  property: PropertyEntity
+  property: PropertyEntity;
 }

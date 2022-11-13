@@ -5,6 +5,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DirectoryPropertyEntity } from "../../model/directory-property.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
+import { ValueSchema } from "../../schema/value.schema";
+import { ValueEntity } from "../../model/value.entity";
 
 @Resolver(of => DirectorySchema)
 export class DirectoryResolver {
@@ -12,10 +14,13 @@ export class DirectoryResolver {
   constructor(
     @InjectRepository(DirectoryPropertyEntity)
     private propertyRepo: Repository<DirectoryPropertyEntity>,
+
+    @InjectRepository(ValueEntity)
+    private valueRepo: Repository<ValueEntity>,
   ) {
   }
 
-  @ResolveField("property", type => PropertySchema)
+  @ResolveField('property', type => PropertySchema)
   async property(
     @Parent()
       prop: DirectoryEntity
@@ -25,4 +30,17 @@ export class DirectoryResolver {
       relations: {property: true},
     });
   }
+
+  @ResolveField('value', type => [ValueSchema])
+  async value(
+    @Parent()
+      prop: DirectoryEntity
+  ) {
+    return this.valueRepo.find({
+      where: {directory: {id: prop.id}},
+      // loadRelationIds: true,
+      relations: {directory: true},
+    });
+  }
+
 }

@@ -5,11 +5,12 @@ import { PropertySchema } from "../../property/schema/property.schema";
 export class DirectoryPropertySchema {
 
   @Field()
-  id: string
+  id: string;
 
   @Field()
-  value: string
+  value: string;
 
   @Field(type => PropertySchema)
-  property: PropertySchema
+  property: PropertySchema;
+
 }

@@ -9,22 +9,20 @@ export class PropertyPropertyEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @Column({nullable: true})
   @Column()
-  value: string
+  value: string;
 
   @ManyToOne(
     () => PropertyEntity,
     property => property.property,
     {onDelete: "CASCADE"},
   )
-  parent: PropertyEntity
+  parent: PropertyEntity;
 
   @ManyToOne(
     () => PropertyEntity,
-    property => property.property,
     {onDelete: "CASCADE"},
   )
-  property: PropertyEntity
+  property: PropertyEntity;
 
 }

@@ -98,9 +98,15 @@ type DirectoryProperty {
   property: Property!
 }
 
+type Value {
+  id: String!
+  directory: Directory!
+}
+
 type Directory {
   id: String!
   property: [DirectoryProperty!]
+  value: [Value!]
 }
 
 type DirectoryQuery {
@@ -112,7 +118,7 @@ type DirectoryQuery {
 """"""
 type DirectoryMutation {
   """Adding new directory"""
-  add(item: DirectoryInputSchema!): Directory!
+  add(item: DirectoryInput!): Directory!
 
   """Deletion existent directory"""
   delete(id: [String!]!): [String!]!
@@ -121,7 +127,7 @@ type DirectoryMutation {
   update: Directory!
 }
 
-input DirectoryInputSchema {
+input DirectoryInput {
   id: String!
   property: [DirectoryPropertyInput!]
 }
@@ -131,11 +137,18 @@ input DirectoryPropertyInput {
   value: String!
 }
 
+type ValueQuery {
+  list(limit: Int, offset: Int): [Value!]!
+  count(limit: Int, offset: Int): Int!
+  item(id: String!): Value
+}
+
 type Query {
   user: UserQuery!
   userGroup: UserGroupQuery!
   property: PropertyQuery!
   directory: DirectoryQuery!
+  value: ValueQuery!
 }
 
 type Mutation {

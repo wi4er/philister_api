@@ -1,6 +1,7 @@
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
 import { DirectoryQuerySchema } from "../../schema/directory-query.schema";
 import { DirectoryMutationSchema } from "../../schema/directory-mutation.schema";
+import { ValueQuerySchema } from "../../schema/value-query.schema";
 
 @Resolver()
 export class DirectoryRootResolver {
@@ -10,6 +11,14 @@ export class DirectoryRootResolver {
     {name: 'directory'}
   )
   async getDirectory() {
+    return {};
+  }
+
+  @Query(
+    returns => ValueQuerySchema,
+    {name: 'value'}
+  )
+  async getValue() {
     return {};
   }
 

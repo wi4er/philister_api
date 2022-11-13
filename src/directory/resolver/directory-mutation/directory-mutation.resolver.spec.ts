@@ -7,7 +7,7 @@ import { gql } from "apollo-server-express";
 import { PropertyEntity } from "../../../property/model/property.entity";
 
 const addDirectoryMutation = gql`
-  mutation addDirectory($item: DirectoryInputSchema!) {
+  mutation addDirectory($item: DirectoryInput!) {
     directory {
       add(item: $item) {
         id
@@ -51,7 +51,7 @@ describe('DirectoryQueryResolver', () => {
         .mutate(addDirectoryMutation, {
           item: {
             id: 'CITY',
-            property: [ {value: 'VALUE', property: 'NAME'} ]
+            property: [ { value: 'VALUE', property: 'NAME' } ]
           }
         })
         .expectNoErrors();

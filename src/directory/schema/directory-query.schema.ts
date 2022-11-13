@@ -5,12 +5,12 @@ import { DirectorySchema } from "./directory.schema";
 export class DirectoryQuerySchema {
 
   @Field(type => [DirectorySchema])
-  list: [DirectorySchema]
+  list: [DirectorySchema];
 
   @Field(type => Int)
-  count: number
+  count: number;
 
   @Field(type => DirectorySchema, {nullable: true})
-  item: DirectorySchema
+  item: DirectorySchema;
 
 }

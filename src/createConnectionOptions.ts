@@ -6,6 +6,7 @@ import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
 import { DirectoryPropertyEntity } from "./directory/model/directory-property.entity";
 import { UserGroupEntity } from "./user/model/user-group.entity";
+import { ValueEntity } from "./directory/model/value.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -20,7 +21,7 @@ export function createConnectionOptions(): DataSourceOptions {
     entities: [
       UserEntity, UserGroupEntity, UserPropertyEntity,
       PropertyEntity, PropertyPropertyEntity,
-      DirectoryEntity, DirectoryPropertyEntity,
+      DirectoryEntity, DirectoryPropertyEntity, ValueEntity,
     ],
     subscribers: [],
     migrations: [],
