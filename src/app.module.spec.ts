@@ -28,7 +28,7 @@ describe('Property list', () => {
     const second = await Object.assign(new PropertyEntity(), { id: 'SECOND_NAME' }).save();
     const descr = await Object.assign(new PropertyEntity(), { id: 'DESCRIPTION' }).save();
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 50; i++) {
       await Object.assign(new PropertyEntity(), {
         id: `PROP_${i}`,
         property: [

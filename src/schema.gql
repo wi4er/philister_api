@@ -143,6 +143,29 @@ type ValueQuery {
   item(id: String!): Value
 }
 
+""""""
+type ValueMutation {
+  """Adding new value"""
+  add(item: ValueInput!): Value!
+
+  """Deletion existent value"""
+  delete(id: [String!]!): [String!]!
+
+  """Updating existent value"""
+  update: Value!
+}
+
+input ValueInput {
+  id: String!
+  directory: String!
+  property: [ValuePropertyInput!]
+}
+
+input ValuePropertyInput {
+  property: String!
+  value: String!
+}
+
 type Query {
   user: UserQuery!
   userGroup: UserGroupQuery!
@@ -157,4 +180,5 @@ type Mutation {
   userGroup: UserGroupMutation!
   property: PropertyMutation!
   directory: DirectoryMutation!
+  value: ValueMutation!
 }
