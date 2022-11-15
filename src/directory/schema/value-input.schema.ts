@@ -14,6 +14,9 @@ export class ValueInputSchema {
   @Field()
   id: string;
 
+  @Field()
+  directory: string
+
   @Field(type => [ ValuePropertyInputSchema ], { nullable: true })
   property: ValuePropertyInputSchema[];
 }

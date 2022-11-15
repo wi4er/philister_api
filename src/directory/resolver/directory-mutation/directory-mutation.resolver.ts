@@ -17,14 +17,15 @@ export class DirectoryMutationResolver {
 
   @ResolveField('add', type => DirectorySchema)
   async add(
+
     @Args('item')
       item: DirectoryInputSchema
   ) {
     const inst = new DirectoryEntity();
     inst.id = item.id;
+    inst.property = [];
 
     if (item.property) {
-      inst.property = [];
       for (const value of item.property) {
         inst.property.push(await Object.assign(
           new DirectoryPropertyEntity(),

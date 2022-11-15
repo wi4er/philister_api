@@ -40,18 +40,32 @@ describe("Directory entity", () => {
 
   describe('Value with directory', () => {
     test('Should add value with directory', async () => {
-      const dir = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
-
       const repo = source.getRepository(ValueEntity);
+
+      const dir = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      await Object.assign(new ValueEntity(), { id: 'London', directory: dir }).save();
+
+      const list = await repo.find({ relations: { directory: true } });
+
+      expect(list[0]['id']).toBe('London');
+      expect(list[0]['directory']['id']).toBe('CITY');
+    });
+  });
+
+  describe('Value deletion', () => {
+    test('Should delete value after directory deletion', async () => {
+      const repo = source.getRepository(DirectoryEntity);
+
+      const dir = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
       await Object.assign(new ValueEntity(), {
         id: 'London',
         directory: dir,
       }).save();
 
-      const list = await repo.find({relations: {directory: true}});
+      await repo.delete({id: 'CITY'});
+      const item = await repo.findOne({where: {id: 'London'}});
 
-      expect(list[0]['id']).toBe('London');
-      expect(list[0]['directory']['id']).toBe('CITY');
+      expect(item).toBeNull();
     });
   });
 });

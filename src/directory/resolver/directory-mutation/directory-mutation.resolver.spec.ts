@@ -5,6 +5,7 @@ import { createConnectionOptions } from "../../../createConnectionOptions";
 import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
 import { PropertyEntity } from "../../../property/model/property.entity";
+import { DirectoryEntity } from "../../model/directory.entity";
 
 const addDirectoryMutation = gql`
   mutation addDirectory($item: DirectoryInput!) {
@@ -18,6 +19,14 @@ const addDirectoryMutation = gql`
           }
         }
       }
+    }
+  }
+`;
+
+const deleteDirectoryMutation = gql`
+  mutation deleteDirectory($id: [String!]!) {
+    directory {
+      delete(id: $id) 
     }
   }
 `
@@ -57,6 +66,30 @@ describe('DirectoryQueryResolver', () => {
         .expectNoErrors();
 
       expect(res.data['directory']['add']['id']).toBe('CITY');
+    });
+  });
+
+  describe('Directory deletion', () => {
+    test('Should delete item', async () => {
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(deleteDirectoryMutation, {id: 'CITY'})
+        .expectNoErrors();
+
+      expect(res.data['directory']['delete']).toEqual(['CITY']);
+    });
+
+    test('Should delete list', async () => {
+      for (let i = 0; i < 10; i++) {
+        await Object.assign(new DirectoryEntity(), { id: `CITY_${i}` }).save();
+      }
+
+      const res = await request(app.getHttpServer())
+        .mutate(deleteDirectoryMutation, {id: ['CITY_0', 'CITY_3', 'CITY_5']})
+        .expectNoErrors();
+
+      expect(res.data['directory']['delete']).toEqual(['CITY_0', 'CITY_3', 'CITY_5']);
     });
   });
 });
