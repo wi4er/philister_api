@@ -9,6 +9,7 @@ import { DirectoryEntity } from "../../model/directory.entity";
 
 @Resolver(of => ValueMutationSchema)
 export class ValueMutationResolver {
+
   constructor(
     @InjectRepository(ValueEntity)
     private valueRepo: Repository<ValueEntity>,
@@ -36,6 +37,19 @@ export class ValueMutationResolver {
     return await inst.save();
   }
 
+  @ResolveField('update', type => ValueSchema)
+  async update(
+    @Args('item')
+      item: ValueInputSchema
+  ) {
+    const inst = await this.valueRepo.findOne({where: { id: item.id }});
+    const directory = await this.directoryRepo.findOne({where: {id: item.directory}});
+
+    inst.directory = directory;
+
+    return await inst.save();
+  }
+
   @ResolveField('delete', type => [ ValueSchema ])
   async delete(
     @Args('id', { type: () => [ String ] })
@@ -51,4 +65,5 @@ export class ValueMutationResolver {
 
     return result;
   }
+
 }

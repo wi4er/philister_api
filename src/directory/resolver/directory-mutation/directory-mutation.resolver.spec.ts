@@ -23,6 +23,22 @@ const addDirectoryMutation = gql`
   }
 `;
 
+const updateDirectoryMutation = gql`
+  mutation updateDirectory($item: DirectoryInput!) {
+    directory {
+      update(item: $item) {
+        id
+        property {
+          value
+          property {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 const deleteDirectoryMutation = gql`
   mutation deleteDirectory($id: [String!]!) {
     directory {
@@ -66,6 +82,28 @@ describe('DirectoryQueryResolver', () => {
         .expectNoErrors();
 
       expect(res.data['directory']['add']['id']).toBe('CITY');
+    });
+  });
+
+  describe('Directory update', () => {
+    test('Should update item', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateDirectoryMutation, {
+          item: {
+            id: 'CITY',
+            property: [{
+              value: 'VALUE',
+              property: 'NAME',
+            }]
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['directory']['update']['id']).toBe('CITY');
+      expect(res.data['directory']['update']['property'][0]['value']).toBe('VALUE');
     });
   });
 

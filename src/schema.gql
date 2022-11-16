@@ -124,7 +124,7 @@ type DirectoryMutation {
   delete(id: [String!]!): [String!]!
 
   """Updating existent directory"""
-  update: Directory!
+  update(item: DirectoryInput!): Directory!
 }
 
 input DirectoryInput {
@@ -152,7 +152,7 @@ type ValueMutation {
   delete(id: [String!]!): [String!]!
 
   """Updating existent value"""
-  update: Value!
+  update(item: ValueInput!): Value!
 }
 
 input ValueInput {

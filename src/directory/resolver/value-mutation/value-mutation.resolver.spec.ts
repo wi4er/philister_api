@@ -21,6 +21,19 @@ const addValueMutation = gql`
   }
 `;
 
+const updateValueMutation = gql`
+  mutation AddValue($item: ValueInput!) {
+    value {
+      update(item: $item) {
+        id
+        directory {
+          id
+        }
+      }
+    }
+  }
+`;
+
 const deleteValueMutation = gql`
   mutation deleteValue($id: [String!]!){
     value {
@@ -60,7 +73,7 @@ describe('ValueMutationResolver', () => {
       const res = await request(app.getHttpServer())
         .mutate(addValueMutation, { item: { id: 'London', directory: 'WRONG' } });
 
-      expect(res.errors[0].path).toEqual(['value', 'add']);
+      expect(res.errors[0].path).toEqual([ 'value', 'add' ]);
     });
 
     test("Shouldn't add without directory", async () => {
@@ -73,15 +86,34 @@ describe('ValueMutationResolver', () => {
     });
   });
 
-  describe('Directory deletion', () => {
+  describe('Directory update', () => {
+    test('Should update value', async () => {
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      await Object.assign(new DirectoryEntity(), { id: 'VILLAGE' }).save();
+
+      await Object.assign(
+        new ValueEntity(),
+        { id: 'London', directory: 'CITY' },
+      ).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateValueMutation, { item: {id: 'London', directory: 'VILLAGE' } })
+        .expectNoErrors();
+
+      expect(res.data['value']['update']['id']).toBe('London');
+      expect(res.data['value']['update']['directory']['id']).toBe('VILLAGE');
+    });
+  });
+
+  describe('Value deletion', () => {
     test('Should delete item', async () => {
       await Object.assign(new ValueEntity(), { id: 'London' }).save();
 
       const res = await request(app.getHttpServer())
-        .mutate(deleteValueMutation, {id: 'London'})
+        .mutate(deleteValueMutation, { id: 'London' })
         .expectNoErrors();
 
-      expect(res.data['value']['delete']).toEqual(['London']);
+      expect(res.data['value']['delete']).toEqual([ 'London' ]);
     });
 
     test('Should delete list', async () => {
@@ -90,10 +122,10 @@ describe('ValueMutationResolver', () => {
       }
 
       const res = await request(app.getHttpServer())
-        .mutate(deleteValueMutation, {id: ['London_0', 'London_3', 'London_5']})
+        .mutate(deleteValueMutation, { id: [ 'London_0', 'London_3', 'London_5' ] })
         .expectNoErrors();
 
-      expect(res.data['value']['delete']).toEqual(['London_0', 'London_3', 'London_5']);
+      expect(res.data['value']['delete']).toEqual([ 'London_0', 'London_3', 'London_5' ]);
     });
   });
 });
