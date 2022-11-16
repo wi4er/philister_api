@@ -12,4 +12,5 @@ export class PropertyQuerySchema {
 
   @Field(type => PropertySchema, {nullable: true})
   item: PropertySchema;
+
 }

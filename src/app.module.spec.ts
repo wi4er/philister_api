@@ -23,7 +23,7 @@ beforeAll(async () => {
 beforeEach(() => source.synchronize(true));
 
 describe('Property list', () => {
-  test.skip("Should get empty list", async () => {
+  test("Should get empty list", async () => {
     const name = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
     const second = await Object.assign(new PropertyEntity(), { id: 'SECOND_NAME' }).save();
     const descr = await Object.assign(new PropertyEntity(), { id: 'DESCRIPTION' }).save();

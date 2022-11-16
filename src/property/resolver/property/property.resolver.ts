@@ -4,6 +4,7 @@ import { PropertyEntity } from "../../model/property.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { PropertyPropertyEntity } from "../../model/property-property.entity";
+import { PropertyPropertySchema } from "../../schema/property-property.schema";
 
 @Resolver(of => PropertySchema)
 export class PropertyResolver {
@@ -14,7 +15,7 @@ export class PropertyResolver {
   ) {
   }
 
-  @ResolveField("property", type => PropertySchema)
+  @ResolveField("property", type => PropertyPropertySchema)
   async property(
     @Parent()
       prop: PropertyEntity
@@ -24,4 +25,5 @@ export class PropertyResolver {
       relations: {property: true},
     });
   }
+
 }

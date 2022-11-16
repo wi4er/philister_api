@@ -166,12 +166,37 @@ input ValuePropertyInput {
   value: String!
 }
 
+type FlagProperty {
+  id: Int!
+  value: String!
+  property: Property!
+}
+
+type FlagFlag {
+  id: Float!
+  flag: Flag!
+}
+
+type Flag {
+  id: String!
+  label: String!
+  property: [FlagProperty!]!
+  flag: [FlagFlag!]!
+}
+
+type FlagQuery {
+  list(limit: Int, offset: Int): [Flag!]!
+  count(limit: Int, offset: Int): Int!
+  item(id: String!): Flag
+}
+
 type Query {
   user: UserQuery!
   userGroup: UserGroupQuery!
   property: PropertyQuery!
   directory: DirectoryQuery!
   value: ValueQuery!
+  flag: FlagQuery!
 }
 
 type Mutation {
@@ -181,4 +206,5 @@ type Mutation {
   property: PropertyMutation!
   directory: DirectoryMutation!
   value: ValueMutation!
+  flag: PropertyMutation!
 }

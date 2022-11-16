@@ -7,6 +7,9 @@ import { DirectoryEntity } from "./directory/model/directory.entity";
 import { DirectoryPropertyEntity } from "./directory/model/directory-property.entity";
 import { UserGroupEntity } from "./user/model/user-group.entity";
 import { ValueEntity } from "./directory/model/value.entity";
+import { FlagEntity } from "./flag/model/flag.entity";
+import { FlagFlagEntity } from "./flag/model/flag-flag.entity";
+import { FlagPropertyEntity } from "./flag/model/flag-property.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -22,6 +25,7 @@ export function createConnectionOptions(): DataSourceOptions {
       UserEntity, UserGroupEntity, UserPropertyEntity,
       PropertyEntity, PropertyPropertyEntity,
       DirectoryEntity, DirectoryPropertyEntity, ValueEntity,
+      FlagEntity, FlagPropertyEntity, FlagFlagEntity
     ],
     subscribers: [],
     migrations: [],

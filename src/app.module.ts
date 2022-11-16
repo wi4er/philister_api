@@ -12,6 +12,7 @@ import { GraphQLRequestContext, GraphQLResponse } from "apollo-server-types";
 import { createConnectionOptions } from "./createConnectionOptions";
 import { DirectoryModule } from './directory/directory.module';
 import { DescriptionModule } from './description/description.module';
+import { FlagModule } from './flag/flag.module';
 import redisPermission from "./permission/redis.permission";
 import * as cors from "cors";
 
@@ -33,6 +34,7 @@ import * as cors from "cors";
     PropertyModule,
     DirectoryModule,
     DescriptionModule,
+    FlagModule,
   ],
   controllers: [ AppController ],
   providers: [],

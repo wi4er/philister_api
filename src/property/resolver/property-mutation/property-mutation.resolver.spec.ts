@@ -138,8 +138,6 @@ describe('PropertyMutationResolver', () => {
         })
         .expectNoErrors();
 
-      console.log(res.data['property']['update']);
-
       expect(res.data['property']['update']['id']).toBe('UPDATE');
       expect(res.data['property']['update']['property']).toHaveLength(1);
     });
