@@ -8,7 +8,7 @@ import { PropertyEntity } from "../../../property/model/property.entity";
 import request from "supertest-graphql";
 import { FlagEntity } from "../../model/flag.entity";
 import { FlagFlagEntity } from "../../model/flag-flag.entity";
-import { FlagPropertyEntity } from "../../model/flag-property.entity";
+import { FlagStringEntity } from "../../model/flag-string.entity";
 
 const flagPropertyQuery = gql`
   query PropertyPropertyQuery ($id: String!){
@@ -81,7 +81,7 @@ describe('FlagResolver', () => {
       await Object.assign(new FlagEntity(), {
         id: 'ACTIVE',
         label: 'active',
-        property: [await Object.assign(new FlagPropertyEntity(), {value: 'OK', property: 'STATUS'}).save()]
+        property: [await Object.assign(new FlagStringEntity(), {value: 'OK', property: 'STATUS'}).save()]
       }).save();
 
       const res = await request(app.getHttpServer())

@@ -6,14 +6,15 @@ import { FlagResolver } from './resolver/flag/flag.resolver';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { FlagEntity } from "./model/flag.entity";
 import { FlagFlagEntity } from "./model/flag-flag.entity";
-import { FlagPropertyEntity } from "./model/flag-property.entity";
-import { FlagPropertyResolver } from './resolver/flag-property/flag-property.resolver';
+import { FlagStringEntity } from "./model/flag-string.entity";
+import { FlagStringResolver } from './resolver/flag-string/flag-string.resolver';
 import { FlagFlagResolver } from './resolver/flag-flag/flag-flag.resolver';
+import { PropertyEntity } from "../property/model/property.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ FlagEntity, FlagFlagEntity, FlagPropertyEntity ])
+    TypeOrmModule.forFeature([ FlagEntity, FlagFlagEntity, FlagStringEntity, PropertyEntity ])
   ],
-  providers: [FlagRootResolver, FlagQueryResolver, FlagMutationResolver, FlagResolver, FlagPropertyResolver, FlagFlagResolver]
+  providers: [FlagRootResolver, FlagQueryResolver, FlagMutationResolver, FlagResolver, FlagStringResolver, FlagFlagResolver]
 })
 export class FlagModule {}

@@ -3,26 +3,29 @@ import { PropertyEntity } from "../../property/model/property.entity";
 import { FlagEntity } from "./flag.entity";
 
 @Entity({
-  name: 'flag-property',
+  name: 'flag-string',
 })
-export class FlagPropertyEntity extends BaseEntity {
+export class FlagStringEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  value: string;
+  string: string;
 
   @ManyToOne(
     () => FlagEntity,
-    flag => flag.property,
+    flag => flag.string,
     {onDelete: 'CASCADE'},
   )
   parent: FlagEntity;
 
   @ManyToOne(
     () => PropertyEntity,
-    {onDelete: 'CASCADE'},
+    {
+      onDelete: 'CASCADE',
+      nullable: false,
+    },
   )
   property: PropertyEntity;
 

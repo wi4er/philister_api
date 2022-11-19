@@ -1,8 +1,13 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, Int, InterfaceType } from "@nestjs/graphql";
 import { PropertySchema } from "../../property/schema/property.schema";
 
-@ObjectType(
-  'FlagProperty'
+@InterfaceType(
+  'FlagProperty',
+  {
+    resolveType: () => {
+      return 'FlagString';
+    }
+  }
 )
 export class FlagPropertySchema {
 
@@ -10,7 +15,7 @@ export class FlagPropertySchema {
   id: number;
 
   @Field()
-  value: string;
+  string: string;
 
   @Field(type => PropertySchema)
   property: PropertySchema;

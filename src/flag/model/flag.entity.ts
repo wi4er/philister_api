@@ -1,5 +1,5 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
-import { FlagPropertyEntity } from "./flag-property.entity";
+import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
+import { FlagStringEntity } from "./flag-string.entity";
 import { FlagFlagEntity } from "./flag-flag.entity";
 
 @Entity({
@@ -16,10 +16,10 @@ export class FlagEntity extends BaseEntity {
   label: string;
 
   @OneToMany(
-    type => FlagPropertyEntity,
+    type => FlagStringEntity,
     property => property.parent,
   )
-  property: FlagPropertyEntity[];
+  string: FlagStringEntity[];
 
   @OneToMany(
     type => FlagFlagEntity,

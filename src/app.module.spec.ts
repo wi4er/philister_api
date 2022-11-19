@@ -11,6 +11,8 @@ import { ValueEntity } from "./directory/model/value.entity";
 import { UserStringEntity } from "./user/model/user-string.entity";
 import { UserValueEntity } from "./user/model/user-value.entity";
 import { UserUserEntity } from "./user/model/user-user.entity";
+import { FlagEntity } from "./flag/model/flag.entity";
+import { FlagStringEntity } from "./flag/model/flag-string.entity";
 
 let source;
 let app;
@@ -31,6 +33,31 @@ describe('Property list', () => {
     const second = await Object.assign(new PropertyEntity(), { id: 'SECOND_NAME' }).save();
     const descr = await Object.assign(new PropertyEntity(), { id: 'DESCRIPTION' }).save();
     const parent = await Object.assign(new PropertyEntity(), { id: 'PARENT' }).save();
+
+    const active = await Object.assign(new FlagEntity(), {
+      id: 'ACTIVE',
+      label: 'active',
+      string: [
+        await Object.assign(new FlagStringEntity(), {string: 'active', property: 'NAME'}).save(),
+        await Object.assign(new FlagStringEntity(), {string: 'active too', property: 'SECOND_NAME'}).save(),
+      ]
+    }).save();
+    const passive = await Object.assign(new FlagEntity(), {
+      id: 'PASSIVE',
+      label: 'passive',
+      string: [
+        await Object.assign(new FlagStringEntity(), {string: 'passive', property: 'NAME'}).save(),
+        await Object.assign(new FlagStringEntity(), {string: 'passive too', property: 'SECOND_NAME'}).save(),
+      ]
+    }).save();
+    const actual = await Object.assign(new FlagEntity(), {
+      id: 'ACTUAL',
+      label: 'actual',
+      string: [
+        await Object.assign(new FlagStringEntity(), {string: 'actual', property: 'NAME'}).save(),
+        await Object.assign(new FlagStringEntity(), {string: 'actual too', property: 'SECOND_NAME'}).save(),
+      ]
+    }).save();
 
     for (let i = 0; i < 50; i++) {
       await Object.assign(new PropertyEntity(), {

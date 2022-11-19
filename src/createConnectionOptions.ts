@@ -9,7 +9,7 @@ import { UserGroupEntity } from "./user/model/user-group.entity";
 import { ValueEntity } from "./directory/model/value.entity";
 import { FlagEntity } from "./flag/model/flag.entity";
 import { FlagFlagEntity } from "./flag/model/flag-flag.entity";
-import { FlagPropertyEntity } from "./flag/model/flag-property.entity";
+import { FlagStringEntity } from "./flag/model/flag-string.entity";
 import { UserFlagEntity } from "./user/model/user-flag.entity";
 import { UserValueEntity } from "./user/model/user-value.entity";
 import { UserUserEntity } from "./user/model/user-user.entity";
@@ -31,7 +31,7 @@ export function createConnectionOptions(): DataSourceOptions {
       UserGroupEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
       DirectoryEntity, DirectoryPropertyEntity, ValueEntity,
-      FlagEntity, FlagPropertyEntity, FlagFlagEntity
+      FlagEntity, FlagStringEntity, FlagFlagEntity
     ],
     subscribers: [],
     migrations: [],

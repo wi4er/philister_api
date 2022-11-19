@@ -8,6 +8,12 @@ interface UserPropertySchema {
   property: Property!
 }
 
+interface FlagProperty {
+  id: Int!
+  string: String!
+  property: Property!
+}
+
 type PropertyProperty {
   id: String!
   value: String!
@@ -17,12 +23,6 @@ type PropertyProperty {
 type Property {
   id: String!
   property: [PropertyProperty!]
-}
-
-type FlagProperty {
-  id: Int!
-  value: String!
-  property: Property!
 }
 
 type FlagFlag {
@@ -213,6 +213,13 @@ type FlagQuery {
   list(limit: Int, offset: Int): [Flag!]!
   count(limit: Int, offset: Int): Int!
   item(id: String!): Flag
+}
+
+type FlagString implements FlagProperty {
+  id: Int!
+  string: String!
+  property: Property!
+  value: String!
 }
 
 type Query {

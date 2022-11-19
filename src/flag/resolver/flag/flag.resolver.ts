@@ -3,31 +3,31 @@ import { FlagSchema } from "../../schema/flag.schema";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { FlagPropertyEntity } from "../../model/flag-property.entity";
+import { FlagStringEntity } from "../../model/flag-string.entity";
 import { FlagFlagEntity } from "../../model/flag-flag.entity";
 import { FlagFlagSchema } from "../../schema/flag-flag.schema";
-import { FlagPropertySchema } from "../../schema/flag-property.schema";
+import { FlagStringSchema } from "../../schema/flag-string.schema";
 
 @Resolver(of => FlagSchema)
 export class FlagResolver {
 
   constructor(
-    @InjectRepository(FlagPropertyEntity)
-    private propertyRepo: Repository<FlagPropertyEntity>,
+    @InjectRepository(FlagStringEntity)
+    private propertyRepo: Repository<FlagStringEntity>,
 
     @InjectRepository(FlagFlagEntity)
     private flagRepo: Repository<FlagFlagEntity>,
   ) {
   }
 
-  @ResolveField("property", type => FlagPropertySchema)
+  @ResolveField("property", type => FlagStringSchema)
   async property(
     @Parent()
       prop: PropertyEntity
   ) {
     return this.propertyRepo.find({
       where: {parent: {id: prop.id}},
-      relations: {property: true},
+      loadRelationIds: true,
     });
   }
 
@@ -38,7 +38,7 @@ export class FlagResolver {
   ) {
     return this.flagRepo.find({
       where: {parent: {id: prop.id}},
-      relations: {flag: true},
+      loadRelationIds: true,
     });
   }
 

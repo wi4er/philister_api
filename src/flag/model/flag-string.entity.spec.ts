@@ -3,7 +3,7 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { FlagEntity } from "./flag.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { FlagPropertyEntity } from "./flag-property.entity";
+import { FlagStringEntity } from "./flag-string.entity";
 
 describe("Flag property entity", () => {
   let source: DataSource;
@@ -23,12 +23,12 @@ describe("Flag property entity", () => {
     });
 
     test('Should create flag with property', async () => {
-      const prop = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const item = await Object.assign(new FlagEntity(), {
         id: 'ACTIVE',
         label: 'activity',
         property: [
-          await Object.assign(new FlagPropertyEntity(), { value: 'Flag name', property: 'NAME' }).save()
+          await Object.assign(new FlagStringEntity(), { string: 'Flag name', property: 'NAME' }).save()
         ]
       }).save();
 
@@ -45,7 +45,7 @@ describe("Flag property entity", () => {
         id: 'ACTIVE',
         label: 'activity',
         property: [
-          await Object.assign(new FlagPropertyEntity(), { value: 'Flag name', property: 'NAME' }).save()
+          await Object.assign(new FlagStringEntity(), { string: 'Flag name', property: 'NAME' }).save()
         ]
       }).save();
 

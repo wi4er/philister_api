@@ -1,21 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { FlagFlagResolver } from './flag-flag.resolver';
+import { FlagStringResolver } from './flag-string.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../../createConnectionOptions";
-import { FlagEntity } from "../../model/flag.entity";
 import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
-import { FlagFlagEntity } from "../../model/flag-flag.entity";
+import { FlagEntity } from "../../model/flag.entity";
+import { PropertyEntity } from "../../../property/model/property.entity";
+import { FlagStringEntity } from "../../model/flag-string.entity";
 
-const flagItemQuery = gql`
-  query FlagItem ($id: String!){
+const getFlagItem = gql`
+  query GetFlagItem($id: String!) {
     flag {
       item(id: $id) {
         id
-        flag {
+        property {
           id
-          flag {
+          string
+          property {
             id
           }
         }
@@ -24,7 +26,7 @@ const flagItemQuery = gql`
   }
 `;
 
-describe('FlagFlagResolver', () => {
+describe('FlagPropertyResolver', () => {
   let source;
   let app;
 
@@ -38,24 +40,24 @@ describe('FlagFlagResolver', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('Flag fields', () => {
-    test('Should get flag with id', async () => {
-      await Object.assign(new FlagEntity(), { id: 'ACTIVE', label: 'active' }).save();
-
+  describe('Flag with property', () => {
+    test("Should get flag with property list", async () => {
+      await Object.assign(new PropertyEntity(), {id: 'NAME'}).save();
       await Object.assign(new FlagEntity(), {
-        id: 'FLAG',
+        id: 'ACTIVE',
         label: 'active',
-        flag: [
-          await Object.assign(new FlagFlagEntity(), {flag: 'ACTIVE'}).save(),
+        string: [
+          await Object.assign(new FlagStringEntity(), {string: 'VALUE', property: 'NAME'}).save(),
         ]
       }).save();
 
       const res = await request(app.getHttpServer())
-        .query(flagItemQuery, { id: 'FLAG' })
+        .query(getFlagItem, {id: 'ACTIVE'})
         .expectNoErrors();
 
-      expect(res.data['flag']['item']['id']).toBe('FLAG');
-    });
+      console.dir(res.data['flag']['item'], {depth: 5});
 
+      // expect(res.data['flag']['list']).toHaveLength(0);
+    });
   });
 });

@@ -1,10 +1,10 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PropertyEntity } from "../../property/model/property.entity";
+import { BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { FlagEntity } from "./flag.entity";
 
 @Entity({
   name: 'flag-flag',
 })
+@Index(['parent', 'flag'], {unique: true})
 export class FlagFlagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
@@ -13,13 +13,18 @@ export class FlagFlagEntity extends BaseEntity {
   @ManyToOne(
     () => FlagEntity,
     flag => flag.flag,
-    {onDelete: 'CASCADE'},
+    {
+      onDelete: 'CASCADE'
+    },
   )
   parent: FlagEntity;
 
   @ManyToOne(
     () => FlagEntity,
-    {onDelete: 'CASCADE'},
+    {
+      onDelete: 'CASCADE',
+      nullable: false,
+    },
   )
   flag: FlagEntity;
 
