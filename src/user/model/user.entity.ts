@@ -1,8 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BaseEntity } from 'typeorm';
-import { UserPropertyEntity } from "./user-property.entity";
+import { UserStringEntity } from './user-string.entity';
+import { UserFlagEntity } from "./user-flag.entity";
+import { UserValueEntity } from "./user-value.entity";
+import { UserUserEntity } from "./user-user.entity";
+import { UserGroupEntity } from "./user-group.entity";
+import { UserDescriptionEntity } from "./user-description.entity";
 
 @Entity({
-  name: "user"
+  name: 'user'
 })
 export class UserEntity extends BaseEntity {
 
@@ -18,8 +23,33 @@ export class UserEntity extends BaseEntity {
   hash: string
 
   @OneToMany(
-    type => UserPropertyEntity,
-    userProperty => userProperty.user,
+    type => UserStringEntity,
+    property => property.parent,
   )
-  property: UserPropertyEntity[]
+  string: UserStringEntity[];
+
+  @OneToMany(
+    type => UserDescriptionEntity,
+    property => property.parent,
+  )
+  description: UserDescriptionEntity[];
+
+  @OneToMany(
+    type => UserValueEntity,
+    value => value.parent,
+  )
+  value: UserValueEntity[];
+
+  @OneToMany(
+    type => UserFlagEntity,
+    flag => flag.parent,
+  )
+  flag: UserFlagEntity[];
+
+  @OneToMany(
+    type => UserUserEntity,
+    user => user.parent,
+  )
+  child: UserUserEntity[];
+
 }

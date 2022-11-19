@@ -3,7 +3,7 @@ import { UserGroupResolver } from './user-group.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
 import { UserEntity } from "../../model/user.entity";
-import { UserPropertyEntity } from "../../model/user-property.entity";
+import { UserStringEntity } from "../../model/user-string.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { gql } from "apollo-server-express";
 import request from "supertest-graphql";

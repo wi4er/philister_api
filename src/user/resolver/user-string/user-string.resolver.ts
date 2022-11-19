@@ -1,12 +1,12 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { UserPropertySchema } from "../../schema/user-property.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { UserPropertyEntity } from "../../model/user-property.entity";
+import { UserStringEntity } from "../../model/user-string.entity";
+import { UserStringSchema } from "../../schema/user-property/user-string.schema";
 
-@Resolver(of => UserPropertySchema)
-export class UserPropertyResolver {
+@Resolver(of => UserStringSchema)
+export class UserStringResolver {
 
   constructor(
     @InjectRepository(PropertyEntity)
@@ -14,8 +14,8 @@ export class UserPropertyResolver {
   ) {
   }
 
-  @ResolveField("property", returns => [ UserPropertySchema ])
-  async property(@Parent() userProperty: UserPropertyEntity) {
+  @ResolveField("property", returns => [ UserStringSchema ])
+  async property(@Parent() userProperty: UserStringEntity) {
     return userProperty.property;
   }
 }

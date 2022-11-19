@@ -1,21 +1,31 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { UserGroupMutationSchema } from "./user-group-mutation.schema";
-import { UserPropertySchema } from "./user-property.schema";
+import { UserPropertySchema } from "./user-property/user.property.schema";
+import { FlagSchema } from "../../flag/schema/flag.schema";
 
 @ObjectType('User')
 export class UserSchema {
   @Field(type => Int)
   id: number;
 
-  @Field({ nullable: true })
+  @Field()
   login: string;
 
   @Field({ nullable: true })
   hash?: string;
 
   @Field(type => [ UserSchema ], { nullable: true })
-  group?: [ UserGroupMutationSchema ]
+  group?: UserGroupMutationSchema[];
 
   @Field(type => [ UserPropertySchema ], { nullable: true })
-  property?: [ UserPropertySchema ]
+  property?: UserPropertySchema[];
+
+  @Field(type => UserPropertySchema, { nullable: true })
+  propertyItem: UserPropertySchema;
+
+  @Field(type => [ FlagSchema ])
+  flag: FlagSchema[];
+
+  @Field(type => FlagSchema)
+  flagItem: FlagSchema;
 }

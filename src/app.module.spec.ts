@@ -8,6 +8,9 @@ import { createConnectionOptions } from "./createConnectionOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
 import { DirectoryPropertyEntity } from "./directory/model/directory-property.entity";
 import { ValueEntity } from "./directory/model/value.entity";
+import { UserStringEntity } from "./user/model/user-string.entity";
+import { UserValueEntity } from "./user/model/user-value.entity";
+import { UserUserEntity } from "./user/model/user-user.entity";
 
 let source;
 let app;
@@ -27,6 +30,7 @@ describe('Property list', () => {
     const name = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
     const second = await Object.assign(new PropertyEntity(), { id: 'SECOND_NAME' }).save();
     const descr = await Object.assign(new PropertyEntity(), { id: 'DESCRIPTION' }).save();
+    const parent = await Object.assign(new PropertyEntity(), { id: 'PARENT' }).save();
 
     for (let i = 0; i < 50; i++) {
       await Object.assign(new PropertyEntity(), {
@@ -50,10 +54,63 @@ describe('Property list', () => {
       }).save();
     }
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1000; i++) {
       await Object.assign(new ValueEntity(), {
-        id: `DIRECT_${i}`,
+        id: `VALUE_${i}`,
         directory: `DIRECT_${Math.random() * 100 >> 0}`,
+      }).save();
+    }
+
+    await Object.assign(new UserEntity(), {
+      login: `USER_0`,
+      string: [
+        await Object.assign(new UserStringEntity(), { string: `VALUE_0`, property: name }).save(),
+        await Object.assign(new UserStringEntity(), { string: `SECOND_0`, property: second }).save(),
+        await Object.assign(new UserStringEntity(), { string: `DESCRIPTION_0`, property: descr }).save(),
+      ],
+      value: [
+        await Object.assign(new UserValueEntity(), {
+          value: `VALUE_${Math.random() * 100 >> 0}`,
+          property: name
+        }).save(),
+        await Object.assign(new UserValueEntity(), {
+          value: `VALUE_${Math.random() * 100 >> 0}`,
+          property: second
+        }).save(),
+        await Object.assign(new UserValueEntity(), {
+          value: `VALUE_${Math.random() * 100 >> 0}`,
+          property: descr
+        }).save(),
+      ],
+    }).save();
+
+    for (let i = 1; i < 1000; i++) {
+      await Object.assign(new UserEntity(), {
+        login: `USER_${i}`,
+        string: [
+          await Object.assign(new UserStringEntity(), { string: `VALUE_${i}`, property: name }).save(),
+          await Object.assign(new UserStringEntity(), { string: `SECOND_${i}`, property: second }).save(),
+          await Object.assign(new UserStringEntity(), { string: `DESCRIPTION_${i}`, property: descr }).save(),
+        ],
+        value: [
+          await Object.assign(new UserValueEntity(), {
+            value: `VALUE_${Math.random() * 100 >> 0}`,
+            property: name
+          }).save(),
+          await Object.assign(new UserValueEntity(), {
+            value: `VALUE_${Math.random() * 100 >> 0}`,
+            property: second
+          }).save(),
+          await Object.assign(new UserValueEntity(), {
+            value: `VALUE_${Math.random() * 100 >> 0}`,
+            property: descr
+          }).save(),
+        ],
+        child: [
+          await Object.assign(new UserUserEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
+          await Object.assign(new UserUserEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
+          await Object.assign(new UserUserEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
+        ]
       }).save();
     }
 

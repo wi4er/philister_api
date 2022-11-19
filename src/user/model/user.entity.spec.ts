@@ -1,12 +1,9 @@
 import { UserEntity } from './user.entity';
 import { createConnection, Repository } from 'typeorm';
-import { UserPropertyEntity } from './user-property.entity';
 import { DataSource } from "typeorm/data-source/DataSource";
-import { PropertyEntity } from "../../property/model/property.entity";
 import { createConnectionOptions } from "../../createConnectionOptions";
 
 describe('User entity', () => {
-
   let source: DataSource;
 
   beforeAll(async () => {
@@ -16,15 +13,40 @@ describe('User entity', () => {
   beforeEach(() => source.synchronize(true));
 
   describe("User fields", () => {
-    test('Should add item', async () => {
+    test('Should find empty list', async () => {
       const repo = source.getRepository(UserEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(0);
     });
 
+    test('Should add item', async () => {
+      const user = await Object.assign(
+        new UserEntity(),
+        {
+          login: 'TEST',
+          hash: 'CRYPT'
+        }
+      ).save();
+
+      expect(user.login).toBe('TEST');
+      expect(user.hash).toBe('CRYPT');
+    });
+
+    test('Should update item', async () => {
+      const repo = source.getRepository(UserEntity);
+      await Object.assign(new UserEntity(), { login: 'TEST' }).save();
+
+      const user = await repo.findOne({ where: { login: 'TEST' } });
+      user.login = 'updated';
+      await user.save();
+
+      const updated = await repo.findOne({ where: { id: user.id } });
+      expect(updated.login).toBe('updated');
+    });
+
     test('Should find item', async () => {
-      const repo = source.getRepository(UserEntity) as Repository<UserEntity>;
+      const repo = source.getRepository(UserEntity);
 
       await Object.assign(new UserEntity(), { login: 'TEST' }).save();
       const list = await repo.find();
@@ -32,50 +54,12 @@ describe('User entity', () => {
       expect(list).toHaveLength(1);
       expect(list[0].login).toBe('TEST');
     });
-  });
 
-  describe("User with property", () => {
-    test("Should create user with property", async () => {
-      const prop = await Object.assign(new PropertyEntity(), { id: "NAME" }).save();
-      const user = await Object.assign(
-        new UserEntity(), {
-          login: "USER",
-          property: [
-            await Object.assign(new UserPropertyEntity(), { value: "TEST", property: prop }).save()
-          ]
-        }
-      ).save();
+    test('Should`t create with same login', async () => {
+      await Object.assign(new UserEntity(), { login: 'TEST' }).save();
 
-      expect(user.property).toHaveLength(1);
-      expect(user.property[0].value).toBe("TEST");
-      expect(user.property[0].property.id).toBe("NAME");
-    });
-
-    test("Should create user with list of properties", async () => {
-      const prop1 = await Object.assign(new PropertyEntity(), { id: "PROP_1" }).save();
-      const prop2 = await Object.assign(new PropertyEntity(), { id: "PROP_2" }).save();
-      const prop3 = await Object.assign(new PropertyEntity(), { id: "PROP_3" }).save();
-
-      const user = await Object.assign(
-        new UserEntity(), {
-          login: "USER",
-          property: [
-            await Object.assign(new UserPropertyEntity(), { value: "TEST_1", property: prop1 }).save(),
-            await Object.assign(new UserPropertyEntity(), { value: "TEST_2", property: prop2 }).save(),
-            await Object.assign(new UserPropertyEntity(), { value: "TEST_3", property: prop3 }).save(),
-          ]
-        }
-      ).save();
-
-      expect(user.property).toHaveLength(3);
-      expect(user.property[0].value).toBe("TEST_1");
-      expect(user.property[0].property.id).toBe("PROP_1");
-
-      expect(user.property[1].value).toBe("TEST_2");
-      expect(user.property[1].property.id).toBe("PROP_2");
-
-      expect(user.property[2].value).toBe("TEST_3");
-      expect(user.property[2].property.id).toBe("PROP_3");
+      const user = Object.assign(new UserEntity(), { login: 'TEST' });
+      await expect(user.save()).rejects.toThrow();
     });
   });
 });
