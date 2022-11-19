@@ -22,10 +22,8 @@ import * as cors from "cors";
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       formatResponse: (response: GraphQLResponse, requestContext: GraphQLRequestContext) => {
         const { headers } = requestContext.response.http;
-
-        console.log(headers)
-
         headers.set('access-control-allow-origin', requestContext.request.http.headers.get('origin'));
+
         return response;
       },
     }),

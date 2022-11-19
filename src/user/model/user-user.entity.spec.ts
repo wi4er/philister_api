@@ -28,8 +28,6 @@ describe('User user entity', () => {
         }
       ).save();
 
-      console.log(user);
-
       expect(user.child).toHaveLength(1);
     });
 
