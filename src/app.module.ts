@@ -21,8 +21,11 @@ import * as cors from "cors";
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       formatResponse: (response: GraphQLResponse, requestContext: GraphQLRequestContext) => {
-        const headers = requestContext.response.http;
-        headers.headers.set('access-control-allow-origin', requestContext.request.http.headers.get('origin'));
+        const { headers } = requestContext.response.http;
+
+        console.log(headers)
+
+        headers.set('access-control-allow-origin', requestContext.request.http.headers.get('origin'));
         return response;
       },
     }),

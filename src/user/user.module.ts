@@ -20,6 +20,7 @@ import { UserUserResolver } from './resolver/user-user/user-user.resolver';
 import { UserUserEntity } from "./model/user-user.entity";
 import { UserValueEntity } from "./model/user-value.entity";
 import { UserFlagEntity } from "./model/user-flag.entity";
+import { UserController } from './controller/user/user.controller';
 
 @Module({
   imports: [
@@ -42,7 +43,8 @@ import { UserFlagEntity } from "./model/user-flag.entity";
     UserService,
     UserValueResolver,
     UserUserResolver,
-  ]
+  ],
+  controllers: [UserController]
 })
 export class UserModule {
 }

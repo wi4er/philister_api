@@ -15,7 +15,7 @@ export class UserQueryResolver {
   ) {
   }
 
-  @ResolveField("list", returns => [ UserSchema ])
+  @ResolveField('list', returns => [ UserSchema ])
   async list(
     @Args('limit', {nullable: true, type: () => Int})
       limit: number,
@@ -28,7 +28,20 @@ export class UserQueryResolver {
     });
   }
 
-  @ResolveField("item", returns => [ UserSchema ])
+  @ResolveField('count', returns => Int)
+  async count(
+    @Args('limit', {nullable: true, type: () => Int})
+      limit: number,
+    @Args('offset', {nullable: true, type: () => Int})
+      offset: number,
+  ) {
+    return this.userRepo.count({
+      skip: offset,
+      take: limit,
+    });
+  }
+
+  @ResolveField('item', returns => [ UserSchema ])
   async item(
     @Args('id', { type: () => Int })
       id: number,
@@ -38,7 +51,7 @@ export class UserQueryResolver {
     return this.userRepo.findOne({where: {id}});
   }
 
-  @ResolveField("myself", returns => [ UserSchema ])
+  @ResolveField('myself', returns => [ UserSchema ])
   async myself(
     @Context()
       context: { req: Request },

@@ -26,7 +26,7 @@ beforeAll(async () => {
 beforeEach(() => source.synchronize(true));
 
 describe('Property list', () => {
-  test("Should get empty list", async () => {
+  test.skip("Should get empty list", async () => {
     const name = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
     const second = await Object.assign(new PropertyEntity(), { id: 'SECOND_NAME' }).save();
     const descr = await Object.assign(new PropertyEntity(), { id: 'DESCRIPTION' }).save();
@@ -84,6 +84,11 @@ describe('Property list', () => {
       ],
     }).save();
 
+    const val_1 = await Object.assign(new PropertyEntity(), { id: 'VALUE+1' }).save();
+    const val_2 = await Object.assign(new PropertyEntity(), { id: 'VALUE+2' }).save();
+    const val_3 = await Object.assign(new PropertyEntity(), { id: 'VALUE+3' }).save();
+
+
     for (let i = 1; i < 1000; i++) {
       await Object.assign(new UserEntity(), {
         login: `USER_${i}`,
@@ -95,15 +100,15 @@ describe('Property list', () => {
         value: [
           await Object.assign(new UserValueEntity(), {
             value: `VALUE_${Math.random() * 100 >> 0}`,
-            property: name
+            property: val_1
           }).save(),
           await Object.assign(new UserValueEntity(), {
             value: `VALUE_${Math.random() * 100 >> 0}`,
-            property: second
+            property: val_2
           }).save(),
           await Object.assign(new UserValueEntity(), {
             value: `VALUE_${Math.random() * 100 >> 0}`,
-            property: descr
+            property: val_3
           }).save(),
         ],
         child: [

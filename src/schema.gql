@@ -50,6 +50,7 @@ type User {
 
 type UserQuery {
   list(limit: Int, offset: Int): [User!]!
+  count(limit: Int, offset: Int): Int!
   item(id: Int!): User
   myself: User
 }
