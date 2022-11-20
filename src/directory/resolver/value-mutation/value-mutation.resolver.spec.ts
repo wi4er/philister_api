@@ -91,13 +91,10 @@ describe('ValueMutationResolver', () => {
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
       await Object.assign(new DirectoryEntity(), { id: 'VILLAGE' }).save();
 
-      await Object.assign(
-        new ValueEntity(),
-        { id: 'London', directory: 'CITY' },
-      ).save();
+      await Object.assign(new ValueEntity(), { id: 'London', directory: 'CITY' }).save();
 
       const res = await request(app.getHttpServer())
-        .mutate(updateValueMutation, { item: {id: 'London', directory: 'VILLAGE' } })
+        .mutate(updateValueMutation, { item: { id: 'London', directory: 'VILLAGE' } })
         .expectNoErrors();
 
       expect(res.data['value']['update']['id']).toBe('London');

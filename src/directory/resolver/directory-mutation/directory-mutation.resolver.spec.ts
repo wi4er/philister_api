@@ -13,7 +13,7 @@ const addDirectoryMutation = gql`
       add(item: $item) {
         id
         property {
-          value
+          string
           property {
             id
           }
@@ -29,7 +29,7 @@ const updateDirectoryMutation = gql`
       update(item: $item) {
         id
         property {
-          value
+          string
           property {
             id
           }
@@ -47,7 +47,7 @@ const deleteDirectoryMutation = gql`
   }
 `
 
-describe('DirectoryQueryResolver', () => {
+describe('DirectoryMutationResolver', () => {
   let source;
   let app;
 
@@ -76,12 +76,14 @@ describe('DirectoryQueryResolver', () => {
         .mutate(addDirectoryMutation, {
           item: {
             id: 'CITY',
-            property: [ { value: 'VALUE', property: 'NAME' } ]
+            property: [ { string: 'VALUE', property: 'NAME' } ]
           }
         })
         .expectNoErrors();
 
       expect(res.data['directory']['add']['id']).toBe('CITY');
+      expect(res.data['directory']['add']['property']).toHaveLength(1);
+      expect(res.data['directory']['add']['property'][0]['string']).toBe('VALUE');
     });
   });
 
@@ -95,7 +97,7 @@ describe('DirectoryQueryResolver', () => {
           item: {
             id: 'CITY',
             property: [{
-              value: 'VALUE',
+              string: 'VALUE',
               property: 'NAME',
             }]
           }
@@ -103,7 +105,7 @@ describe('DirectoryQueryResolver', () => {
         .expectNoErrors();
 
       expect(res.data['directory']['update']['id']).toBe('CITY');
-      expect(res.data['directory']['update']['property'][0]['value']).toBe('VALUE');
+      expect(res.data['directory']['update']['property'][0]['string']).toBe('VALUE');
     });
   });
 

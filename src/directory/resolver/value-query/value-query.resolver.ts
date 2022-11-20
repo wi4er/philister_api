@@ -24,7 +24,7 @@ export class ValueQueryResolver {
     return this.valueRepo.find({
       skip: offset,
       take: limit,
-      relations: { directory: true },
+      loadRelationIds: true,
     });
   }
 
@@ -48,7 +48,7 @@ export class ValueQueryResolver {
   ) {
     return this.valueRepo.findOne({
       where: { id },
-      relations: { directory: true },
+      loadRelationIds: true,
     });
   }
 

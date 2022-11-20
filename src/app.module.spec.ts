@@ -6,7 +6,7 @@ import { PropertyEntity } from "./property/model/property.entity";
 import { PropertyPropertyEntity } from "./property/model/property-property.entity";
 import { createConnectionOptions } from "./createConnectionOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
-import { DirectoryPropertyEntity } from "./directory/model/directory-property.entity";
+import { DirectoryStringEntity } from "./directory/model/directory-string.entity";
 import { ValueEntity } from "./directory/model/value.entity";
 import { UserStringEntity } from "./user/model/user-string.entity";
 import { UserValueEntity } from "./user/model/user-value.entity";
@@ -74,9 +74,9 @@ describe('Property list', () => {
       await Object.assign(new DirectoryEntity(), {
         id: `DIRECT_${i}`,
         property: [
-          await Object.assign(new DirectoryPropertyEntity(), { value: `VALUE_${i}`, property: name }).save(),
-          await Object.assign(new DirectoryPropertyEntity(), { value: `SECOND_${i}`, property: second }).save(),
-          await Object.assign(new DirectoryPropertyEntity(), { value: `DESCRIPTION_${i}`, property: descr }).save(),
+          await Object.assign(new DirectoryStringEntity(), { value: `VALUE_${i}`, property: name }).save(),
+          await Object.assign(new DirectoryStringEntity(), { value: `SECOND_${i}`, property: second }).save(),
+          await Object.assign(new DirectoryStringEntity(), { value: `DESCRIPTION_${i}`, property: descr }).save(),
         ]
       }).save();
     }

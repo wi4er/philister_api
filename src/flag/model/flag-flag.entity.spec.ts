@@ -32,7 +32,7 @@ describe("Flag entity", () => {
         // relations: {flag: true},
       });
 
-      console.log(list)
+      // console.log(list)
 
       // expect(list.flag[0]['id']).toBe(1);
     });

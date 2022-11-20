@@ -24,7 +24,7 @@ const flagPropertyQuery = gql`
         }
         property {
           id
-          value
+          string
           property {
             id
           }
@@ -62,11 +62,11 @@ describe('FlagResolver', () => {
 
     test('Should get flag with flag', async () => {
       await Object.assign(new FlagEntity(), {id: 'STATUS', label: 'status'}).save();
-      await Object.assign(new FlagEntity(), {
+      const parent = await Object.assign(new FlagEntity(), {
         id: 'ACTIVE',
         label: 'active',
-        flag: [await Object.assign(new FlagFlagEntity(), {flag: 'STATUS'}).save()]
       }).save();
+      await Object.assign(new FlagFlagEntity(), {flag: 'STATUS', parent}).save()
 
       const res = await request(app.getHttpServer())
         .query(flagPropertyQuery, { id: 'ACTIVE' })
@@ -78,18 +78,18 @@ describe('FlagResolver', () => {
 
     test('Should get flag with property', async () => {
       await Object.assign(new PropertyEntity(), {id: 'STATUS'}).save();
-      await Object.assign(new FlagEntity(), {
+      const parent = await Object.assign(new FlagEntity(), {
         id: 'ACTIVE',
         label: 'active',
-        property: [await Object.assign(new FlagStringEntity(), {value: 'OK', property: 'STATUS'}).save()]
       }).save();
+      await Object.assign(new FlagStringEntity(), {string: 'OK', property: 'STATUS', parent}).save()
 
       const res = await request(app.getHttpServer())
         .query(flagPropertyQuery, { id: 'ACTIVE' })
         .expectNoErrors();
 
       expect(res.data['flag']['item']['property']).toHaveLength(1);
-      expect(res.data['flag']['item']['property'][0]['value']).toBe('OK');
+      expect(res.data['flag']['item']['property'][0]['string']).toBe('OK');
       expect(res.data['flag']['item']['property'][0]['property']['id']).toBe('STATUS');
     });
   });

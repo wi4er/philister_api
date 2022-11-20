@@ -1,5 +1,5 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import { DirectoryPropertySchema } from "./directory-property.schema";
+import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { DirectoryStringSchema } from "./directory-string.schema";
 import { ValueSchema } from "./value.schema";
 
 @ObjectType('Directory')
@@ -8,10 +8,19 @@ export class DirectorySchema {
   @Field()
   id: string;
 
-  @Field(type => [DirectoryPropertySchema], {nullable: true})
-  property: DirectoryPropertySchema[];
+  @Field()
+  created_at: string;
 
-  @Field(type => [ValueSchema], {nullable: true})
+  @Field()
+  updated_at: string;
+
+  @Field(type => Int)
+  version: number;
+
+  @Field(type => [ DirectoryStringSchema ], { nullable: true })
+  property: DirectoryStringSchema[];
+
+  @Field(type => [ ValueSchema ], { nullable: true })
   value: ValueSchema[];
 
 }

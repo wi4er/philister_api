@@ -14,6 +14,15 @@ interface FlagProperty {
   property: Property!
 }
 
+interface ValueProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
 type PropertyProperty {
   id: String!
   value: String!
@@ -93,20 +102,41 @@ type UserString implements UserPropertySchema {
   property: Property!
 }
 
-type DirectoryProperty {
-  id: String!
-  value: String!
+type DirectoryString implements DirectoryProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
+interface DirectoryProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
   property: Property!
 }
 
 type Value {
   id: String!
+  created_at: String!
+  updated_at: String!
+  version: Int!
   directory: Directory!
+  propertyList: [ValueProperty!]!
+  propertyItem(id: String!): ValueProperty!
+  propertyString(id: String!): String!
 }
 
 type Directory {
   id: String!
-  property: [DirectoryProperty!]
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  property: [DirectoryString!]
   value: [Value!]
 }
 
@@ -177,7 +207,7 @@ input DirectoryInput {
 
 input DirectoryPropertyInput {
   property: String!
-  value: String!
+  string: String!
 }
 
 type ValueQuery {
@@ -207,6 +237,15 @@ input ValueInput {
 input ValuePropertyInput {
   property: String!
   value: String!
+}
+
+type ValueString implements ValueProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
 }
 
 type FlagQuery {

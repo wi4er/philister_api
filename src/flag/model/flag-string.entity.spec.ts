@@ -50,10 +50,10 @@ describe("Flag property entity", () => {
       }).save();
 
       await propRepo.delete({ id: 'NAME' });
-      const list = await flagRepo.find({ relations: { property: true } });
+      const list = await flagRepo.find({ relations: { string: true } });
 
       expect(list).toHaveLength(1);
-      expect(list[0].property).toEqual([]);
+      expect(list[0].string).toEqual([]);
     });
   });
 });

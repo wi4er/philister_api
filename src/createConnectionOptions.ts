@@ -4,7 +4,7 @@ import { PropertyEntity } from "./property/model/property.entity";
 import { PropertyPropertyEntity } from "./property/model/property-property.entity";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
-import { DirectoryPropertyEntity } from "./directory/model/directory-property.entity";
+import { DirectoryStringEntity } from "./directory/model/directory-string.entity";
 import { UserGroupEntity } from "./user/model/user-group.entity";
 import { ValueEntity } from "./directory/model/value.entity";
 import { FlagEntity } from "./flag/model/flag.entity";
@@ -15,6 +15,7 @@ import { UserValueEntity } from "./user/model/user-value.entity";
 import { UserUserEntity } from "./user/model/user-user.entity";
 import { PropertyUserEntity } from "./property/model/property-user.entity";
 import { UserDescriptionEntity } from "./user/model/user-description.entity";
+import { ValueStringEntity } from "./directory/model/value.string.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -30,7 +31,7 @@ export function createConnectionOptions(): DataSourceOptions {
       UserEntity, UserStringEntity, UserFlagEntity, UserValueEntity, UserUserEntity, UserDescriptionEntity,
       UserGroupEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
-      DirectoryEntity, DirectoryPropertyEntity, ValueEntity,
+      DirectoryEntity, DirectoryStringEntity, ValueEntity, ValueStringEntity,
       FlagEntity, FlagStringEntity, FlagFlagEntity
     ],
     subscribers: [],

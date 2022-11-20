@@ -1,16 +1,15 @@
 import { Field, Int, InterfaceType } from "@nestjs/graphql";
 import { PropertySchema } from "../../property/schema/property.schema";
-import { type } from "os";
 
 @InterfaceType(
-  'DirectoryProperty',
+  'ValueProperty',
   {
     resolveType: inst => {
-      return 'DirectoryString';
+      return 'ValueString';
     }
   }
 )
-export abstract class DirectoryPropertySchema {
+export abstract class ValuePropertySchema {
 
   @Field(type => Int)
   id: number;

@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { FlagQueryResolver } from './flag-query.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
@@ -13,7 +13,7 @@ const flagListQuery = gql`
       list(offset: $offset, limit: $limit) {
         id
         property {
-          value
+          string
           property {
             id
           }
@@ -38,7 +38,7 @@ const flagItemQuery = gql`
       item(id: $id) {
         id
         property {
-          value
+          string
           property {
             id
           }

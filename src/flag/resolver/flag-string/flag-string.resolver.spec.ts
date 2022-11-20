@@ -55,9 +55,9 @@ describe('FlagPropertyResolver', () => {
         .query(getFlagItem, {id: 'ACTIVE'})
         .expectNoErrors();
 
-      console.dir(res.data['flag']['item'], {depth: 5});
-
-      // expect(res.data['flag']['list']).toHaveLength(0);
+      expect(res.data['flag']['item']['property']).toHaveLength(1);
+      expect(res.data['flag']['item']['property'][0]['string']).toBe('VALUE');
+      expect(res.data['flag']['item']['property'][0]['property']['id']).toBe('NAME');
     });
   });
 });

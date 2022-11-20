@@ -4,7 +4,7 @@ import { In, Repository } from "typeorm";
 import { DirectorySchema } from "../../schema/directory.schema";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { DirectoryInputSchema } from "../../schema/directory-input.schema";
-import { DirectoryPropertyEntity } from "../../model/directory-property.entity";
+import { DirectoryStringEntity } from "../../model/directory-string.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Resolver(of => DirectoryMutationSchema)
@@ -12,8 +12,8 @@ export class DirectoryMutationResolver {
   constructor(
     @InjectRepository(DirectoryEntity)
     private directoryRepo: Repository<DirectoryEntity>,
-    @InjectRepository(DirectoryPropertyEntity)
-    private directoryPropertyRepo: Repository<DirectoryPropertyEntity>,
+    @InjectRepository(DirectoryStringEntity)
+    private directoryPropertyRepo: Repository<DirectoryStringEntity>,
   ) {
   }
 
@@ -24,18 +24,24 @@ export class DirectoryMutationResolver {
   ) {
     const inst = new DirectoryEntity();
     inst.id = item.id;
-    inst.property = [];
+    const parent = await inst.save();
 
     if (item.property) {
       for (const value of item.property) {
-        inst.property.push(await Object.assign(
-          new DirectoryPropertyEntity(),
-          { value: value.value, property: value.property }
-        ).save());
+        await Object.assign(
+          new DirectoryStringEntity(),
+          {
+            string: value.string,
+            property: value.property,
+            parent,
+          }
+        ).save();
       }
     }
 
-    return await inst.save();
+    await inst.reload();
+
+    return inst;
   }
 
   @ResolveField('update', type => DirectorySchema)
@@ -56,14 +62,20 @@ export class DirectoryMutationResolver {
 
     if (item.property) {
       for (const value of item.property) {
-        inst.property.push(await Object.assign(
-          new DirectoryPropertyEntity(),
-          { value: value.value, property: value.property }
-        ).save());
+        await Object.assign(
+          new DirectoryStringEntity(),
+          {
+            string: value.string,
+            property: value.property,
+            parent: inst,
+          }
+        ).save();
       }
     }
 
-    return await inst.save();
+    await inst.reload();
+
+    return inst;
   }
 
   @ResolveField('delete', type => [ DirectorySchema ])

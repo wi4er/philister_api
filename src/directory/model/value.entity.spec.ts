@@ -4,7 +4,7 @@ import { createConnectionOptions } from "../../createConnectionOptions";
 import { ValueEntity } from "./value.entity";
 import { DirectoryEntity } from "./directory.entity";
 
-describe("Directory entity", () => {
+describe("Value entity", () => {
   let source: DataSource;
 
   beforeAll(async () => {

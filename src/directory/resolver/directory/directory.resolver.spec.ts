@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { DirectoryResolver } from './directory.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
@@ -7,7 +7,7 @@ import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { DirectoryPropertyEntity } from "../../model/directory-property.entity";
+import { DirectoryStringEntity } from "../../model/directory-string.entity";
 import { ValueEntity } from "../../model/value.entity";
 
 const directoryItemQuery = gql`
@@ -15,8 +15,11 @@ const directoryItemQuery = gql`
     directory {
       item(id: $id) {
         id
+        created_at
+        updated_at
+        version
         property {
-          value
+          string
           property {
             id
           }
@@ -62,20 +65,17 @@ describe('DirectoryResolver', () => {
 
   describe('Directory with property', () => {
     test('Should get with property', async () => {
-      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
-      await Object.assign(new DirectoryEntity(), {
-        id: 'CITY',
-        property: [
-          await Object.assign(new DirectoryPropertyEntity(), { value: 'City name', property: 'NAME' }).save(),
-        ]
-      }).save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const parent = await Object.assign(new DirectoryEntity(), {id: 'CITY'}).save();
+
+      await Object.assign(new DirectoryStringEntity(), { string: 'City name', property, parent }).save();
 
       const res = await request(app.getHttpServer())
         .query(directoryItemQuery, { id: 'CITY' })
         .expectNoErrors();
 
       expect(res.data['directory']['item']['property']).toHaveLength(1);
-      expect(res.data['directory']['item']['property'][0]['value']).toBe('City name');
+      expect(res.data['directory']['item']['property'][0]['string']).toBe('City name');
       expect(res.data['directory']['item']['property'][0]['property']['id']).toBe('NAME');
     });
   });

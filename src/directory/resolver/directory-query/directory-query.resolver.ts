@@ -14,7 +14,7 @@ export class DirectoryQueryResolver {
   ) {
   }
 
-  @ResolveField('list', type => [DirectorySchema])
+  @ResolveField('list')
   async list(
     @Args('limit', {nullable: true, type: () => Int})
       limit: number,
@@ -27,7 +27,7 @@ export class DirectoryQueryResolver {
     });
   }
 
-  @ResolveField('count', type => [DirectorySchema])
+  @ResolveField('count')
   async count(
     @Args('limit', {nullable: true, type: () => Int})
       limit: number,
@@ -40,7 +40,7 @@ export class DirectoryQueryResolver {
     });
   }
 
-  @ResolveField('item', type => DirectorySchema)
+  @ResolveField('item')
   item(
     @Args('id', { type: () => String })
       id: string

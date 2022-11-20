@@ -14,7 +14,7 @@ const directoryListQuery = gql`
         id
         property {
           id
-          value
+          string
           property {
             id
           }
@@ -39,7 +39,7 @@ const directoryItemQuery = gql`
         id
         property {
           id
-          value
+          string
           property {
             id
           }
@@ -131,6 +131,16 @@ describe('DirectoryQueryResolver', () => {
         .expectNoErrors();
 
       expect(res.data['directory']['item']['id']).toBe('CITY');
+    });
+
+    test('Should get directory item with wrong id', async () => {
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(directoryItemQuery, { id: 'WRONG' })
+        .expectNoErrors();
+
+      expect(res.data['directory']['item']).toBeNull();
     });
   });
 });

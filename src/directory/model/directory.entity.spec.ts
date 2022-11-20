@@ -14,6 +14,35 @@ describe("Directory entity", () => {
   beforeEach(() => source.synchronize(true));
 
   describe('Directory fields', () => {
+    test('Should create with id', async () => {
+        const inst = new DirectoryEntity();
+        inst.id = 'NAME';
+
+        await inst.save();
+
+        expect(inst.id).toBe('NAME');
+        expect(inst.created_at).not.toBeUndefined();
+        expect(inst.updated_at).not.toBeUndefined();
+        expect(inst.deleted_at).toBeNull();
+        expect(inst.version).toBe(1);
+        expect(inst.id).toBe('NAME');
+    });
+
+    test('Shouldn`t create with same id',  () => {
+      // const inst = await Object.assign(new DirectoryEntity(), {id: 'NAME'}).save();
+      //
+      // setImmediate(async () => {
+      //
+      //   const another = await Object.assign(new DirectoryEntity(), {id: 'NAME'}).save()
+      //
+      //   done()
+      //   console.log(another)
+      // })
+      // console.log(inst)
+      // // console.log(another)
+      // // await expect(Object.assign(new DirectoryEntity(), {id: 'NAME'}).save()).rejects.toThrow();
+    });
+
     test('Should get empty list', async () => {
       const repo = source.getRepository(DirectoryEntity);
       const list = await repo.find();

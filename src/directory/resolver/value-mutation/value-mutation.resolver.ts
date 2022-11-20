@@ -34,7 +34,12 @@ export class ValueMutationResolver {
     inst.id = item.id;
     inst.directory = directory;
 
-    return await inst.save();
+    await inst.save();
+
+    return this.valueRepo.findOne({
+      where: {id: inst.id},
+      loadRelationIds: true,
+    });
   }
 
   @ResolveField('update', type => ValueSchema)
@@ -46,8 +51,12 @@ export class ValueMutationResolver {
     const directory = await this.directoryRepo.findOne({where: {id: item.directory}});
 
     inst.directory = directory;
+    await inst.save();
 
-    return await inst.save();
+    return this.valueRepo.findOne({
+      where: {id: inst.id},
+      loadRelationIds: true,
+    });
   }
 
   @ResolveField('delete', type => [ ValueSchema ])

@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { DirectoryPropertyResolver } from './directory-property.resolver';
+import { DirectoryStringResolver } from './directory-string.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../../createConnectionOptions";
@@ -7,7 +7,7 @@ import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
-import { DirectoryPropertyEntity } from "../../model/directory-property.entity";
+import { DirectoryStringEntity } from "../../model/directory-string.entity";
 
 const directoryItemQuery = gql`
   query getDirectoryList($id: String!) {
@@ -16,7 +16,7 @@ const directoryItemQuery = gql`
         id
         property {
           id
-          value
+          string
           property {
             id
           }
@@ -42,20 +42,16 @@ describe('DirectoryPropertyResolver', () => {
 
   describe('DirectoryProperty fields', () => {
     test("Should get directory property", async () => {
-      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
-      await Object.assign(new DirectoryEntity(), {
-        id: 'NAME',
-        property: [
-          await Object.assign(new DirectoryPropertyEntity(), { value: 'VALUE', property: 'NAME' }).save()
-        ],
-      }).save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const parent = await Object.assign(new DirectoryEntity(), { id: 'NAME' }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property, parent }).save()
 
       const res = await request(app.getHttpServer())
         .mutate(directoryItemQuery, { id: 'NAME' })
         .expectNoErrors();
 
       expect(res.data['directory']['item']['property']).toHaveLength(1);
-      expect(res.data['directory']['item']['property'][0]['value']).toBe('VALUE');
+      expect(res.data['directory']['item']['property'][0]['string']).toBe('VALUE');
       expect(res.data['directory']['item']['property'][0]['property']['id']).toBe('NAME');
     });
 
@@ -63,21 +59,18 @@ describe('DirectoryPropertyResolver', () => {
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       await Object.assign(new PropertyEntity(), { id: 'SECOND' }).save();
       await Object.assign(new PropertyEntity(), { id: 'FAMILY' }).save();
-      await Object.assign(new DirectoryEntity(), {
-        id: 'NAME',
-        property: [
-          await Object.assign(new DirectoryPropertyEntity(), { value: 'VALUE', property: 'NAME' }).save(),
-          await Object.assign(new DirectoryPropertyEntity(), { value: 'VALUE', property: 'SECOND' }).save(),
-          await Object.assign(new DirectoryPropertyEntity(), { value: 'VALUE', property: 'FAMILY' }).save(),
-        ],
-      }).save();
+      const parent = await Object.assign(new DirectoryEntity(), { id: 'NAME' }).save();
+
+      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'NAME', parent }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'SECOND', parent }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'FAMILY', parent }).save();
 
       const res = await request(app.getHttpServer())
         .mutate(directoryItemQuery, { id: 'NAME' })
         .expectNoErrors();
 
       expect(res.data['directory']['item']['property']).toHaveLength(3);
-      expect(res.data['directory']['item']['property'][0]['value']).toBe('VALUE');
+      expect(res.data['directory']['item']['property'][0]['string']).toBe('VALUE');
       expect(res.data['directory']['item']['property'][0]['property']['id']).toBe('NAME');
       expect(res.data['directory']['item']['property'][1]['property']['id']).toBe('SECOND');
       expect(res.data['directory']['item']['property'][2]['property']['id']).toBe('FAMILY');

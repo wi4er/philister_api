@@ -7,7 +7,7 @@ export class DirectoryPropertyInputSchema {
   property: string;
 
   @Field()
-  value: string;
+  string: string;
 
 }
 
