@@ -13,10 +13,25 @@ export class ValueResolver {
   constructor(
     @InjectRepository(DirectoryEntity)
     private directoryRepo: Repository<DirectoryEntity>,
-
     @InjectRepository(ValueStringEntity)
     private stingRepo: Repository<ValueStringEntity>,
   ) {
+  }
+
+  @ResolveField()
+  created_at(
+    @Parent()
+      current: DirectoryEntity
+  ) {
+    return new Date(current.created_at).toISOString();
+  }
+
+  @ResolveField()
+  updated_at(
+    @Parent()
+      current: DirectoryEntity
+  ) {
+    return new Date(current.updated_at).toISOString();
   }
 
   @ResolveField('directory')
@@ -27,7 +42,7 @@ export class ValueResolver {
     return this.directoryRepo.findOne({ where: { id: current.directory } });
   }
 
-  @ResolveField('propertyList')
+  @ResolveField()
   async propertyList(
     @Parent()
       current: { id: string }
@@ -35,7 +50,7 @@ export class ValueResolver {
     return this.stingRepo.find({ where: { parent: { id: current.id } } });
   }
 
-  @ResolveField('propertyItem')
+  @ResolveField()
   async propertyItem(
     @Args('id')
       id: string,
@@ -50,7 +65,7 @@ export class ValueResolver {
     });
   }
 
-  @ResolveField('propertyString')
+  @ResolveField()
   async propertyString(
     @Args('id')
       id: string,

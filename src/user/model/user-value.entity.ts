@@ -1,4 +1,12 @@
-import { BaseEntity, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  CreateDateColumn, DeleteDateColumn,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn, VersionColumn
+} from 'typeorm';
 import { UserEntity } from './user.entity';
 import { ValueEntity } from '../../directory/model/value.entity';
 import { PropertyEntity } from '../../property/model/property.entity';
@@ -11,6 +19,18 @@ export class UserValueEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
+
+  @VersionColumn()
+  version: number;
 
   @ManyToOne(
     () => ValueEntity,

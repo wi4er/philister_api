@@ -1,5 +1,5 @@
 import {
-  BaseEntity,
+  BaseEntity, Check,
   CreateDateColumn, DeleteDateColumn,
   Entity,
   OneToMany,
@@ -12,12 +12,15 @@ import { ValueEntity } from "./value.entity";
 @Entity({
   name: "directory"
 })
+@Check('not_empty_id', '"id" > \'\'')
 export class DirectoryEntity extends BaseEntity {
 
   @PrimaryColumn({
     type: "varchar",
     nullable: false,
     unique: true,
+    length: 100,
+
   })
   id: string;
 
@@ -43,6 +46,6 @@ export class DirectoryEntity extends BaseEntity {
     type => ValueEntity,
     value => value.directory,
   )
-  value: DirectoryStringEntity[];
+  value: ValueEntity[];
 
 }

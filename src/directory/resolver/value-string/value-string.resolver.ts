@@ -13,7 +13,7 @@ export class ValueStringResolver {
   ) {
   }
 
-  @ResolveField('property', type => PropertyEntity)
+  @ResolveField('property')
   async property(
     @Parent()
       current: {property: string}

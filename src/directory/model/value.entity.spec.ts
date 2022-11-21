@@ -22,16 +22,29 @@ describe("Value entity", () => {
     });
 
     test('Should add value', async () => {
+      await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
       const inst = await Object.assign(new ValueEntity(), {
         id: 'NAME',
+        directory: 'LIST'
       }).save();
 
       expect(inst['id']).toBe('NAME');
     });
 
+    test('Shouldn`t add with blank id', async () => {
+      await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
+      const inst = await Object.assign(new ValueEntity(), {
+        id: '',
+        directory: 'LIST',
+      });
+
+      await expect(inst.save()).rejects.toThrow();
+    });
+
     test('Should get single value', async () => {
       const repo = source.getRepository(ValueEntity);
-      await Object.assign(new ValueEntity(), { id: 'NAME' }).save();
+      await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
+      await Object.assign(new ValueEntity(), { id: 'NAME', directory: 'LIST' }).save();
 
       const item = await repo.findOne({ where: { id: 'NAME' } });
       expect(item['id']).toBe('NAME');
@@ -62,8 +75,8 @@ describe("Value entity", () => {
         directory: dir,
       }).save();
 
-      await repo.delete({id: 'CITY'});
-      const item = await repo.findOne({where: {id: 'London'}});
+      await repo.delete({ id: 'CITY' });
+      const item = await repo.findOne({ where: { id: 'London' } });
 
       expect(item).toBeNull();
     });

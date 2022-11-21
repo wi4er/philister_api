@@ -14,30 +14,45 @@ export class DirectoryResolver {
   constructor(
     @InjectRepository(DirectoryStringEntity)
     private propertyRepo: Repository<DirectoryStringEntity>,
-
     @InjectRepository(ValueEntity)
     private valueRepo: Repository<ValueEntity>,
   ) {
   }
 
-  @ResolveField('property')
+  @ResolveField()
+  created_at(
+    @Parent()
+      current: DirectoryEntity
+  ) {
+    return new Date(current.created_at).toISOString();
+  }
+
+  @ResolveField()
+  updated_at(
+    @Parent()
+      current: DirectoryEntity
+  ) {
+    return new Date(current.updated_at).toISOString();
+  }
+
+  @ResolveField()
   async property(
     @Parent()
-      prop: DirectoryEntity
+      current: DirectoryEntity
   ) {
     return this.propertyRepo.find({
-      where: {parent: {id: prop.id}},
+      where: { parent: { id: current.id } },
       loadRelationIds: true,
     });
   }
 
-  @ResolveField('value')
+  @ResolveField()
   async value(
     @Parent()
-      prop: DirectoryEntity
+      current: DirectoryEntity
   ) {
     return this.valueRepo.find({
-      where: {directory: {id: prop.id}},
+      where: { directory: { id: current.id } },
       loadRelationIds: true,
     });
   }

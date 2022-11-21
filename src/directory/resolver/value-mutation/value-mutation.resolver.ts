@@ -13,18 +13,17 @@ export class ValueMutationResolver {
   constructor(
     @InjectRepository(ValueEntity)
     private valueRepo: Repository<ValueEntity>,
-
     @InjectRepository(DirectoryEntity)
     private directoryRepo: Repository<DirectoryEntity>,
   ) {
   }
 
-  @ResolveField('add', type => ValueSchema)
+  @ResolveField('add')
   async add(
     @Args('item')
       item: ValueInputSchema
   ) {
-    const directory = await this.directoryRepo.findOne({where: {id: item.directory}});
+    const directory = await this.directoryRepo.findOne({ where: { id: item.directory } });
 
     if (!directory) {
       throw Error("Wrong directory.");
@@ -37,29 +36,29 @@ export class ValueMutationResolver {
     await inst.save();
 
     return this.valueRepo.findOne({
-      where: {id: inst.id},
+      where: { id: inst.id },
       loadRelationIds: true,
     });
   }
 
-  @ResolveField('update', type => ValueSchema)
+  @ResolveField('update')
   async update(
     @Args('item')
       item: ValueInputSchema
   ) {
-    const inst = await this.valueRepo.findOne({where: { id: item.id }});
-    const directory = await this.directoryRepo.findOne({where: {id: item.directory}});
+    const inst = await this.valueRepo.findOne({ where: { id: item.id } });
+    const directory = await this.directoryRepo.findOne({ where: { id: item.directory } });
 
     inst.directory = directory;
     await inst.save();
 
     return this.valueRepo.findOne({
-      where: {id: inst.id},
+      where: { id: inst.id },
       loadRelationIds: true,
     });
   }
 
-  @ResolveField('delete', type => [ ValueSchema ])
+  @ResolveField('delete')
   async delete(
     @Args('id', { type: () => [ String ] })
       id: string[]

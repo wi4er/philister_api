@@ -1,5 +1,4 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { DirectorySchema } from "../../schema/directory.schema";
 import { DirectoryQuerySchema } from "../../schema/directory-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";

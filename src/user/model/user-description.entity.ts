@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn, DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn, VersionColumn
+} from 'typeorm';
 import { UserEntity } from './user.entity';
 import { PropertyEntity } from '../../property/model/property.entity';
 
@@ -7,6 +15,19 @@ export class UserDescriptionEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
+
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
+
+  @VersionColumn()
+  version: number;
 
   @Column({
     type: 'text'

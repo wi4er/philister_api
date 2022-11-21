@@ -1,23 +1,30 @@
 import { Args, ResolveField, Resolver } from '@nestjs/graphql';
 import { DirectoryMutationSchema } from "../../schema/directory-mutation.schema";
 import { In, Repository } from "typeorm";
-import { DirectorySchema } from "../../schema/directory.schema";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { DirectoryInputSchema } from "../../schema/directory-input.schema";
 import { DirectoryStringEntity } from "../../model/directory-string.entity";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ValueEntity } from "../../model/value.entity";
+import { DirectoryService } from "../../service/directory/directory.service";
 
 @Resolver(of => DirectoryMutationSchema)
 export class DirectoryMutationResolver {
   constructor(
     @InjectRepository(DirectoryEntity)
     private directoryRepo: Repository<DirectoryEntity>,
+
+    @InjectRepository(ValueEntity)
+    private valueRepo: Repository<ValueEntity>,
+
     @InjectRepository(DirectoryStringEntity)
     private directoryPropertyRepo: Repository<DirectoryStringEntity>,
+
+    private directoryService: DirectoryService,
   ) {
   }
 
-  @ResolveField('add', type => DirectorySchema)
+  @ResolveField('add')
   async add(
     @Args('item')
       item: DirectoryInputSchema
@@ -39,19 +46,29 @@ export class DirectoryMutationResolver {
       }
     }
 
+    if (item.value) {
+      for (const value of item.value) {
+        const created = new ValueEntity();
+        created.id = value;
+        created.directory = inst;
+
+        await created.save();
+      }
+    }
+
     await inst.reload();
 
     return inst;
   }
 
-  @ResolveField('update', type => DirectorySchema)
+  @ResolveField('update')
   async update(
     @Args('item')
       item: DirectoryInputSchema
   ) {
     const inst = await this.directoryRepo.findOne({
       where: { id: item.id },
-      relations: { property: true },
+      relations: { property: true, value: true },
     });
 
     for (const prop of inst.property) {
@@ -73,12 +90,30 @@ export class DirectoryMutationResolver {
       }
     }
 
+    const curValues = new Set<string>(inst.value.map(it => it.id));
+
+    for (const value of item.value) {
+      const check = await this.valueRepo.findOne({where: {id: value}});
+
+      if (!check) {
+        const created = new ValueEntity();
+        created.id = value;
+        created.directory = inst;
+
+        await created.save();
+      }
+
+      curValues.delete(value);
+    }
+
+    await this.valueRepo.delete({id: In(Array.from(curValues))});
+
     await inst.reload();
 
     return inst;
   }
 
-  @ResolveField('delete', type => [ DirectorySchema ])
+  @ResolveField('delete')
   async delete(
     @Args('id', { type: () => [ String ] })
       id: string[]

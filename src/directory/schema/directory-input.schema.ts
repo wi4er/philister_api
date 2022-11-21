@@ -20,4 +20,7 @@ export class DirectoryInputSchema {
   @Field(type => [ DirectoryPropertyInputSchema ], { nullable: true })
   property: DirectoryPropertyInputSchema[];
 
+  @Field(type => [ String ], { nullable: true })
+  value: string[];
+
 }

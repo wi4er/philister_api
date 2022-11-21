@@ -27,8 +27,8 @@ beforeAll(async () => {
 
 beforeEach(() => source.synchronize(true));
 
-describe('Property list', () => {
-  test.skip("Should get empty list", async () => {
+describe('App mocks', () => {
+  test("Should populate", async () => {
     const name = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
     const second = await Object.assign(new PropertyEntity(), { id: 'SECOND_NAME' }).save();
     const descr = await Object.assign(new PropertyEntity(), { id: 'DESCRIPTION' }).save();
@@ -38,24 +38,24 @@ describe('Property list', () => {
       id: 'ACTIVE',
       label: 'active',
       string: [
-        await Object.assign(new FlagStringEntity(), {string: 'active', property: 'NAME'}).save(),
-        await Object.assign(new FlagStringEntity(), {string: 'active too', property: 'SECOND_NAME'}).save(),
+        await Object.assign(new FlagStringEntity(), { string: 'active', property: 'NAME' }).save(),
+        await Object.assign(new FlagStringEntity(), { string: 'active too', property: 'SECOND_NAME' }).save(),
       ]
     }).save();
     const passive = await Object.assign(new FlagEntity(), {
       id: 'PASSIVE',
       label: 'passive',
       string: [
-        await Object.assign(new FlagStringEntity(), {string: 'passive', property: 'NAME'}).save(),
-        await Object.assign(new FlagStringEntity(), {string: 'passive too', property: 'SECOND_NAME'}).save(),
+        await Object.assign(new FlagStringEntity(), { string: 'passive', property: 'NAME' }).save(),
+        await Object.assign(new FlagStringEntity(), { string: 'passive too', property: 'SECOND_NAME' }).save(),
       ]
     }).save();
     const actual = await Object.assign(new FlagEntity(), {
       id: 'ACTUAL',
       label: 'actual',
       string: [
-        await Object.assign(new FlagStringEntity(), {string: 'actual', property: 'NAME'}).save(),
-        await Object.assign(new FlagStringEntity(), {string: 'actual too', property: 'SECOND_NAME'}).save(),
+        await Object.assign(new FlagStringEntity(), { string: 'actual', property: 'NAME' }).save(),
+        await Object.assign(new FlagStringEntity(), { string: 'actual too', property: 'SECOND_NAME' }).save(),
       ]
     }).save();
 
@@ -71,14 +71,11 @@ describe('Property list', () => {
     }
 
     for (let i = 0; i < 100; i++) {
-      await Object.assign(new DirectoryEntity(), {
-        id: `DIRECT_${i}`,
-        property: [
-          await Object.assign(new DirectoryStringEntity(), { value: `VALUE_${i}`, property: name }).save(),
-          await Object.assign(new DirectoryStringEntity(), { value: `SECOND_${i}`, property: second }).save(),
-          await Object.assign(new DirectoryStringEntity(), { value: `DESCRIPTION_${i}`, property: descr }).save(),
-        ]
-      }).save();
+      const parent = await Object.assign(new DirectoryEntity(), { id: `DIRECT_${i}` }).save();
+
+      await Object.assign(new DirectoryStringEntity(), { string: `VALUE_${i}`, property: name, parent }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: `SECOND_${i}`, property: second, parent }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: `DESCRIPTION_${i}`, property: descr, parent }).save();
     }
 
     for (let i = 0; i < 1000; i++) {
@@ -114,7 +111,6 @@ describe('Property list', () => {
     const val_1 = await Object.assign(new PropertyEntity(), { id: 'VALUE+1' }).save();
     const val_2 = await Object.assign(new PropertyEntity(), { id: 'VALUE+2' }).save();
     const val_3 = await Object.assign(new PropertyEntity(), { id: 'VALUE+3' }).save();
-
 
     for (let i = 1; i < 1000; i++) {
       await Object.assign(new UserEntity(), {

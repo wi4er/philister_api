@@ -14,6 +14,7 @@ import { ValueResolver } from './resolver/value/value.resolver';
 import { ValueStringEntity } from "./model/value.string.entity";
 import { PropertyEntity } from "../property/model/property.entity";
 import { ValueStringResolver } from './resolver/value-string/value-string.resolver';
+import { DirectoryService } from './service/directory/directory.service';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { ValueStringResolver } from './resolver/value-string/value-string.resolv
     ValueQueryResolver,
     ValueMutationResolver,
     ValueResolver,
-    ValueStringResolver
+    ValueStringResolver,
+    DirectoryService
   ]
 })
 export class DirectoryModule {}

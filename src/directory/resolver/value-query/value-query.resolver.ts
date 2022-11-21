@@ -14,7 +14,7 @@ export class ValueQueryResolver {
   ) {
   }
 
-  @ResolveField('list', type => [ ValueSchema ])
+  @ResolveField('list')
   async list(
     @Args('limit', { nullable: true, type: () => Int })
       limit: number,
@@ -28,7 +28,7 @@ export class ValueQueryResolver {
     });
   }
 
-  @ResolveField('count', type => [ ValueSchema ])
+  @ResolveField('count')
   async count(
     @Args('limit', { nullable: true, type: () => Int })
       limit: number,
@@ -41,7 +41,7 @@ export class ValueQueryResolver {
     });
   }
 
-  @ResolveField('item', type => ValueSchema)
+  @ResolveField('item')
   item(
     @Args('id', { type: () => String })
       id: string

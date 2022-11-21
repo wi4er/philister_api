@@ -31,6 +31,9 @@ type PropertyProperty {
 
 type Property {
   id: String!
+  created_at: String!
+  updated_at: String!
+  version: Int!
   property: [PropertyProperty!]
 }
 
@@ -203,6 +206,7 @@ type DirectoryMutation {
 input DirectoryInput {
   id: String!
   property: [DirectoryPropertyInput!]
+  value: [String!]
 }
 
 input DirectoryPropertyInput {

@@ -1,5 +1,5 @@
 import {
-  BaseEntity,
+  BaseEntity, Check,
   Column,
   CreateDateColumn, DeleteDateColumn,
   Entity,
@@ -14,6 +14,7 @@ import { ValueStringEntity } from "./value.string.entity";
 @Entity({
   name: 'value'
 })
+@Check('not_empty_id', '"id" > \'\'')
 export class ValueEntity extends BaseEntity {
 
   @PrimaryColumn({
@@ -44,7 +45,7 @@ export class ValueEntity extends BaseEntity {
     directory => directory.value,
     {
       onDelete: 'CASCADE',
-      nullable: true,
+      nullable: false,
     },
   )
   directory: DirectoryEntity;
