@@ -34,7 +34,7 @@ export class ValueResolver {
     return new Date(current.updated_at).toISOString();
   }
 
-  @ResolveField('directory')
+  @ResolveField()
   async directory(
     @Parent()
       current: { directory: string }

@@ -3,7 +3,6 @@ import { ValueMutationSchema } from "../../schema/value-mutation.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
 import { ValueEntity } from "../../model/value.entity";
-import { ValueSchema } from "../../schema/value.schema";
 import { ValueInputSchema } from "../../schema/value-input.schema";
 import { DirectoryEntity } from "../../model/directory.entity";
 

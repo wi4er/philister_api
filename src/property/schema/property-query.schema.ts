@@ -5,7 +5,7 @@ import { PropertySchema } from "./property.schema";
 export class PropertyQuerySchema {
 
   @Field(type => [PropertySchema])
-  list: [PropertySchema];
+  list: PropertySchema[];
 
   @Field(type => Int)
   count: number;

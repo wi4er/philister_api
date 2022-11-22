@@ -23,6 +23,15 @@ interface ValueProperty {
   property: Property!
 }
 
+interface LangProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
 type PropertyProperty {
   id: String!
   value: String!
@@ -265,6 +274,39 @@ type FlagString implements FlagProperty {
   value: String!
 }
 
+type LangFlag {
+  id: Int!
+  flag: Flag!
+}
+
+type Lang {
+  id: String!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  propertyList: [LangProperty!]!
+  propertyItem(id: String!): LangProperty
+  propertyString(id: String!): String
+  flagList: [LangFlag!]!
+  flagString: [String!]!
+}
+
+type LangQuery {
+  list(limit: Int, offset: Int): [Lang!]!
+  count(limit: Int, offset: Int): Int!
+  item(id: String!): Lang
+}
+
+type LangString implements LangProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+  lang: Lang!
+}
+
 type Query {
   user: UserQuery!
   userGroup: UserGroupQuery!
@@ -272,6 +314,7 @@ type Query {
   directory: DirectoryQuery!
   value: ValueQuery!
   flag: FlagQuery!
+  lang: LangQuery!
 }
 
 type Mutation {

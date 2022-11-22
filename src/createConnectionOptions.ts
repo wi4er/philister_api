@@ -16,6 +16,9 @@ import { UserUserEntity } from "./user/model/user-user.entity";
 import { PropertyUserEntity } from "./property/model/property-user.entity";
 import { UserDescriptionEntity } from "./user/model/user-description.entity";
 import { ValueStringEntity } from "./directory/model/value.string.entity";
+import { LangEntity } from "./lang/model/lang.entity";
+import { LangStringEntity } from "./lang/model/lang-string.entity";
+import { LangFlagEntity } from "./lang/model/lang-flag.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -32,7 +35,8 @@ export function createConnectionOptions(): DataSourceOptions {
       UserGroupEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
       DirectoryEntity, DirectoryStringEntity, ValueEntity, ValueStringEntity,
-      FlagEntity, FlagStringEntity, FlagFlagEntity
+      FlagEntity, FlagStringEntity, FlagFlagEntity,
+      LangEntity, LangStringEntity, LangFlagEntity,
     ],
     subscribers: [],
     migrations: [],

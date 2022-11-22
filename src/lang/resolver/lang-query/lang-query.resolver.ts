@@ -1,15 +1,15 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { PropertyEntity } from "../../model/property.entity";
+import { LangQuerySchema } from "../../schema/lang-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { PropertyQuerySchema } from "../../schema/property-query.schema";
+import { LangEntity } from "../../model/lang.entity";
 
-@Resolver(of => PropertyQuerySchema)
-export class PropertyQueryResolver {
+@Resolver(of => LangQuerySchema)
+export class LangQueryResolver {
 
   constructor(
-    @InjectRepository(PropertyEntity)
-    private propertyRepo: Repository<PropertyEntity>,
+    @InjectRepository(LangEntity)
+    private langRepo: Repository<LangEntity>,
   ) {
   }
 
@@ -20,7 +20,7 @@ export class PropertyQueryResolver {
     @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
-    return this.propertyRepo.find({
+    return this.langRepo.find({
       skip: offset,
       take: limit,
     });
@@ -33,7 +33,7 @@ export class PropertyQueryResolver {
     @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
-    return this.propertyRepo.count({
+    return this.langRepo.count({
       skip: offset,
       take: limit,
     });
@@ -44,7 +44,7 @@ export class PropertyQueryResolver {
     @Args('id', { type: () => String })
       id: string
   ) {
-    return this.propertyRepo.findOne({ where: { id } })
+    return this.langRepo.findOne({ where: { id } })
   }
 
 }

@@ -4,7 +4,6 @@ import { PropertyEntity } from "../../model/property.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { PropertyPropertyEntity } from "../../model/property-property.entity";
-import { PropertyPropertySchema } from "../../schema/property-property.schema";
 import { DirectoryEntity } from "../../../directory/model/directory.entity";
 
 @Resolver(of => PropertySchema)

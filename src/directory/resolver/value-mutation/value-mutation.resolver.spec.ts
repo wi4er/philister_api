@@ -104,7 +104,8 @@ describe('ValueMutationResolver', () => {
 
   describe('Value deletion', () => {
     test('Should delete item', async () => {
-      await Object.assign(new ValueEntity(), { id: 'London' }).save();
+      const directory = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      await Object.assign(new ValueEntity(), { id: 'London', directory }).save();
 
       const res = await request(app.getHttpServer())
         .mutate(deleteValueMutation, { id: 'London' })
@@ -114,8 +115,9 @@ describe('ValueMutationResolver', () => {
     });
 
     test('Should delete list', async () => {
+      const directory = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new ValueEntity(), { id: `London_${i}` }).save();
+        await Object.assign(new ValueEntity(), { id: `London_${i}`, directory }).save();
       }
 
       const res = await request(app.getHttpServer())

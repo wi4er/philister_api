@@ -18,7 +18,7 @@ export class PropertyMutationResolver {
   ) {
   }
 
-  @ResolveField('add', type => PropertySchema)
+  @ResolveField()
   async add(
     @Args('item')
       item: PropertyInputSchema
@@ -39,7 +39,7 @@ export class PropertyMutationResolver {
     return await inst.save();
   }
 
-  @ResolveField('update', type => PropertySchema)
+  @ResolveField()
   async update(
     @Args('item')
       item: PropertyInputSchema
@@ -67,7 +67,7 @@ export class PropertyMutationResolver {
     return await inst.save();
   }
 
-  @ResolveField('delete', type => [ PropertySchema ])
+  @ResolveField()
   async delete(
     @Args('id', { type: () => [ String ] })
       id: string[]
