@@ -5,6 +5,7 @@ import { DirectorySchema } from "./directory.schema";
   description: ''
 })
 export class DirectoryMutationSchema {
+
   @Field(
     type => DirectorySchema,
     { description: 'Adding new directory' }
@@ -19,4 +20,5 @@ export class DirectoryMutationSchema {
     type => DirectorySchema,
     { description: 'Updating existent directory' }
   ) update: DirectorySchema;
+
 }

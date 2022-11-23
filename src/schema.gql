@@ -297,6 +297,29 @@ type LangQuery {
   item(id: String!): Lang
 }
 
+type LangMutation {
+  """Adding new lang"""
+  add(item: LangInput!): Lang!
+
+  """Deletion existent lang"""
+  delete(id: [String!]!): [String!]!
+
+  """Updating existent lang"""
+  update(item: LangInput!): Lang!
+}
+
+input LangInput {
+  id: String!
+  property: [LangPropertyInput!]
+  flag: [String!]
+}
+
+input LangPropertyInput {
+  property: String!
+  string: String!
+  lang: String
+}
+
 type LangString implements LangProperty {
   id: Int!
   created_at: String!
@@ -325,4 +348,5 @@ type Mutation {
   directory: DirectoryMutation!
   value: ValueMutation!
   flag: PropertyMutation!
+  lang: LangMutation!
 }

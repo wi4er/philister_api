@@ -10,6 +10,8 @@ import { LangStringResolver } from './resolver/lang-string/lang-string.resolver'
 import { LangFlagResolver } from './resolver/lang-flag/lang-flag.resolver';
 import { PropertyEntity } from "../property/model/property.entity";
 import { FlagEntity } from "../flag/model/flag.entity";
+import { LangMutationResolver } from './resolver/lang-mutation/lang-mutation.resolver';
+import { LangService } from './service/lang/lang.service';
 
 @Module({
   imports: [
@@ -19,6 +21,6 @@ import { FlagEntity } from "../flag/model/flag.entity";
       FlagEntity,
     ])
   ],
-  providers: [LangRootResolver, LangQueryResolver, LangResolver, LangStringResolver, LangFlagResolver],
+  providers: [LangRootResolver, LangQueryResolver, LangResolver, LangStringResolver, LangFlagResolver, LangMutationResolver, LangService],
 })
 export class LangModule {}
