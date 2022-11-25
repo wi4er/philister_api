@@ -21,6 +21,15 @@ import { LangService } from './service/lang/lang.service';
       FlagEntity,
     ])
   ],
-  providers: [LangRootResolver, LangQueryResolver, LangResolver, LangStringResolver, LangFlagResolver, LangMutationResolver, LangService],
+  providers: [
+    LangRootResolver,
+    LangQueryResolver,
+    LangResolver,
+    LangStringResolver,
+    LangFlagResolver,
+    LangMutationResolver,
+    LangService
+  ],
 })
-export class LangModule {}
+export class LangModule {
+}

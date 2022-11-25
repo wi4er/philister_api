@@ -4,13 +4,13 @@ import { LangSchema } from "./lang.schema";
 @ObjectType('LangQuery')
 export class LangQuerySchema {
 
-  @Field(type => [LangSchema])
+  @Field(type => [ LangSchema ])
   list: LangSchema[];
 
   @Field(type => Int)
   count: number;
 
-  @Field(type => LangSchema, {nullable: true})
+  @Field(type => LangSchema, { nullable: true })
   item: LangSchema;
 
 }

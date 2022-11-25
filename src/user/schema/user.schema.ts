@@ -1,13 +1,22 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { UserGroupMutationSchema } from "./user-group-mutation.schema";
-import { UserPropertySchema } from "./user-property/user.property.schema";
-import { FlagSchema } from "../../flag/schema/flag.schema";
+import { UserGroupMutationSchema } from './user-group-mutation.schema';
+import { UserPropertySchema } from './user-property/user.property.schema';
+import { FlagSchema } from '../../flag/schema/flag.schema';
 
 @ObjectType('User')
 export class UserSchema {
+
   @Field(type => Int)
   id: number;
 
+  @Field()
+  created_at: string;
+
+  @Field()
+  updated_at: string;
+
+  @Field(type => Int)
+  version: number;
   @Field()
   login: string;
 
@@ -28,4 +37,5 @@ export class UserSchema {
 
   @Field(type => FlagSchema)
   flagItem: FlagSchema;
+
 }

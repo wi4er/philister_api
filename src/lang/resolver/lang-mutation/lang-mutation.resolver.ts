@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { LangInputSchema } from "../../schema/lang-input.schema";
 import { LangEntity } from "../../model/lang.entity";
 import { LangInsertOperation } from "../../operation/lang-insert.operation";
+import { LangUpdateOperation } from "../../operation/lang-update.operation";
 
 @Resolver(of => LangMutationSchema)
 export class LangMutationResolver {
@@ -15,7 +16,7 @@ export class LangMutationResolver {
   ) {
   }
 
-  @ResolveField('add')
+  @ResolveField()
   async add(
     @Args('item')
       item: LangInputSchema
@@ -23,14 +24,15 @@ export class LangMutationResolver {
     return new LangInsertOperation(item).save();
   }
 
-  @ResolveField('update')
+  @ResolveField()
   async update(
     @Args('item')
       item: LangInputSchema
   ) {
+    return new LangUpdateOperation(item).save();
   }
 
-  @ResolveField('delete')
+  @ResolveField()
   async delete(
     @Args('id', { type: () => [ String ] })
       id: string[]

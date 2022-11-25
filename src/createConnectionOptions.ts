@@ -19,6 +19,16 @@ import { ValueStringEntity } from "./directory/model/value.string.entity";
 import { LangEntity } from "./lang/model/lang.entity";
 import { LangStringEntity } from "./lang/model/lang-string.entity";
 import { LangFlagEntity } from "./lang/model/lang-flag.entity";
+import { ElementEntity } from "./content/model/element.entity";
+import { ElementSectionEntity } from "./content/model/element-section.entity";
+import { SectionEntity } from "./content/model/section.entity";
+import { ElementStringEntity } from "./content/model/element-string.entity";
+import { BlockEntity } from "./content/model/block.entity";
+import { BlockStringEntity } from "./content/model/block-string.entity";
+import { ElementValueEntity } from "./content/model/element-value.entity";
+import { SectionValueEntity } from "./content/model/section-value.entity";
+import { SectionStringEntity } from "./content/model/section-string.entity";
+import { ElementElementEntity } from "./content/model/element-element.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -37,6 +47,9 @@ export function createConnectionOptions(): DataSourceOptions {
       DirectoryEntity, DirectoryStringEntity, ValueEntity, ValueStringEntity,
       FlagEntity, FlagStringEntity, FlagFlagEntity,
       LangEntity, LangStringEntity, LangFlagEntity,
+      ElementEntity, ElementSectionEntity, ElementStringEntity, ElementValueEntity, ElementElementEntity,
+      SectionEntity, SectionValueEntity, SectionStringEntity,
+      BlockEntity, BlockStringEntity,
     ],
     subscribers: [],
     migrations: [],

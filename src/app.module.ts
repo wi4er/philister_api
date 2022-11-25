@@ -4,7 +4,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from 'node:path';
 import { UserModule } from './user/user.module';
-import { ElementModule } from './element/element.module';
+import { ContentModule } from './content/content.module';
 import { FileModule } from './file/file.module';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { PropertyModule } from './property/property.module';
@@ -30,7 +30,7 @@ import * as cors from "cors";
     }),
     TypeOrmModule.forRoot(createConnectionOptions()),
     UserModule,
-    ElementModule,
+    ContentModule,
     FileModule,
     PropertyModule,
     DirectoryModule,

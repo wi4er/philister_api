@@ -1,15 +1,15 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
+import { BlockQuerySchema } from "../../schema/block-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ValueEntity } from "../../model/value.entity";
-import { ValueQuerySchema } from "../../schema/value-query.schema";
+import { BlockEntity } from "../../model/block.entity";
 
-@Resolver(of => ValueQuerySchema)
-export class ValueQueryResolver {
+@Resolver(of => BlockQuerySchema)
+export class BlockQueryResolver {
 
   constructor(
-    @InjectRepository(ValueEntity)
-    private valueRepo: Repository<ValueEntity>,
+    @InjectRepository(BlockEntity)
+    private blockRepo: Repository<BlockEntity>,
   ) {
   }
 
@@ -20,7 +20,7 @@ export class ValueQueryResolver {
     @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
-    return this.valueRepo.find({
+    return this.blockRepo.find({
       skip: offset,
       take: limit,
       loadRelationIds: true,
@@ -34,7 +34,7 @@ export class ValueQueryResolver {
     @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
-    return this.valueRepo.count({
+    return this.blockRepo.count({
       skip: offset,
       take: limit,
     });
@@ -42,13 +42,12 @@ export class ValueQueryResolver {
 
   @ResolveField('item')
   item(
-    @Args('id', { type: () => String })
-      id: string
+    @Args('id', { type: () => Int })
+      id: number
   ) {
-    return this.valueRepo.findOne({
+    return this.blockRepo.findOne({
       where: { id },
       loadRelationIds: true,
     });
   }
-
 }

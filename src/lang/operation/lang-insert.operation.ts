@@ -1,4 +1,4 @@
-import { EntityManager, getConnection } from "typeorm";
+import { EntityManager } from "typeorm";
 import { getManager } from "typeorm/globals";
 import { LangEntity } from "../model/lang.entity";
 import { LangInputSchema } from "../schema/lang-input.schema";
@@ -59,7 +59,7 @@ export class LangInsertOperation {
   async* addFlag() {
     const flagRepo = this.manager.getRepository(FlagEntity);
 
-    for (const item of this.item.flag) {
+    for (const item of this.item.flag ?? []) {
       const inst = new LangFlagEntity();
       inst.parent = this.created;
       inst.flag = await flagRepo.findOne({ where: { id: item } });

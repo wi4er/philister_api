@@ -23,6 +23,15 @@ interface ValueProperty {
   property: Property!
 }
 
+interface ContentProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
 interface LangProperty {
   id: Int!
   created_at: String!
@@ -60,6 +69,9 @@ type Flag {
 
 type User {
   id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
   login: String!
   hash: String
   group: [User!]
@@ -165,6 +177,70 @@ type UserUser implements UserPropertySchema {
   string: String!
   property: Property!
   user: User!
+}
+
+type Element {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  block: Block!
+}
+
+type Section {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+}
+
+type LangFlag {
+  id: Int!
+  flag: Flag!
+}
+
+type Block implements Content {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  propertyList: [ContentProperty!]!
+  propertyItem: ContentProperty!
+  propertyString: String!
+  flagList: [LangFlag!]!
+  flagString: [String!]!
+  element: [Element!]!
+  section: [Section!]!
+}
+
+interface Content {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  propertyList: [ContentProperty!]!
+  propertyItem: ContentProperty!
+  propertyString: String!
+  flagList: [LangFlag!]!
+  flagString: [String!]!
+}
+
+type ElementQuery {
+  list: [Element!]!
+  count: Int!
+  item: Element
+}
+
+type SectionQuery {
+  list: [Section!]!
+  count: Int!
+  item: Section
+}
+
+type BlockQuery {
+  list(limit: Int, offset: Int): [Block!]!
+  count(limit: Int, offset: Int): Int!
+  item(id: Int!): Block
 }
 
 type PropertyQuery {
@@ -274,11 +350,6 @@ type FlagString implements FlagProperty {
   value: String!
 }
 
-type LangFlag {
-  id: Int!
-  flag: Flag!
-}
-
 type Lang {
   id: String!
   created_at: String!
@@ -333,6 +404,9 @@ type LangString implements LangProperty {
 type Query {
   user: UserQuery!
   userGroup: UserGroupQuery!
+  element: ElementQuery!
+  section: SectionQuery!
+  block: BlockQuery!
   property: PropertyQuery!
   directory: DirectoryQuery!
   value: ValueQuery!

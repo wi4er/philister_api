@@ -13,6 +13,8 @@ import { UserValueEntity } from "./user/model/user-value.entity";
 import { UserUserEntity } from "./user/model/user-user.entity";
 import { FlagEntity } from "./flag/model/flag.entity";
 import { FlagStringEntity } from "./flag/model/flag-string.entity";
+import { LangEntity } from "./lang/model/lang.entity";
+import { LangStringEntity } from "./lang/model/lang-string.entity";
 
 let source;
 let app;
@@ -140,6 +142,21 @@ describe('App mocks', () => {
           await Object.assign(new UserUserEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
         ]
       }).save();
+    }
+
+    const english = await Object.assign(new LangEntity(), { id: `EN` }).save();
+    const german = await Object.assign(new LangEntity(), { id: `GR` }).save();
+
+    for (let i = 0; i < 100; i++) {
+      const parent = await Object.assign(new LangEntity(), { id: `LANG_${i}` }).save();
+
+      await Object.assign(new LangStringEntity(), { string: `VALUE_EN_${i}`, property: name, parent, lang: english }).save();
+      await Object.assign(new LangStringEntity(), { string: `SECOND_EN_${i}`, property: second, parent, lang: english }).save();
+      await Object.assign(new LangStringEntity(), { string: `DESCRIPTION_EN_${i}`, property: descr, parent, lang: english }).save();
+
+      await Object.assign(new LangStringEntity(), { string: `VALUE_GR_${i}`, property: name, parent, lang: german }).save();
+      await Object.assign(new LangStringEntity(), { string: `SECOND_GR_${i}`, property: second, parent, lang: german }).save();
+      await Object.assign(new LangStringEntity(), { string: `DESCRIPTION_GR_${i}`, property: descr, parent, lang: german }).save();
     }
 
     await Object.assign(
