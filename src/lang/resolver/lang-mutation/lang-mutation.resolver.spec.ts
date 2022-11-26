@@ -52,6 +52,14 @@ const updateLangMutation = gql`
   }
 `;
 
+const deleteLangListMutation = gql`
+  mutation deleteLangList($id: [String!]!) {
+    lang {
+      delete(id: $id)
+    }
+  }
+`;
+
 describe('LangMutationResolver', () => {
   let source;
   let app;
@@ -363,6 +371,30 @@ describe('LangMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['lang']['update']['flagString']).toHaveLength(0);
+    });
+  });
+
+  describe('Lang deletion', () => {
+    test('Should delete lang', async () => {
+      await Object.assign(new LangEntity(), { id: 'EN' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(deleteLangListMutation, { id: [ 'EN' ] })
+        .expectNoErrors();
+
+      expect(res.data['lang']['delete']).toEqual([ 'EN' ]);
+    });
+
+    test('Should delete lang list', async () => {
+      for (let i = 0; i < 10; i++) {
+        await Object.assign(new LangEntity(), { id: `LANG_${i}` }).save();
+      }
+
+      const res = await request(app.getHttpServer())
+        .query(deleteLangListMutation, { id: [ 'LANG_0', 'LANG_3', 'LANG_5' ] })
+        .expectNoErrors();
+
+      expect(res.data['lang']['delete']).toEqual([ 'LANG_0', 'LANG_3', 'LANG_5' ]);
     });
   });
 });

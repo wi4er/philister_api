@@ -1,7 +1,7 @@
 import { Args, ResolveField, Resolver } from '@nestjs/graphql';
 import { LangMutationSchema } from "../../schema/lang-mutation.schema";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { LangInputSchema } from "../../schema/lang-input.schema";
 import { LangEntity } from "../../model/lang.entity";
 import { LangInsertOperation } from "../../operation/lang-insert.operation";
@@ -37,6 +37,15 @@ export class LangMutationResolver {
     @Args('id', { type: () => [ String ] })
       id: string[]
   ) {
+    const result = [];
+    const list = await this.langRepo.find({ where: { id: In(id) } });
+
+    for (const item of list) {
+      await this.langRepo.delete(item.id);
+      result.push(item.id);
+    }
+
+    return result;
   }
 
 }
