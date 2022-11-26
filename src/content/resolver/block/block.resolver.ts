@@ -13,8 +13,10 @@ export class BlockResolver {
   constructor(
     @InjectRepository(ElementEntity)
     private elementRepo: Repository<ElementEntity>,
+
     @InjectRepository(SectionEntity)
     private sectionRepo: Repository<SectionEntity>,
+
     @InjectRepository(BlockStringEntity)
     private stringRepo: Repository<BlockStringEntity>,
   ) {
@@ -63,7 +65,10 @@ export class BlockResolver {
     @Parent()
       current: BlockEntity
   ) {
-    return this.stringRepo.find({ where: { parent: { id: current.id } } });
+    return this.stringRepo.find({
+      where: { parent: { id: current.id } },
+      loadRelationIds: true,
+    });
   }
 
   @ResolveField()
@@ -77,7 +82,8 @@ export class BlockResolver {
       where: {
         property: { id },
         parent: { id: current.id },
-      }
+      },
+      loadRelationIds: true,
     });
   }
 

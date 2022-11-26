@@ -32,7 +32,7 @@ beforeAll(async () => {
 beforeEach(() => source.synchronize(true));
 
 describe('App mocks', () => {
-  test.skip("Should populate", async () => {
+  test("Should populate", async () => {
     const name = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
     const second = await Object.assign(new PropertyEntity(), { id: 'SECOND_NAME' }).save();
     const descr = await Object.assign(new PropertyEntity(), { id: 'DESCRIPTION' }).save();
@@ -41,7 +41,7 @@ describe('App mocks', () => {
     for (let i = 0; i < 10; i++) {
       const parent = await new BlockEntity().save();
 
-      await Object.assign(new BlockStringEntity(), { parent, property: name, string: 'VALUE' }).save();
+      await Object.assign(new BlockStringEntity(), { parent, property: name, string: `Content #${i}` }).save();
       await Object.assign(new BlockStringEntity(), { parent, property: second, string: 'VALUE' }).save();
       await Object.assign(new BlockStringEntity(), { parent, property: descr, string: 'VALUE' }).save();
     }
