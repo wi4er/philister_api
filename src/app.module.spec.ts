@@ -15,6 +15,8 @@ import { FlagEntity } from "./flag/model/flag.entity";
 import { FlagStringEntity } from "./flag/model/flag-string.entity";
 import { LangEntity } from "./lang/model/lang.entity";
 import { LangStringEntity } from "./lang/model/lang-string.entity";
+import { BlockEntity } from "./content/model/block.entity";
+import { BlockStringEntity } from "./content/model/block-string.entity";
 
 let source;
 let app;
@@ -35,6 +37,14 @@ describe('App mocks', () => {
     const second = await Object.assign(new PropertyEntity(), { id: 'SECOND_NAME' }).save();
     const descr = await Object.assign(new PropertyEntity(), { id: 'DESCRIPTION' }).save();
     const parent = await Object.assign(new PropertyEntity(), { id: 'PARENT' }).save();
+
+    for (let i = 0; i < 10; i++) {
+      const parent = await new BlockEntity().save();
+
+      await Object.assign(new BlockStringEntity(), { parent, property: name, string: 'VALUE' }).save();
+      await Object.assign(new BlockStringEntity(), { parent, property: second, string: 'VALUE' }).save();
+      await Object.assign(new BlockStringEntity(), { parent, property: descr, string: 'VALUE' }).save();
+    }
 
     const active = await Object.assign(new FlagEntity(), {
       id: 'ACTIVE',
@@ -150,13 +160,43 @@ describe('App mocks', () => {
     for (let i = 0; i < 100; i++) {
       const parent = await Object.assign(new LangEntity(), { id: `LANG_${i}` }).save();
 
-      await Object.assign(new LangStringEntity(), { string: `VALUE_EN_${i}`, property: name, parent, lang: english }).save();
-      await Object.assign(new LangStringEntity(), { string: `SECOND_EN_${i}`, property: second, parent, lang: english }).save();
-      await Object.assign(new LangStringEntity(), { string: `DESCRIPTION_EN_${i}`, property: descr, parent, lang: english }).save();
+      await Object.assign(new LangStringEntity(), {
+        string: `VALUE_EN_${i}`,
+        property: name,
+        parent,
+        lang: english
+      }).save();
+      await Object.assign(new LangStringEntity(), {
+        string: `SECOND_EN_${i}`,
+        property: second,
+        parent,
+        lang: english
+      }).save();
+      await Object.assign(new LangStringEntity(), {
+        string: `DESCRIPTION_EN_${i}`,
+        property: descr,
+        parent,
+        lang: english
+      }).save();
 
-      await Object.assign(new LangStringEntity(), { string: `VALUE_GR_${i}`, property: name, parent, lang: german }).save();
-      await Object.assign(new LangStringEntity(), { string: `SECOND_GR_${i}`, property: second, parent, lang: german }).save();
-      await Object.assign(new LangStringEntity(), { string: `DESCRIPTION_GR_${i}`, property: descr, parent, lang: german }).save();
+      await Object.assign(new LangStringEntity(), {
+        string: `VALUE_GR_${i}`,
+        property: name,
+        parent,
+        lang: german
+      }).save();
+      await Object.assign(new LangStringEntity(), {
+        string: `SECOND_GR_${i}`,
+        property: second,
+        parent,
+        lang: german
+      }).save();
+      await Object.assign(new LangStringEntity(), {
+        string: `DESCRIPTION_GR_${i}`,
+        property: descr,
+        parent,
+        lang: german
+      }).save();
     }
 
     await Object.assign(

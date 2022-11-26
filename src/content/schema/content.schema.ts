@@ -23,7 +23,12 @@ export class ContentSchema {
   @Field(type => [ ContentPropertySchema ])
   propertyList: ContentPropertySchema[];
 
-  @Field(type => ContentPropertySchema)
+  @Field(
+    type => ContentPropertySchema,
+    {
+
+    }
+  )
   propertyItem: ContentPropertySchema;
 
   @Field(type => String)

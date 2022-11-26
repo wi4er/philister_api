@@ -205,8 +205,8 @@ type Block implements Content {
   updated_at: String!
   version: Int!
   propertyList: [ContentProperty!]!
-  propertyItem: ContentProperty!
-  propertyString: String!
+  propertyItem(id: String!): ContentProperty!
+  propertyString(id: String!): String!
   flagList: [LangFlag!]!
   flagString: [String!]!
   element: [Element!]!
@@ -219,8 +219,8 @@ interface Content {
   updated_at: String!
   version: Int!
   propertyList: [ContentProperty!]!
-  propertyItem: ContentProperty!
-  propertyString: String!
+  propertyItem(id: String!): ContentProperty!
+  propertyString(id: String!): String!
   flagList: [LangFlag!]!
   flagString: [String!]!
 }
@@ -241,6 +241,15 @@ type BlockQuery {
   list(limit: Int, offset: Int): [Block!]!
   count(limit: Int, offset: Int): Int!
   item(id: Int!): Block
+}
+
+type BlockString implements ContentProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
 }
 
 type PropertyQuery {

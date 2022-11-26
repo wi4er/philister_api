@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { ElementSchema } from "./element.schema";
 import { SectionSchema } from "./section.schema";
 import { ContentSchema } from "./content.schema";
+import { ContentPropertySchema } from "./content-property.schema";
 
 @ObjectType(
   'Block',
@@ -28,5 +29,14 @@ export class BlockSchema {
 
   @Field(type => [ SectionSchema ])
   section: SectionSchema[]
+
+  @Field(type => [ ContentPropertySchema ])
+  propertyList: ContentPropertySchema[];
+
+  @Field(type =>  ContentPropertySchema )
+  propertyItem: ContentPropertySchema;
+
+  @Field()
+  propertyString: string;
 
 }

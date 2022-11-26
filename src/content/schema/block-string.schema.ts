@@ -1,11 +1,11 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { PropertySchema } from "../../property/schema/property.schema";
-import { BlockPropertySchema } from "./block-property.schema";
+import { ContentPropertySchema } from "./content-property.schema";
 
 @ObjectType(
-  'ValueString',
+  'BlockString',
   {
-    implements: () => [BlockPropertySchema]
+    implements: () => [ContentPropertySchema]
   }
 )
 export class BlockStringSchema {

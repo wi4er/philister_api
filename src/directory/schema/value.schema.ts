@@ -30,4 +30,5 @@ export class ValueSchema {
 
   @Field()
   propertyString: string;
+
 }

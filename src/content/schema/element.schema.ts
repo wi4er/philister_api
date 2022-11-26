@@ -18,4 +18,5 @@ export class ElementSchema {
 
   @Field(type => BlockSchema)
   block: BlockSchema;
+
 }

@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { ElementSchema } from "./element.schema";
 import { BlockSchema } from "./block.schema";
 
 @ObjectType('BlockQuery')
