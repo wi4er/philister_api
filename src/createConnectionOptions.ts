@@ -29,6 +29,8 @@ import { ElementValueEntity } from "./content/model/element-value.entity";
 import { SectionValueEntity } from "./content/model/section-value.entity";
 import { SectionStringEntity } from "./content/model/section-string.entity";
 import { ElementElementEntity } from "./content/model/element-element.entity";
+import { ChangeLogEntity } from "./log/model/change-log.entity";
+import { FetchLogEntity } from "./log/model/fetch-log.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -50,6 +52,7 @@ export function createConnectionOptions(): DataSourceOptions {
       ElementEntity, ElementSectionEntity, ElementStringEntity, ElementValueEntity, ElementElementEntity,
       SectionEntity, SectionValueEntity, SectionStringEntity,
       BlockEntity, BlockStringEntity,
+      ChangeLogEntity, FetchLogEntity,
     ],
     subscribers: [],
     migrations: [],

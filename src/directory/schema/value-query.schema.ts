@@ -5,7 +5,7 @@ import { ValueSchema } from "./value.schema";
 export class ValueQuerySchema {
 
   @Field(type => [ ValueSchema ])
-  list: [ ValueSchema ];
+  list: ValueSchema [];
 
   @Field(type => Int)
   count: number;

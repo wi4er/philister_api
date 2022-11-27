@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ElementResolver } from './element.resolver';
+import { FetchLogResolver } from './fetch-log.resolver';
 
-describe('ElementResolver', () => {
+describe('FetchLogResolver', () => {
   it('should be defined', () => {
-
   });
 });

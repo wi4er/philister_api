@@ -1,15 +1,15 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { DirectoryQuerySchema } from "../../schema/directory-query.schema";
+import { FetchLogQuerySchema } from "../../schema/fetch-log-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { DirectoryEntity } from "../../model/directory.entity";
+import { FetchLogEntity } from "../../model/fetch-log.entity";
 
-@Resolver(of => DirectoryQuerySchema)
-export class DirectoryQueryResolver {
+@Resolver(of => FetchLogQuerySchema)
+export class FetchLogQueryResolver {
 
   constructor(
-    @InjectRepository(DirectoryEntity)
-    private directoryRepo: Repository<DirectoryEntity>,
+    @InjectRepository(FetchLogEntity)
+    private logRepo: Repository<FetchLogEntity>,
   ) {
   }
 
@@ -19,8 +19,8 @@ export class DirectoryQueryResolver {
       limit: number,
     @Args('offset', {nullable: true, type: () => Int})
       offset: number,
-  ) {
-    return this.directoryRepo.find({
+  ): Promise<FetchLogEntity[]> {
+    return this.logRepo.find({
       skip: offset,
       take: limit,
     });
@@ -32,19 +32,19 @@ export class DirectoryQueryResolver {
       limit: number,
     @Args('offset', {nullable: true, type: () => Int})
       offset: number,
-  ) {
-    return this.directoryRepo.count({
+  ): Promise<number> {
+    return this.logRepo.count({
       skip: offset,
       take: limit,
     });
   }
 
   @ResolveField()
-  item(
+  async item(
     @Args('id', { type: () => String })
-      id: string
-  ) {
-    return this.directoryRepo.findOne({ where: { id } });
+      id: number
+  ): Promise<FetchLogEntity | null> {
+    return this.logRepo.findOne({ where: { id } });
   }
 
 }

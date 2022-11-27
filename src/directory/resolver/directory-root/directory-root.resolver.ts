@@ -9,7 +9,7 @@ export class DirectoryRootResolver {
 
   @Query(
     returns => DirectoryQuerySchema,
-    {name: 'directory'}
+    { name: 'directory' }
   )
   async getDirectory() {
     return {};
@@ -17,7 +17,7 @@ export class DirectoryRootResolver {
 
   @Query(
     returns => ValueQuerySchema,
-    {name: 'value'}
+    { name: 'value' }
   )
   async getValue() {
     return {};
@@ -25,7 +25,7 @@ export class DirectoryRootResolver {
 
   @Mutation(
     returns => DirectoryMutationSchema,
-    {name: 'directory'}
+    { name: 'directory' }
   )
   async setDirectory() {
     return {}
@@ -33,7 +33,7 @@ export class DirectoryRootResolver {
 
   @Mutation(
     returns => ValueMutationSchema,
-    {name: 'value'}
+    { name: 'value' }
   )
   async setValue() {
     return {}

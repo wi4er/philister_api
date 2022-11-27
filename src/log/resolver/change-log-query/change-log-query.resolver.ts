@@ -1,15 +1,15 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ValueEntity } from "../../model/value.entity";
-import { ValueQuerySchema } from "../../schema/value-query.schema";
+import { ChangeLogQuerySchema } from "../../schema/change-log-query.schema";
+import { ChangeLogEntity } from "../../model/change-log.entity";
 
-@Resolver(of => ValueQuerySchema)
-export class ValueQueryResolver {
+@Resolver(of => ChangeLogQuerySchema)
+export class ChangeLogQueryResolver {
 
   constructor(
-    @InjectRepository(ValueEntity)
-    private valueRepo: Repository<ValueEntity>,
+    @InjectRepository(ChangeLogEntity)
+    private logRepo: Repository<ChangeLogEntity>,
   ) {
   }
 
@@ -20,7 +20,7 @@ export class ValueQueryResolver {
     @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
-    return this.valueRepo.find({
+    return this.logRepo.find({
       skip: offset,
       take: limit,
       loadRelationIds: true,
@@ -34,21 +34,21 @@ export class ValueQueryResolver {
     @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
-    return this.valueRepo.count({
+    return this.logRepo.count({
       skip: offset,
       take: limit,
     });
   }
 
-  @ResolveField()
-  item(
-    @Args('id', { type: () => String })
-      id: string
-  ) {
-    return this.valueRepo.findOne({
-      where: { id },
-      loadRelationIds: true,
-    });
-  }
+  // @ResolveField()
+  // item(
+  //   @Args('id', { type: () => String })
+  //     id: number
+  // ) {
+  //   return this.logRepo.findOne({
+  //     where: { id },
+  //     loadRelationIds: true,
+  //   });
+  // }
 
 }

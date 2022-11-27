@@ -11,17 +11,13 @@ import { UserStringEntity } from './user-string.entity';
 import { UserFlagEntity } from "./user-flag.entity";
 import { UserValueEntity } from "./user-value.entity";
 import { UserUserEntity } from "./user-user.entity";
-import { UserGroupEntity } from "./user-group.entity";
 import { UserDescriptionEntity } from "./user-description.entity";
 
-@Entity({
-  name: 'user'
-})
+@Entity('user')
 export class UserEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
-
 
   @CreateDateColumn()
   created_at: Date;
@@ -40,8 +36,8 @@ export class UserEntity extends BaseEntity {
   })
   login: string;
 
-  @Column({nullable: true})
-  hash: string
+  @Column({ nullable: true })
+  hash: string;
 
   @OneToMany(
     type => UserStringEntity,
