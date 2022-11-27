@@ -3,6 +3,7 @@ import { PropertyEntity } from "../../model/property.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { PropertyQuerySchema } from "../../schema/property-query.schema";
+import { LogService } from "../../../log/service/log/log.service";
 
 @Resolver(of => PropertyQuerySchema)
 export class PropertyQueryResolver {
@@ -10,6 +11,8 @@ export class PropertyQueryResolver {
   constructor(
     @InjectRepository(PropertyEntity)
     private propertyRepo: Repository<PropertyEntity>,
+
+    private logService: LogService,
   ) {
   }
 
@@ -23,6 +26,10 @@ export class PropertyQueryResolver {
     return this.propertyRepo.find({
       skip: offset,
       take: limit,
+    }).then(res => {
+      this.logService.get('property', 'list');
+
+      return res;
     });
   }
 

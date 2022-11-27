@@ -7,17 +7,19 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { PropertyEntity } from "./model/property.entity";
 import { PropertyPropertyResolver } from './resolver/property-property/property-property.resolver';
 import { PropertyPropertyEntity } from "./model/property-property.entity";
+import { LogModule } from "../log/log.module";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ PropertyEntity, PropertyPropertyEntity ])
+    LogModule,
+    TypeOrmModule.forFeature([ PropertyEntity, PropertyPropertyEntity ]),
   ],
   providers: [
     PropertyResolver,
     PropertyRootResolver,
     PropertyQueryResolver,
     PropertyMutationResolver,
-    PropertyPropertyResolver
-  ]
+    PropertyPropertyResolver,
+  ],
 })
 export class PropertyModule {}

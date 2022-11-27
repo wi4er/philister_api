@@ -1,11 +1,11 @@
 import { Args, ResolveField, Resolver } from '@nestjs/graphql';
-import { PropertySchema } from "../../schema/property.schema";
 import { PropertyMutationSchema } from "../../schema/property-mutation.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PropertyPropertyEntity } from "../../model/property-property.entity";
 import { In, Repository } from "typeorm";
 import { PropertyEntity } from "../../model/property.entity";
 import { PropertyInputSchema } from "../../schema/property-input.schema";
+import { LogService } from "../../../log/service/log/log.service";
 
 @Resolver(of => PropertyMutationSchema)
 export class PropertyMutationResolver {
@@ -13,8 +13,11 @@ export class PropertyMutationResolver {
   constructor(
     @InjectRepository(PropertyEntity)
     private propertyRepo: Repository<PropertyEntity>,
+
     @InjectRepository(PropertyPropertyEntity)
     private propertyPropertyRepo: Repository<PropertyPropertyEntity>,
+
+    private logService: LogService,
   ) {
   }
 
@@ -36,7 +39,12 @@ export class PropertyMutationResolver {
       }
     }
 
-    return await inst.save();
+    return await inst.save()
+      .then(res => {
+        this.logService.create('property', String(res.id));
+
+        return res;
+      });
   }
 
   @ResolveField()
@@ -82,4 +90,5 @@ export class PropertyMutationResolver {
 
     return result;
   }
+
 }

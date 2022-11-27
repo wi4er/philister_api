@@ -16,6 +16,10 @@ const changeLogListQuery = gql`
         value
         field
         entity
+        user {
+          id
+          login
+        }
       }
     }
   }

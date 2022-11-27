@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from "../../user/model/user.entity";
 
 @Entity('log-change')
 export class ChangeLogEntity extends BaseEntity {
@@ -13,9 +14,18 @@ export class ChangeLogEntity extends BaseEntity {
   entity: string;
 
   @Column()
+  entityId: string;
+
+  @Column()
   field: string;
 
   @Column()
   value: string;
+
+  @ManyToOne(
+    type => UserEntity,
+    { onDelete: 'CASCADE' },
+  )
+  user: UserEntity;
 
 }

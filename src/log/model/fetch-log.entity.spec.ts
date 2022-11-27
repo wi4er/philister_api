@@ -1,7 +1,8 @@
-import { DataSource } from "typeorm/data-source/DataSource";
-import { createConnection } from "typeorm";
-import { createConnectionOptions } from "../../createConnectionOptions";
-import { FetchLogEntity } from "./fetch-log.entity";
+import { DataSource } from 'typeorm/data-source/DataSource';
+import { createConnection } from 'typeorm';
+import { createConnectionOptions } from '../../createConnectionOptions';
+import { FetchLogEntity } from './fetch-log.entity';
+import { UserEntity } from "../../user/model/user.entity";
 
 describe('FetchLog entity', () => {
   let source: DataSource;
@@ -14,10 +15,13 @@ describe('FetchLog entity', () => {
 
   describe('FetchLog fields', () => {
     test('Should create item', async () => {
+      const user = await Object.assign(new UserEntity(), { login: 'user' }).save();
+
       const inst = new FetchLogEntity();
       inst.entity = 'element';
       inst.operation = 'list';
       inst.arguments = '{}';
+      inst.user = user;
       await inst.save();
 
       expect(inst.id).toBe(1);

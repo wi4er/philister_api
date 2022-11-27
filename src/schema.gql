@@ -279,6 +279,42 @@ input PropertyPropertyInput {
   value: String!
 }
 
+type ChangeLog {
+  id: Int!
+  created_at: DateTime!
+  entity: String!
+  entityId: String!
+  field: String!
+  value: String!
+  user: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ChangeLogQuery {
+  list(limit: Int, offset: Int): [ChangeLog!]!
+  count(limit: Int, offset: Int): Int!
+  item: ChangeLog
+}
+
+type FetchLog {
+  id: Float!
+  entity: String!
+  entityId: String!
+  operation: String!
+  arguments: String!
+  user: User!
+}
+
+type FetchLogQuery {
+  list(limit: Int, offset: Int): [FetchLog!]!
+  count(limit: Int, offset: Int): Int!
+  item(id: String!): FetchLog
+}
+
 type DirectoryQuery {
   list(limit: Int, offset: Int): [Directory!]!
   count(limit: Int, offset: Int): Int!
@@ -410,38 +446,6 @@ type LangString implements LangProperty {
   lang: Lang!
 }
 
-type ChangeLog {
-  id: Int!
-  created_at: DateTime!
-  entity: String!
-  field: String!
-  value: String!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type ChangeLogQuery {
-  list(limit: Int, offset: Int): [ChangeLog!]!
-  count(limit: Int, offset: Int): Int!
-  item: ChangeLog
-}
-
-type FetchLog {
-  id: Float!
-  entity: String!
-  operation: String!
-  arguments: String!
-}
-
-type FetchLogQuery {
-  list(limit: Int, offset: Int): [FetchLog!]!
-  count(limit: Int, offset: Int): Int!
-  item(id: String!): FetchLog
-}
-
 type Query {
   user: UserQuery!
   userGroup: UserGroupQuery!
@@ -449,12 +453,12 @@ type Query {
   section: SectionQuery!
   block: BlockQuery!
   property: PropertyQuery!
+  changeLog: ChangeLogQuery!
+  fetchLog: FetchLogQuery!
   directory: DirectoryQuery!
   value: ValueQuery!
   flag: FlagQuery!
   lang: LangQuery!
-  changeLog: ChangeLogQuery!
-  fetchLog: FetchLogQuery!
 }
 
 type Mutation {

@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { UserSchema } from "../../user/schema/user.schema";
 
 @ObjectType('ChangeLog')
 export class ChangeLogSchema {
@@ -13,9 +14,15 @@ export class ChangeLogSchema {
   entity: string;
 
   @Field()
+  entityId: string;
+
+  @Field()
   field: string;
 
   @Field()
   value: string;
+
+  @Field(type => UserSchema)
+  user: UserSchema;
 
 }

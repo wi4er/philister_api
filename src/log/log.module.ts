@@ -7,13 +7,26 @@ import { LogRootResolver } from './resolver/log-root/log-root.resolver';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ChangeLogEntity } from "./model/change-log.entity";
 import { FetchLogEntity } from "./model/fetch-log.entity";
+import { LogService } from './service/log/log.service';
+import { UserEntity } from "../user/model/user.entity";
 
 @Module({
   imports: [
+
     TypeOrmModule.forFeature([
-      ChangeLogEntity, FetchLogEntity,
-    ])
+      ChangeLogEntity, FetchLogEntity, UserEntity,
+    ]),
   ],
-  providers: [LogRootResolver, ChangeLogQueryResolver, FetchLogQueryResolver, FetchLogResolver, ChangeLogResolver]
+  providers: [
+    LogRootResolver,
+    ChangeLogQueryResolver,
+    FetchLogQueryResolver,
+    FetchLogResolver,
+    ChangeLogResolver,
+    LogService,
+  ],
+  exports: [
+    LogService
+  ]
 })
 export class LogModule {}
