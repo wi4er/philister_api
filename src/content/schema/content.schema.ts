@@ -25,13 +25,14 @@ export class ContentSchema {
 
   @Field(
     type => ContentPropertySchema,
-    {
-
-    }
+    { nullable: true },
   )
   propertyItem: ContentPropertySchema;
 
-  @Field(type => String)
+  @Field(
+    type => String,
+    { nullable: true }
+  )
   propertyString: string;
 
   @Field(type => [ LangFlagSchema ])

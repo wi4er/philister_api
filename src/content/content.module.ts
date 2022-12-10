@@ -13,7 +13,7 @@ import { ElementValueEntity } from "./model/element-value.entity";
 import { SectionValueEntity } from "./model/section-value.entity";
 import { SectionStringEntity } from "./model/section-string.entity";
 import { ElementElementEntity } from "./model/element-element.entity";
-import { ElementRootResolver } from './resolver/element-root/element-root.resolver';
+import { ContentRootResolver } from './resolver/content-root/content-root.resolver';
 import { ElementQueryResolver } from './resolver/element-query/element-query.resolver';
 import { SectionQueryResolver } from './resolver/section-query/section-query.resolver';
 import { SectionMutationResolver } from './resolver/section-mutation/section-mutation.resolver';
@@ -34,7 +34,12 @@ import { ContentResolver } from './resolver/content/content.resolver';
       PropertyEntity,
     ])
   ],
-  providers: [ ElementResolver, ElementPropertyResolver, ElementRootResolver, ElementQueryResolver, SectionQueryResolver, SectionMutationResolver, ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver, BlockResolver, BlockStringResolver, ContentResolver ]
+  providers: [
+    ElementResolver, ElementPropertyResolver, ContentRootResolver, ElementQueryResolver,
+    SectionQueryResolver, SectionMutationResolver,
+    ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
+    BlockResolver, BlockStringResolver, ContentResolver
+  ]
 })
 export class ContentModule {
 }

@@ -1,12 +1,11 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { PropertySchema } from "../../../property/schema/property.schema";
 import { DirectorySchema } from "../../schema/directory.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DirectoryStringEntity } from "../../model/directory-string.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
-import { ValueSchema } from "../../schema/value.schema";
 import { ValueEntity } from "../../model/value.entity";
+import { DirectoryFlagEntity } from "../../model/directory-flag.entity";
 
 @Resolver(of => DirectorySchema)
 export class DirectoryResolver {
@@ -16,6 +15,8 @@ export class DirectoryResolver {
     private propertyRepo: Repository<DirectoryStringEntity>,
     @InjectRepository(ValueEntity)
     private valueRepo: Repository<ValueEntity>,
+    @InjectRepository(DirectoryFlagEntity)
+    private flagRepo: Repository<DirectoryFlagEntity>,
   ) {
   }
 
@@ -55,6 +56,32 @@ export class DirectoryResolver {
       where: { directory: { id: current.id } },
       loadRelationIds: true,
     });
+  }
+
+  @ResolveField()
+  async flagList(
+    @Parent()
+      current: { id: string }
+  ) {
+    return this.flagRepo.find({
+      where: {
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    });
+  }
+
+  @ResolveField()
+  async flagString(
+    @Parent()
+      current: { id: string }
+  ) {
+    return this.flagRepo.find({
+      where: {
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    }).then(list => list.map(item => item.flag));
   }
 
 }

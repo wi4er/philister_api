@@ -28,10 +28,5 @@ describe("Flag entity", () => {
 
       expect(list).toHaveLength(1);
     });
-
-    test('Shouldn`t create without label', async () => {
-      const flag = Object.assign(new FlagEntity(), {id: 'ACTIVE'});
-      await expect(flag.save()).rejects.toThrow();
-    });
   });
 });

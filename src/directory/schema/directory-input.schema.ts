@@ -1,4 +1,4 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType('DirectoryPropertyInput')
 export class DirectoryPropertyInputSchema {
@@ -8,6 +8,9 @@ export class DirectoryPropertyInputSchema {
 
   @Field()
   string: string;
+
+  @Field()
+  lang: string;
 
 }
 
@@ -22,5 +25,8 @@ export class DirectoryInputSchema {
 
   @Field(type => [ String ], { nullable: true })
   value: string[];
+
+  @Field(type => [ String ], { nullable: true })
+  flag: string[];
 
 }

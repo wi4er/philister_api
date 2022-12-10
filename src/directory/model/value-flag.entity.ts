@@ -6,12 +6,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
 } from "typeorm";
-import { LangEntity } from "./lang.entity";
 import { FlagEntity } from "../../flag/model/flag.entity";
+import { ValueEntity } from "./value.entity";
 
-@Entity('lang-flag')
+@Entity('value-flag')
 @Index([ 'parent', 'flag' ], { unique: true })
-export class LangFlagEntity extends BaseEntity {
+export class ValueFlagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,20 +23,20 @@ export class LangFlagEntity extends BaseEntity {
   updated_at: Date;
 
   @DeleteDateColumn()
-  deleted_at: Date;
+  deleted_at: Date | null;
 
   @VersionColumn()
   version: number;
 
   @ManyToOne(
-    () => LangEntity,
+    () => ValueEntity,
     lang => lang.flag,
     {
       onDelete: 'CASCADE',
       nullable: false,
     },
   )
-  parent: LangEntity;
+  parent: ValueEntity;
 
   @ManyToOne(
     () => FlagEntity,

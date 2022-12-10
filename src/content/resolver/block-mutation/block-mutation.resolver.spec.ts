@@ -1,18 +1,53 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { BlockMutationResolver } from './block-mutation.resolver';
+import { Test } from '@nestjs/testing';
+import { AppModule } from "../../../app.module";
+import { createConnection } from "typeorm";
+import { createConnectionOptions } from "../../../createConnectionOptions";
+import request from "supertest-graphql";
+import { gql } from "apollo-server-express";
+
+const addBlockItemMutation = gql`
+  mutation addBlockItem($item: BlockInput!) {
+    block {
+      add(item: $item) {
+        id
+        created_at
+        updated_at
+        version
+        propertyList {
+          id
+          string
+          property {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
 
 describe('BlockMutationResolver', () => {
-  let resolver: BlockMutationResolver;
+  let source;
+  let app;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [BlockMutationResolver],
-    }).compile();
+  beforeAll(async () => {
+    const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
+    app = moduleBuilder.createNestApplication();
+    app.init()
 
-    resolver = module.get<BlockMutationResolver>(BlockMutationResolver);
+    source = await createConnection(createConnectionOptions());
   });
 
-  it('should be defined', () => {
-    expect(resolver).toBeDefined();
+  beforeEach(() => source.synchronize(true));
+
+  describe('Block addition', () => {
+    test("Should add blank item ", async () => {
+      const res = await request(app.getHttpServer())
+        .mutate(addBlockItemMutation, {
+          item: {}
+        })
+        .expectNoErrors();
+
+      expect(res.data['block']['add']['id']).toBe(1);
+    });
   });
 });

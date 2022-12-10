@@ -7,117 +7,42 @@ import { DirectoryStringEntity } from "../../model/directory-string.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ValueEntity } from "../../model/value.entity";
 import { DirectoryService } from "../../service/directory/directory.service";
+import { DirectoryInsertOperation } from "../../operation/directory-insert.operation";
+import { DirectoryUpdateOperation } from "../../operation/directory-update.operation";
 
 @Resolver(of => DirectoryMutationSchema)
 export class DirectoryMutationResolver {
   constructor(
     @InjectRepository(DirectoryEntity)
     private directoryRepo: Repository<DirectoryEntity>,
-
     @InjectRepository(ValueEntity)
     private valueRepo: Repository<ValueEntity>,
-
     @InjectRepository(DirectoryStringEntity)
     private directoryPropertyRepo: Repository<DirectoryStringEntity>,
-
-    private directoryService: DirectoryService,
   ) {
   }
 
-  @ResolveField('add')
+  @ResolveField()
   async add(
     @Args('item')
       item: DirectoryInputSchema
-  ) {
-    const inst = new DirectoryEntity();
-    inst.id = item.id;
-    const parent = await inst.save();
-
-    if (item.property) {
-      for (const value of item.property) {
-        await Object.assign(
-          new DirectoryStringEntity(),
-          {
-            string: value.string,
-            property: value.property,
-            parent,
-          }
-        ).save();
-      }
-    }
-
-    if (item.value) {
-      for (const value of item.value) {
-        const created = new ValueEntity();
-        created.id = value;
-        created.directory = inst;
-
-        await created.save();
-      }
-    }
-
-    await inst.reload();
-
-    return inst;
+  ): Promise<DirectoryEntity> {
+    return new DirectoryInsertOperation(item).save();
   }
 
-  @ResolveField('update')
+  @ResolveField()
   async update(
     @Args('item')
       item: DirectoryInputSchema
-  ) {
-    const inst = await this.directoryRepo.findOne({
-      where: { id: item.id },
-      relations: { property: true, value: true },
-    });
-
-    for (const prop of inst.property) {
-      await this.directoryPropertyRepo.delete({ id: prop.id });
-    }
-
-    inst.property = [];
-
-    if (item.property) {
-      for (const value of item.property) {
-        await Object.assign(
-          new DirectoryStringEntity(),
-          {
-            string: value.string,
-            property: value.property,
-            parent: inst,
-          }
-        ).save();
-      }
-    }
-
-    const curValues = new Set<string>(inst.value.map(it => it.id));
-
-    for (const value of item.value) {
-      const check = await this.valueRepo.findOne({where: {id: value}});
-
-      if (!check) {
-        const created = new ValueEntity();
-        created.id = value;
-        created.directory = inst;
-
-        await created.save();
-      }
-
-      curValues.delete(value);
-    }
-
-    await this.valueRepo.delete({id: In(Array.from(curValues))});
-
-    await inst.reload();
-
-    return inst;
+  ): Promise<DirectoryEntity> {
+    return new DirectoryUpdateOperation(item).save();
   }
 
-  @ResolveField('delete')
+  @ResolveField()
   async delete(
     @Args('id', { type: () => [ String ] })
       id: string[]
-  ) {
+  ): Promise<string[]> {
     const result = [];
     const list = await this.directoryRepo.find({ where: { id: In(id) } });
 

@@ -31,6 +31,8 @@ import { SectionStringEntity } from "./content/model/section-string.entity";
 import { ElementElementEntity } from "./content/model/element-element.entity";
 import { ChangeLogEntity } from "./log/model/change-log.entity";
 import { FetchLogEntity } from "./log/model/fetch-log.entity";
+import { DirectoryFlagEntity } from "./directory/model/directory-flag.entity";
+import { ValueFlagEntity } from "./directory/model/value-flag.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -46,7 +48,8 @@ export function createConnectionOptions(): DataSourceOptions {
       UserEntity, UserStringEntity, UserFlagEntity, UserValueEntity, UserUserEntity, UserDescriptionEntity,
       UserGroupEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
-      DirectoryEntity, DirectoryStringEntity, ValueEntity, ValueStringEntity,
+      DirectoryEntity, DirectoryStringEntity, DirectoryFlagEntity,
+      ValueEntity, ValueStringEntity, ValueFlagEntity,
       FlagEntity, FlagStringEntity, FlagFlagEntity,
       LangEntity, LangStringEntity, LangFlagEntity,
       ElementEntity, ElementSectionEntity, ElementStringEntity, ElementValueEntity, ElementElementEntity,

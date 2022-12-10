@@ -1,10 +1,11 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ElementQuerySchema } from "../../schema/element-query.schema";
 import { SectionQuerySchema } from "../../schema/section-query.schema";
 import { BlockQuerySchema } from "../../schema/block-query.schema";
+import { BlockMutationSchema } from "../../schema/block-mutation.schema";
 
 @Resolver()
-export class ElementRootResolver {
+export class ContentRootResolver {
 
   @Query(of => ElementQuerySchema, { name: 'element' })
   getElement() {
@@ -18,6 +19,11 @@ export class ElementRootResolver {
 
   @Query(of => BlockQuerySchema, { name: 'block' })
   getBlock() {
+    return {};
+  }
+
+  @Mutation(of => BlockMutationSchema, { name: 'block' })
+  setBlock() {
     return {};
   }
 

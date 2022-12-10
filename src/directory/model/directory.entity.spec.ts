@@ -3,6 +3,8 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { DirectoryEntity } from "./directory.entity";
 import { ValueEntity } from "./value.entity";
+import { DirectoryStringEntity } from "./directory-string.entity";
+import { PropertyEntity } from "../../property/model/property.entity";
 
 describe("Directory entity", () => {
   let source: DataSource;
@@ -15,20 +17,20 @@ describe("Directory entity", () => {
 
   describe('Directory fields', () => {
     test('Should create with id', async () => {
-        const inst = new DirectoryEntity();
-        inst.id = 'NAME';
+      const inst = new DirectoryEntity();
+      inst.id = 'NAME';
 
-        await inst.save();
+      await inst.save();
 
-        expect(inst.id).toBe('NAME');
-        expect(inst.created_at).not.toBeUndefined();
-        expect(inst.updated_at).not.toBeUndefined();
-        expect(inst.deleted_at).toBeNull();
-        expect(inst.version).toBe(1);
-        expect(inst.id).toBe('NAME');
+      expect(inst.id).toBe('NAME');
+      expect(inst.created_at).not.toBeUndefined();
+      expect(inst.updated_at).not.toBeUndefined();
+      expect(inst.deleted_at).toBeNull();
+      expect(inst.version).toBe(1);
+      expect(inst.id).toBe('NAME');
     });
 
-    test('Shouldn`t create with same id',  () => {
+    test('Shouldn`t create with same id', () => {
       // const inst = await Object.assign(new DirectoryEntity(), {id: 'NAME'}).save();
       //
       // setImmediate(async () => {

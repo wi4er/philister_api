@@ -9,14 +9,15 @@ import {
 } from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { DirectoryEntity } from "./directory.entity";
+import { LangEntity } from "../../lang/model/lang.entity";
+import { CommonStringEntity } from "../../common/model/common-string.entity";
 
 @Entity({
   name: 'directory-string'
 })
-export class DirectoryStringEntity extends BaseEntity {
+export class DirectoryStringEntity extends BaseEntity implements CommonStringEntity<DirectoryEntity>{
   @PrimaryGeneratedColumn()
   id: number;
-
 
   @CreateDateColumn()
   created_at: Date;
@@ -35,7 +36,7 @@ export class DirectoryStringEntity extends BaseEntity {
 
   @ManyToOne(
     () => DirectoryEntity,
-    directory => directory.property,
+    directory => directory.string,
     {
       onDelete: "CASCADE",
       nullable: false,
@@ -51,4 +52,14 @@ export class DirectoryStringEntity extends BaseEntity {
     },
   )
   property: PropertyEntity;
+
+  @ManyToOne(
+    () => LangEntity,
+    {
+      onDelete: "CASCADE",
+      nullable: false,
+    },
+  )
+  lang: LangEntity;
+
 }

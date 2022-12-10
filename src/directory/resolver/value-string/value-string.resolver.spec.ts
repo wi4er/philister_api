@@ -9,6 +9,7 @@ import { PropertyEntity } from "../../../property/model/property.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { ValueEntity } from "../../model/value.entity";
 import { ValueStringEntity } from "../../model/value.string.entity";
+import { LangEntity } from "../../../lang/model/lang.entity";
 
 const valuePropertyListQuery = gql`
   query GetValueProperty ($id: String!) {
@@ -74,9 +75,10 @@ describe('ValueStringResolver', () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const directory = await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       await Object.assign(new ValueStringEntity(), {
-        string: 'VALUE', property, parent
+        string: 'VALUE', property, parent, lang
       }).save();
 
       const res = await request(app.getHttpServer())
@@ -92,9 +94,10 @@ describe('ValueStringResolver', () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const directory = await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       await Object.assign(new ValueStringEntity(), {
-        string: 'VALUE', property, parent
+        string: 'VALUE', property, parent, lang
       }).save();
 
       const res = await request(app.getHttpServer())
@@ -109,9 +112,10 @@ describe('ValueStringResolver', () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const directory = await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       await Object.assign(new ValueStringEntity(), {
-        string: 'VALUE', property, parent
+        string: 'VALUE', property, parent, lang
       }).save();
 
       const res = await request(app.getHttpServer())

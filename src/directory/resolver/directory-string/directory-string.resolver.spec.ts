@@ -8,6 +8,7 @@ import { gql } from "apollo-server-express";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { DirectoryStringEntity } from "../../model/directory-string.entity";
+import { LangEntity } from "../../../lang/model/lang.entity";
 
 const directoryItemQuery = gql`
   query getDirectoryList($id: String!) {
@@ -20,13 +21,18 @@ const directoryItemQuery = gql`
           property {
             id
           }
+          ... on DirectoryString {
+            lang {
+              id
+            }
+          }
         }
       }
     }
   }
 `;
 
-describe('DirectoryPropertyResolver', () => {
+describe('DirectoryStringResolver', () => {
   let source;
   let app;
 
@@ -40,11 +46,12 @@ describe('DirectoryPropertyResolver', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('DirectoryProperty fields', () => {
-    test("Should get directory property", async () => {
+  describe('DirectoryString fields', () => {
+    test("Should get directory string", async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new DirectoryEntity(), { id: 'NAME' }).save();
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property, parent }).save()
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property, parent, lang }).save()
 
       const res = await request(app.getHttpServer())
         .mutate(directoryItemQuery, { id: 'NAME' })
@@ -53,20 +60,22 @@ describe('DirectoryPropertyResolver', () => {
       expect(res.data['directory']['item']['property']).toHaveLength(1);
       expect(res.data['directory']['item']['property'][0]['string']).toBe('VALUE');
       expect(res.data['directory']['item']['property'][0]['property']['id']).toBe('NAME');
+      expect(res.data['directory']['item']['property'][0]['lang']['id']).toBe('EN');
     });
 
     test("Should get directory with property list", async () => {
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       await Object.assign(new PropertyEntity(), { id: 'SECOND' }).save();
       await Object.assign(new PropertyEntity(), { id: 'FAMILY' }).save();
-      const parent = await Object.assign(new DirectoryEntity(), { id: 'NAME' }).save();
+      await Object.assign(new LangEntity(), { id: 'EN' }).save();
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
 
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'NAME', parent }).save();
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'SECOND', parent }).save();
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'FAMILY', parent }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'NAME', parent: 'CITY', lang: 'EN' }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'SECOND', parent: 'CITY', lang: 'EN' }).save();
+      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'FAMILY', parent: 'CITY', lang: 'EN' }).save();
 
       const res = await request(app.getHttpServer())
-        .mutate(directoryItemQuery, { id: 'NAME' })
+        .mutate(directoryItemQuery, { id: 'CITY' })
         .expectNoErrors();
 
       expect(res.data['directory']['item']['property']).toHaveLength(3);

@@ -15,13 +15,19 @@ import { ValueStringEntity } from "./model/value.string.entity";
 import { PropertyEntity } from "../property/model/property.entity";
 import { ValueStringResolver } from './resolver/value-string/value-string.resolver';
 import { DirectoryService } from './service/directory/directory.service';
+import { LangEntity } from "../lang/model/lang.entity";
+import { DirectoryFlagEntity } from "./model/directory-flag.entity";
+import { ValueFlagEntity } from "./model/value-flag.entity";
+import { FlagEntity } from "../flag/model/flag.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      DirectoryEntity, DirectoryStringEntity,
-      ValueEntity, ValueStringEntity,
+      DirectoryEntity, DirectoryStringEntity, DirectoryFlagEntity,
+      ValueEntity, ValueStringEntity, ValueFlagEntity,
       PropertyEntity,
+      LangEntity,
+      FlagEntity,
     ])
   ],
   providers: [

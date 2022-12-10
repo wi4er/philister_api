@@ -9,14 +9,16 @@ import {
 } from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { ValueEntity } from "./value.entity";
+import { LangEntity } from "../../lang/model/lang.entity";
+import { CommonStringEntity } from "../../common/model/common-string.entity";
 
 @Entity({
   name: 'value-string'
 })
-export class ValueStringEntity extends BaseEntity {
+export class ValueStringEntity extends BaseEntity implements CommonStringEntity<ValueEntity> {
+
   @PrimaryGeneratedColumn()
   id: number;
-
 
   @CreateDateColumn()
   created_at: Date;
@@ -51,4 +53,14 @@ export class ValueStringEntity extends BaseEntity {
     },
   )
   property: PropertyEntity;
+
+  @ManyToOne(
+    () => LangEntity,
+    {
+      onDelete: "CASCADE",
+      nullable: false,
+    },
+  )
+  lang: LangEntity;
+
 }

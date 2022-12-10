@@ -63,10 +63,6 @@ describe('PropertyMutationResolver', () => {
   beforeEach(() => source.synchronize(true));
 
   describe('Property addition', () => {
-    it('should be defined', () => {
-
-    });
-
     test("Should add item ", async () => {
       const res = await request(app.getHttpServer())
         .mutate(propertyAddMutation, {

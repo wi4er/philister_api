@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { DirectoryEntity } from "./directory.entity";
 import { ValueStringEntity } from "./value.string.entity";
+import { DirectoryFlagEntity } from "./directory-flag.entity";
+import { ValueFlagEntity } from "./value-flag.entity";
 
 @Entity({
   name: 'value'
@@ -49,5 +51,12 @@ export class ValueEntity extends BaseEntity {
     },
   )
   directory: DirectoryEntity;
+
+
+  @OneToMany(
+    type => ValueFlagEntity,
+    string => string.parent,
+  )
+  flag: ValueFlagEntity[];
 
 }

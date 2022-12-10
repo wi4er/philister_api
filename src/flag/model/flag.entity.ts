@@ -2,9 +2,7 @@ import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from
 import { FlagStringEntity } from "./flag-string.entity";
 import { FlagFlagEntity } from "./flag-flag.entity";
 
-@Entity({
-  name: 'flag'
-})
+@Entity('flag')
 export class FlagEntity extends BaseEntity {
 
   @PrimaryColumn({
@@ -12,7 +10,9 @@ export class FlagEntity extends BaseEntity {
   })
   id: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   label: string;
 
   @OneToMany(

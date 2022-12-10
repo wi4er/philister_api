@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { PropertySchema } from "../../property/schema/property.schema";
 import { DirectoryPropertySchema } from "./directory-property.schema";
+import { LangSchema } from "../../lang/schema/lang.schema";
 
 @ObjectType(
   'DirectoryString',
@@ -27,5 +28,8 @@ export class DirectoryStringSchema {
 
   @Field(type => PropertySchema)
   property: PropertySchema;
+
+  @Field(type => LangSchema)
+  lang: LangSchema;
 
 }

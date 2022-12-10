@@ -14,6 +14,15 @@ interface FlagProperty {
   property: Property!
 }
 
+interface LangProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
 interface ValueProperty {
   id: Int!
   created_at: String!
@@ -24,15 +33,6 @@ interface ValueProperty {
 }
 
 interface ContentProperty {
-  id: Int!
-  created_at: String!
-  updated_at: String!
-  version: Int!
-  string: String!
-  property: Property!
-}
-
-interface LangProperty {
   id: Int!
   created_at: String!
   updated_at: String!
@@ -126,6 +126,23 @@ type UserString implements UserPropertySchema {
   property: Property!
 }
 
+type LangFlag {
+  id: Int!
+  flag: Flag!
+}
+
+type Lang {
+  id: String!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  propertyList: [LangProperty!]!
+  propertyItem(id: String!): LangProperty
+  propertyString(id: String!): String
+  flagList: [LangFlag!]!
+  flagString: [String!]!
+}
+
 type DirectoryString implements DirectoryProperty {
   id: Int!
   created_at: String!
@@ -133,6 +150,7 @@ type DirectoryString implements DirectoryProperty {
   version: Int!
   string: String!
   property: Property!
+  lang: Lang!
 }
 
 interface DirectoryProperty {
@@ -162,6 +180,8 @@ type Directory {
   version: Int!
   property: [DirectoryString!]
   value: [Value!]
+  flagList: [LangFlag!]!
+  flagString: [String!]!
 }
 
 type UserValue implements UserPropertySchema {
@@ -194,19 +214,14 @@ type Section {
   version: Int!
 }
 
-type LangFlag {
-  id: Int!
-  flag: Flag!
-}
-
 type Block implements Content {
   id: Int!
   created_at: String!
   updated_at: String!
   version: Int!
   propertyList: [ContentProperty!]!
-  propertyItem(id: String!): ContentProperty!
-  propertyString(id: String!): String!
+  propertyItem(id: String!): ContentProperty
+  propertyString(id: String!): String
   flagList: [LangFlag!]!
   flagString: [String!]!
   element: [Element!]!
@@ -219,8 +234,8 @@ interface Content {
   updated_at: String!
   version: Int!
   propertyList: [ContentProperty!]!
-  propertyItem(id: String!): ContentProperty!
-  propertyString(id: String!): String!
+  propertyItem(id: String!): ContentProperty
+  propertyString(id: String!): String
   flagList: [LangFlag!]!
   flagString: [String!]!
 }
@@ -241,6 +256,27 @@ type BlockQuery {
   list(limit: Int, offset: Int): [Block!]!
   count(limit: Int, offset: Int): Int!
   item(id: Int!): Block
+}
+
+type BlockMutation {
+  """Adding new content block"""
+  add(item: BlockInput!): Block!
+
+  """Deletion existent content block"""
+  delete: [String!]!
+
+  """Updating existent content block"""
+  update: Block!
+}
+
+input BlockInput {
+  id: Float
+  property: [BlockPropertyInput!]
+}
+
+input BlockPropertyInput {
+  property: String!
+  string: String!
 }
 
 type BlockString implements ContentProperty {
@@ -337,11 +373,13 @@ input DirectoryInput {
   id: String!
   property: [DirectoryPropertyInput!]
   value: [String!]
+  flag: [String!]
 }
 
 input DirectoryPropertyInput {
   property: String!
   string: String!
+  lang: String!
 }
 
 type ValueQuery {
@@ -380,6 +418,7 @@ type ValueString implements ValueProperty {
   version: Int!
   string: String!
   property: Property!
+  lang: Lang!
 }
 
 type FlagQuery {
@@ -393,18 +432,6 @@ type FlagString implements FlagProperty {
   string: String!
   property: Property!
   value: String!
-}
-
-type Lang {
-  id: String!
-  created_at: String!
-  updated_at: String!
-  version: Int!
-  propertyList: [LangProperty!]!
-  propertyItem(id: String!): LangProperty
-  propertyString(id: String!): String
-  flagList: [LangFlag!]!
-  flagString: [String!]!
 }
 
 type LangQuery {
@@ -465,6 +492,7 @@ type Mutation {
   user: UserMutation!
   auth: AuthMutation
   userGroup: UserGroupMutation!
+  block: BlockMutation!
   property: PropertyMutation!
   directory: DirectoryMutation!
   value: ValueMutation!

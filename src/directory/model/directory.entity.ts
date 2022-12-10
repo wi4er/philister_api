@@ -5,22 +5,21 @@ import {
   OneToMany,
   PrimaryColumn,
   UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { DirectoryStringEntity } from "./directory-string.entity";
-import { ValueEntity } from "./value.entity";
+} from 'typeorm';
+import { DirectoryStringEntity } from './directory-string.entity';
+import { ValueEntity } from './value.entity';
+import { LangFlagEntity } from "../../lang/model/lang-flag.entity";
+import { DirectoryFlagEntity } from "./directory-flag.entity";
 
-@Entity({
-  name: "directory"
-})
+@Entity('directory')
 @Check('not_empty_id', '"id" > \'\'')
 export class DirectoryEntity extends BaseEntity {
 
   @PrimaryColumn({
-    type: "varchar",
+    type: 'varchar',
     nullable: false,
     unique: true,
     length: 100,
-
   })
   id: string;
 
@@ -31,7 +30,7 @@ export class DirectoryEntity extends BaseEntity {
   updated_at: Date;
 
   @DeleteDateColumn()
-  deleted_at: Date;
+  deleted_at: Date | null;
 
   @VersionColumn()
   version: number;
@@ -40,12 +39,18 @@ export class DirectoryEntity extends BaseEntity {
     type => DirectoryStringEntity,
     propertyProperty => propertyProperty.parent,
   )
-  property: DirectoryStringEntity[];
+  string: DirectoryStringEntity[];
 
   @OneToMany(
     type => ValueEntity,
     value => value.directory,
   )
   value: ValueEntity[];
+
+  @OneToMany(
+    type => DirectoryFlagEntity,
+    string => string.parent,
+  )
+  flag: DirectoryFlagEntity[];
 
 }

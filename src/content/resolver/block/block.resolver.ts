@@ -99,7 +99,7 @@ export class BlockResolver {
         property: { id },
         parent: { id: current.id },
       }
-    }).then(item => item.string);
+    }).then(item => item?.string);
   }
 
 }

@@ -14,6 +14,7 @@ import { DirectoryModule } from './directory/directory.module';
 import { FlagModule } from './flag/flag.module';
 import { LangModule } from './lang/lang.module';
 import { LogModule } from './log/log.module';
+import { CommonModule } from './common/common.module';
 import redisPermission from "./permission/redis.permission";
 import * as cors from "cors";
 
@@ -38,6 +39,7 @@ import * as cors from "cors";
     FlagModule,
     LangModule,
     LogModule,
+    CommonModule,
   ],
   controllers: [ AppController ],
   providers: [],

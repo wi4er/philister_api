@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { PropertySchema } from "../../property/schema/property.schema";
 import { ValuePropertySchema } from "./value-property.schema";
+import { LangSchema } from "../../lang/schema/lang.schema";
 
 @ObjectType(
   'ValueString',
@@ -27,5 +28,8 @@ export class ValueStringSchema {
 
   @Field(type => PropertySchema)
   property: PropertySchema;
+
+  @Field(type => LangSchema)
+  lang: LangSchema;
 
 }

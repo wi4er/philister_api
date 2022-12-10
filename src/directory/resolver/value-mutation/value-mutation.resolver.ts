@@ -17,7 +17,7 @@ export class ValueMutationResolver {
   ) {
   }
 
-  @ResolveField('add')
+  @ResolveField()
   async add(
     @Args('item')
       item: ValueInputSchema
@@ -40,7 +40,7 @@ export class ValueMutationResolver {
     });
   }
 
-  @ResolveField('update')
+  @ResolveField()
   async update(
     @Args('item')
       item: ValueInputSchema
@@ -57,7 +57,7 @@ export class ValueMutationResolver {
     });
   }
 
-  @ResolveField('delete')
+  @ResolveField()
   async delete(
     @Args('id', { type: () => [ String ] })
       id: string[]

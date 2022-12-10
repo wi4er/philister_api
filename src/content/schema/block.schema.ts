@@ -28,15 +28,18 @@ export class BlockSchema {
   element: ElementSchema[];
 
   @Field(type => [ SectionSchema ])
-  section: SectionSchema[]
+  section: SectionSchema[];
 
   @Field(type => [ ContentPropertySchema ])
   propertyList: ContentPropertySchema[];
 
-  @Field(type =>  ContentPropertySchema )
+  @Field(
+    type => ContentPropertySchema,
+    { nullable: true }
+  )
   propertyItem: ContentPropertySchema;
 
-  @Field()
+  @Field({ nullable: true })
   propertyString: string;
 
 }

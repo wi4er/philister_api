@@ -7,6 +7,9 @@ import { gql } from "apollo-server-express";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { ValueEntity } from "../../model/value.entity";
+import { LangEntity } from "../../../lang/model/lang.entity";
+import { FlagEntity } from "../../../flag/model/flag.entity";
+import { DirectoryFlagEntity } from "../../model/directory-flag.entity";
 
 const addDirectoryMutation = gql`
   mutation addDirectory($item: DirectoryInput!) {
@@ -41,6 +44,7 @@ const updateDirectoryMutation = gql`
         value {
           id
         }
+        flag: flagString
       }
     }
   }
@@ -86,11 +90,13 @@ describe('DirectoryMutationResolver', () => {
 
     test("Should add directory with property", async () => {
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new LangEntity(), { id: 'GR' }).save();
+
       const res = await request(app.getHttpServer())
         .mutate(addDirectoryMutation, {
           item: {
             id: 'CITY',
-            property: [ { string: 'VALUE', property: 'NAME' } ]
+            property: [ { string: 'VALUE', property: 'NAME', lang: 'GR' } ]
           }
         })
         .expectNoErrors();
@@ -117,8 +123,9 @@ describe('DirectoryMutationResolver', () => {
   });
 
   describe('Directory update', () => {
-    test('Should update item with property', async () => {
+    test('Should update item with string', async () => {
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new LangEntity(), { id: 'GR' }).save();
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
 
       const res = await request(app.getHttpServer())
@@ -128,8 +135,10 @@ describe('DirectoryMutationResolver', () => {
             property: [ {
               string: 'VALUE',
               property: 'NAME',
+              lang: 'GR',
             } ],
-            value: []
+            value: [],
+            flag: [],
           }
         })
         .expectNoErrors();
@@ -187,6 +196,68 @@ describe('DirectoryMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['directory']['update']['value']).toHaveLength(0);
+    });
+  });
+
+  describe('Directory update with flags', () => {
+    test('Should update item with flag', async () => {
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateDirectoryMutation, {
+          item: {
+            id: 'CITY',
+            property: [],
+            value: [],
+            flag: [ 'ACTIVE' ],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['directory']['update']['flag']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should delete flags in update', async () => {
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      await Object.assign(new DirectoryFlagEntity(), { parent: 'CITY', flag: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateDirectoryMutation, {
+          item: {
+            id: 'CITY',
+            property: [],
+            value: [],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['directory']['update']['flag']).toEqual([]);
+    });
+
+    test('Should change flags in item', async () => {
+      await Object.assign(new FlagEntity(), { id: 'FIRST' }).save();
+      await Object.assign(new FlagEntity(), { id: 'SECOND' }).save();
+      await Object.assign(new FlagEntity(), { id: 'THIRD' }).save();
+
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      await Object.assign(new DirectoryFlagEntity(), { parent: 'CITY', flag: 'FIRST' }).save();
+      await Object.assign(new DirectoryFlagEntity(), { parent: 'CITY', flag: 'SECOND' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateDirectoryMutation, {
+          item: {
+            id: 'CITY',
+            property: [],
+            value: [],
+            flag: [ 'FIRST', 'THIRD' ],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['directory']['update']['flag']).toEqual([ 'FIRST', 'THIRD' ]);
     });
   });
 
