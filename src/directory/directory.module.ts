@@ -19,6 +19,8 @@ import { LangEntity } from "../lang/model/lang.entity";
 import { DirectoryFlagEntity } from "./model/directory-flag.entity";
 import { ValueFlagEntity } from "./model/value-flag.entity";
 import { FlagEntity } from "../flag/model/flag.entity";
+import { DirectoryController } from "./controller/directory/directory.controller";
+import { ValueController } from "./controller/value/value.controller";
 
 @Module({
   imports: [
@@ -41,6 +43,7 @@ import { FlagEntity } from "../flag/model/flag.entity";
     ValueResolver,
     ValueStringResolver,
     DirectoryService
-  ]
+  ],
+  controllers: [DirectoryController, ValueController]
 })
 export class DirectoryModule {}

@@ -37,6 +37,8 @@ export class DirectoryUpdateOperation {
       await this.addProperty(trans);
       await this.addValue(trans);
       await this.addFlag(trans);
+
+      await  this.beforeItem.save();
     });
 
     return dirRepo.findOne({

@@ -2,9 +2,6 @@ import { DataSource } from "typeorm/data-source/DataSource";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { DirectoryEntity } from "./directory.entity";
-import { ValueEntity } from "./value.entity";
-import { DirectoryStringEntity } from "./directory-string.entity";
-import { PropertyEntity } from "../../property/model/property.entity";
 
 describe("Directory entity", () => {
   let source: DataSource;
@@ -23,11 +20,17 @@ describe("Directory entity", () => {
       await inst.save();
 
       expect(inst.id).toBe('NAME');
-      expect(inst.created_at).not.toBeUndefined();
-      expect(inst.updated_at).not.toBeUndefined();
+      expect(inst.created_at).toBeDefined();
+      expect(inst.updated_at).toBeDefined();
       expect(inst.deleted_at).toBeNull();
       expect(inst.version).toBe(1);
-      expect(inst.id).toBe('NAME');
+    });
+
+    test('Shouldn`t create with blank id', async () => {
+      const inst = new DirectoryEntity();
+      inst.id = '';
+
+      await expect(inst.save()).rejects.toThrow('id');
     });
 
     test('Shouldn`t create with same id', () => {
@@ -52,41 +55,13 @@ describe("Directory entity", () => {
       expect(list).toHaveLength(0);
     });
 
-    test('Should get single element list', async () => {
+    test('Should get single element', async () => {
       await Object.assign(new DirectoryEntity(), { id: 'NAME' }).save();
 
       const repo = source.getRepository(DirectoryEntity);
-      const list = await repo.find();
+      const item = await repo.findOne({ where: { id: 'NAME' } });
 
-      expect(list).toHaveLength(1);
-    });
-  });
-
-  describe('Directory with values', () => {
-    test('Should create directory with value', async () => {
-      await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
-      await Object.assign(new ValueEntity(), { id: 'ITEM', directory: 'LIST' }).save();
-
-      const repo = source.getRepository(DirectoryEntity);
-      const list = await repo.find({ relations: { value: true } });
-
-      expect(list).toHaveLength(1);
-      expect(list[0]['value'][0]['id']).toBe('ITEM');
-    });
-
-    test('Should create directory with list of values', async () => {
-      await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
-      for (let i = 0; i < 10; i++) {
-        await Object.assign(new ValueEntity(), { id: `ITEM_${i}`, directory: 'LIST' }).save();
-      }
-
-      const repo = source.getRepository(DirectoryEntity);
-      const item = await repo.findOne({
-        where: { id: 'LIST' },
-        relations: { value: true },
-      });
-
-      expect(item['value']).toHaveLength(10);
+      expect(item.id).toBe('NAME');
     });
   });
 });

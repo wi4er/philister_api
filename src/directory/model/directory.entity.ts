@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { DirectoryStringEntity } from './directory-string.entity';
 import { ValueEntity } from './value.entity';
-import { LangFlagEntity } from "../../lang/model/lang-flag.entity";
 import { DirectoryFlagEntity } from "./directory-flag.entity";
 
 @Entity('directory')

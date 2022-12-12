@@ -6,7 +6,6 @@ import { DirectoryInputSchema } from "../../schema/directory-input.schema";
 import { DirectoryStringEntity } from "../../model/directory-string.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ValueEntity } from "../../model/value.entity";
-import { DirectoryService } from "../../service/directory/directory.service";
 import { DirectoryInsertOperation } from "../../operation/directory-insert.operation";
 import { DirectoryUpdateOperation } from "../../operation/directory-update.operation";
 

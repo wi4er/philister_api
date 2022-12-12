@@ -16,6 +16,7 @@ import { LangModule } from './lang/lang.module';
 import { LogModule } from './log/log.module';
 import { CommonModule } from './common/common.module';
 import redisPermission from "./permission/redis.permission";
+import { ConfigModule } from '@nestjs/config';
 import * as cors from "cors";
 
 @Module({
@@ -30,6 +31,7 @@ import * as cors from "cors";
         return response;
       },
     }),
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot(createConnectionOptions()),
     UserModule,
     ContentModule,
