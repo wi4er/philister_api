@@ -150,7 +150,7 @@ type DirectoryString implements DirectoryProperty {
   version: Int!
   string: String!
   property: Property!
-  lang: Lang!
+  lang: Lang
 }
 
 interface DirectoryProperty {
@@ -286,6 +286,7 @@ type BlockString implements ContentProperty {
   version: Int!
   string: String!
   property: Property!
+  lang: Lang
 }
 
 type PropertyQuery {
@@ -418,7 +419,7 @@ type ValueString implements ValueProperty {
   version: Int!
   string: String!
   property: Property!
-  lang: Lang!
+  lang: Lang
 }
 
 type FlagQuery {
@@ -470,7 +471,7 @@ type LangString implements LangProperty {
   version: Int!
   string: String!
   property: Property!
-  lang: Lang!
+  lang: Lang
 }
 
 type Query {

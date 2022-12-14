@@ -33,13 +33,15 @@ describe("DirectoryString entity", () => {
       }).save();
     });
 
-    test('Shouldn`t create without lang', async () => {
+    test('Should create without lang', async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
 
-      await expect(Object.assign(new DirectoryStringEntity(), {
+      const inst = await Object.assign(new DirectoryStringEntity(), {
         string: 'VALUE', property, parent
-      }).save()).rejects.toThrow('langId');
+      }).save()
+
+      expect(inst.lang).toBeUndefined();
     });
 
     test('Shouldn`t create without property', async () => {

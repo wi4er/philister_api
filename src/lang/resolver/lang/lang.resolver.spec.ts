@@ -8,8 +8,6 @@ import { gql } from "apollo-server-express";
 import { LangEntity } from "../../model/lang.entity";
 import { LangStringEntity } from "../../model/lang-string.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { FlagEntity } from "../../../flag/model/flag.entity";
-import { LangFlagEntity } from "../../model/lang-flag.entity";
 
 const langPropertyListQuery = gql`
   query GetLangItem($id: String!) {

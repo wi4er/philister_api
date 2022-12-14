@@ -1,7 +1,6 @@
 import { LangEntity } from "../model/lang.entity";
 import { EntityManager } from "typeorm";
 import { LangInputSchema } from "../schema/lang-input.schema";
-import { getManager } from "typeorm/globals";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { LangStringEntity } from "../model/lang-string.entity";
 import { LangFlagEntity } from "../model/lang-flag.entity";
@@ -17,8 +16,8 @@ export class LangUpdateOperation {
   ) {
   }
 
-  async save(): Promise<LangEntity> {
-    this.manager = await getManager();
+  async save(manager: EntityManager): Promise<LangEntity> {
+    this.manager = manager;
     const langRepo = this.manager.getRepository(LangEntity);
 
     await this.manager.transaction(async (trans: EntityManager) => {

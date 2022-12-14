@@ -1,11 +1,12 @@
 import { Args, ResolveField, Resolver } from '@nestjs/graphql';
 import { LangMutationSchema } from "../../schema/lang-mutation.schema";
-import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
+import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
+import { EntityManager, In, Repository } from "typeorm";
 import { LangInputSchema } from "../../schema/lang-input.schema";
 import { LangEntity } from "../../model/lang.entity";
 import { LangInsertOperation } from "../../operation/lang-insert.operation";
 import { LangUpdateOperation } from "../../operation/lang-update.operation";
+import { LangService } from "../../service/lang/lang.service";
 
 @Resolver(of => LangMutationSchema)
 export class LangMutationResolver {
@@ -13,7 +14,11 @@ export class LangMutationResolver {
   constructor(
     @InjectRepository(LangEntity)
     private langRepo: Repository<LangEntity>,
+    @InjectEntityManager()
+    private entityManager: EntityManager,
+    private langService: LangService,
   ) {
+
   }
 
   @ResolveField()
@@ -21,7 +26,7 @@ export class LangMutationResolver {
     @Args('item')
       item: LangInputSchema
   ): Promise<LangEntity> {
-    return new LangInsertOperation(item).save();
+    return new LangInsertOperation(item).save(this.entityManager);
   }
 
   @ResolveField()
@@ -29,7 +34,7 @@ export class LangMutationResolver {
     @Args('item')
       item: LangInputSchema
   ) {
-    return new LangUpdateOperation(item).save();
+    return new LangUpdateOperation(item).save(this.entityManager);
   }
 
   @ResolveField()

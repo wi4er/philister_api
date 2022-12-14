@@ -11,7 +11,6 @@ export class LangStringResolver {
   constructor(
     @InjectRepository(PropertyEntity)
     private propertyRepo: Repository<PropertyEntity>,
-
     @InjectRepository(LangEntity)
     private langRepo: Repository<LangEntity>,
   ) {
@@ -20,17 +19,27 @@ export class LangStringResolver {
   @ResolveField()
   async property(
     @Parent()
-      current: {property: string}
+      current: { property: string }
   ) {
-    return await this.propertyRepo.findOne({where: {id: current.property}});
+    return this.propertyRepo.findOne({
+      where: { id: current.property },
+      loadRelationIds: true,
+    });
   }
 
   @ResolveField()
   async lang(
     @Parent()
-      current: {lang: string}
+      current: { lang: string }
   ) {
-    return await this.langRepo.findOne({where: {id: current.lang}});
+    if (!current.lang) {
+      return null;
+    }
+
+    return this.langRepo.findOne({
+      where: { id: current.lang },
+      loadRelationIds: true,
+    });
   }
 
 }

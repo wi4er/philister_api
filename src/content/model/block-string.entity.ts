@@ -9,9 +9,11 @@ import {
 } from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { BlockEntity } from "./block.entity";
+import { LangEntity } from "../../lang/model/lang.entity";
+import { CommonStringEntity } from "../../common/model/common-string.entity";
 
 @Entity('block-string')
-export class BlockStringEntity extends BaseEntity {
+export class BlockStringEntity extends BaseEntity implements CommonStringEntity<BlockEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -30,6 +32,15 @@ export class BlockStringEntity extends BaseEntity {
 
   @Column()
   string: string;
+
+  @ManyToOne(
+    () => LangEntity,
+    {
+      onDelete: 'CASCADE',
+      nullable: true,
+    },
+  )
+  lang?: LangEntity;
 
   @ManyToOne(
     () => BlockEntity,

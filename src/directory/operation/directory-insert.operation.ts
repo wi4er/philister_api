@@ -21,8 +21,8 @@ export class DirectoryInsertOperation {
     this.created.id = this.item.id;
   }
 
-  async save(): Promise<DirectoryEntity> {
-    this.manager = getManager();
+  async save(manager: EntityManager): Promise<DirectoryEntity> {
+    this.manager = manager;
     const directoryRepo = this.manager.getRepository(DirectoryEntity);
 
     await this.manager.transaction(async (trans: EntityManager) => {

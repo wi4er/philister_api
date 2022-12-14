@@ -29,7 +29,11 @@ export class ValueStringResolver {
     @Parent()
       current: { lang: string }
   ) {
-    return await this.langRepo.findOne({
+    if (!current.lang) {
+      return null;
+    }
+
+    return this.langRepo.findOne({
       where: { id: current.lang },
       loadRelationIds: true,
     });

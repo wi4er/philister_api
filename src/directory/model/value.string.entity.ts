@@ -58,9 +58,9 @@ export class ValueStringEntity extends BaseEntity implements CommonStringEntity<
     () => LangEntity,
     {
       onDelete: "CASCADE",
-      nullable: false,
+      nullable: true,
     },
   )
-  lang: LangEntity;
+  lang?: LangEntity;
 
 }

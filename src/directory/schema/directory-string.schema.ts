@@ -29,7 +29,7 @@ export class DirectoryStringSchema {
   @Field(type => PropertySchema)
   property: PropertySchema;
 
-  @Field(type => LangSchema)
-  lang: LangSchema;
+  @Field(type => LangSchema, { nullable: true })
+  lang: LangSchema | null;
 
 }

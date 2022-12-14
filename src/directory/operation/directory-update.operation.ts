@@ -20,8 +20,8 @@ export class DirectoryUpdateOperation {
   ) {
   }
 
-  async save(): Promise<DirectoryEntity> {
-    this.manager = await getManager();
+  async save(manager: EntityManager): Promise<DirectoryEntity> {
+    this.manager = manager;
     const dirRepo = this.manager.getRepository(DirectoryEntity);
 
     await this.manager.transaction(async (trans: EntityManager) => {

@@ -9,11 +9,12 @@ import {
 } from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { LangEntity } from "./lang.entity";
+import { CommonStringEntity } from "../../common/model/common-string.entity";
 
 @Entity(
   'lang-string'
 )
-export class LangStringEntity extends BaseEntity {
+export class LangStringEntity extends BaseEntity implements CommonStringEntity<LangEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -37,10 +38,10 @@ export class LangStringEntity extends BaseEntity {
     () => LangEntity,
     {
       onDelete: 'CASCADE',
-      nullable: false,
+      nullable: true,
     },
   )
-  lang: LangEntity;
+  lang?: LangEntity;
 
   @ManyToOne(
     () => LangEntity,

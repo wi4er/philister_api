@@ -22,14 +22,15 @@ import { LangService } from './service/lang/lang.service';
     ])
   ],
   providers: [
+    LangService,
     LangRootResolver,
     LangQueryResolver,
     LangResolver,
     LangStringResolver,
     LangFlagResolver,
-    LangMutationResolver,
-    LangService
+    LangMutationResolver
   ],
+  exports: [ LangService ]
 })
 export class LangModule {
 }

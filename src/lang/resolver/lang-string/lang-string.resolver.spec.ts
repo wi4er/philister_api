@@ -44,8 +44,25 @@ describe('LangStringResolver', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('Lang list', () => {
-    test("Should get empty list", async () => {
+  describe('LangString fields', () => {
+    test('Should get without lang', async () => {
+      const parent = await Object.assign(new LangEntity(), { id: 'EN' }).save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+
+      for (let i = 0; i < 5; i++) {
+        await Object.assign(new LangStringEntity(), { parent, property, string: `VALUE_${i}` }).save();
+      }
+
+      const res = await request(app.getHttpServer())
+        .query(langStringQuery, {id: 'EN', property: 'NAME'})
+        .expectNoErrors();
+
+      expect(res.data['lang']['item']['propertyItem']['lang']).toBeNull();
+    });
+  });
+
+  describe('Lang with strings', () => {
+    test("Should get with string list", async () => {
       const parent = await Object.assign(new LangEntity(), { id: 'EN' }).save();
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
 

@@ -57,9 +57,9 @@ export class DirectoryStringEntity extends BaseEntity implements CommonStringEnt
     () => LangEntity,
     {
       onDelete: "CASCADE",
-      nullable: false,
+      nullable: true,
     },
   )
-  lang: LangEntity;
+  lang?: LangEntity;
 
 }

@@ -6,7 +6,7 @@ import { LangSchema } from "../../lang/schema/lang.schema";
 @ObjectType(
   'ValueString',
   {
-    implements: () => [ValuePropertySchema]
+    implements: () => [ ValuePropertySchema ]
   }
 )
 export class ValueStringSchema {
@@ -29,7 +29,7 @@ export class ValueStringSchema {
   @Field(type => PropertySchema)
   property: PropertySchema;
 
-  @Field(type => LangSchema)
-  lang: LangSchema;
+  @Field(type => LangSchema, { nullable: true })
+  lang: LangSchema | null;
 
 }

@@ -6,12 +6,13 @@ import {
   UpdateDateColumn,
   VersionColumn
 } from "typeorm";
-import { ElementEntity } from "./element.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { SectionEntity } from "./section.entity";
+import { CommonStringEntity } from "../../common/model/common-string.entity";
+import { LangEntity } from "../../lang/model/lang.entity";
 
 @Entity('section-string')
-export class SectionStringEntity extends BaseEntity {
+export class SectionStringEntity extends BaseEntity implements CommonStringEntity<SectionEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -30,6 +31,15 @@ export class SectionStringEntity extends BaseEntity {
 
   @Column()
   string: string;
+
+  @ManyToOne(
+    () => LangEntity,
+    {
+      onDelete: 'CASCADE',
+      nullable: true,
+    },
+  )
+  lang?: LangEntity;
 
   @ManyToOne(
     () => SectionEntity,

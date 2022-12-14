@@ -17,13 +17,14 @@ describe("Lang entity", () => {
   describe('LangString fields', () => {
     test('Should add item with id', async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
       const parent = await Object.assign(new LangEntity(), { id: 'UA' }).save();
 
       const inst = new LangStringEntity();
       inst.property = property;
       inst.parent = parent;
       inst.string = 'VALUE';
-      inst.lang = parent;
+      inst.lang = lang;
       await inst.save();
 
       expect(inst.created_at).toBeDefined();
@@ -32,24 +33,39 @@ describe("Lang entity", () => {
       expect(inst.version).toBe(1);
     });
 
-    test('Shouldn`t create without parent', async () => {
+    test('Should create without lang', async () => {
       const parent = await Object.assign(new LangEntity(), { id: 'UA' }).save();
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
 
       const inst = new LangStringEntity();
       inst.property = property;
       inst.string = 'VALUE';
-      inst.lang = parent;
+      inst.parent = parent;
+      await inst.save();
+
+       // expect(inst.save()).rejects.toThrow();
+    });
+
+    test('Shouldn`t create without parent', async () => {
+      const parent = await Object.assign(new LangEntity(), { id: 'UA' }).save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
+
+      const inst = new LangStringEntity();
+      inst.property = property;
+      inst.string = 'VALUE';
+      inst.lang = lang;
       await expect(inst.save()).rejects.toThrow();
     });
 
     test('Shouldn`t create without property', async () => {
       const parent = await Object.assign(new LangEntity(), { id: 'UA' }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       const inst = new LangStringEntity();
       inst.parent = parent;
       inst.string = 'VALUE';
-      inst.lang = parent;
+      inst.lang = lang;
       await expect(inst.save()).rejects.toThrow();
     });
   });

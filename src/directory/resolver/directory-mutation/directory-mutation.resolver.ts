@@ -1,16 +1,17 @@
 import { Args, ResolveField, Resolver } from '@nestjs/graphql';
 import { DirectoryMutationSchema } from "../../schema/directory-mutation.schema";
-import { In, Repository } from "typeorm";
+import { EntityManager, In, Repository } from "typeorm";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { DirectoryInputSchema } from "../../schema/directory-input.schema";
 import { DirectoryStringEntity } from "../../model/directory-string.entity";
-import { InjectRepository } from "@nestjs/typeorm";
+import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { ValueEntity } from "../../model/value.entity";
 import { DirectoryInsertOperation } from "../../operation/directory-insert.operation";
 import { DirectoryUpdateOperation } from "../../operation/directory-update.operation";
 
 @Resolver(of => DirectoryMutationSchema)
 export class DirectoryMutationResolver {
+
   constructor(
     @InjectRepository(DirectoryEntity)
     private directoryRepo: Repository<DirectoryEntity>,
@@ -18,6 +19,8 @@ export class DirectoryMutationResolver {
     private valueRepo: Repository<ValueEntity>,
     @InjectRepository(DirectoryStringEntity)
     private directoryPropertyRepo: Repository<DirectoryStringEntity>,
+    @InjectEntityManager()
+    private entityManager: EntityManager,
   ) {
   }
 
@@ -26,7 +29,7 @@ export class DirectoryMutationResolver {
     @Args('item')
       item: DirectoryInputSchema
   ): Promise<DirectoryEntity> {
-    return new DirectoryInsertOperation(item).save();
+    return new DirectoryInsertOperation(item).save(this.entityManager);
   }
 
   @ResolveField()
@@ -34,7 +37,7 @@ export class DirectoryMutationResolver {
     @Args('item')
       item: DirectoryInputSchema
   ): Promise<DirectoryEntity> {
-    return new DirectoryUpdateOperation(item).save();
+    return new DirectoryUpdateOperation(item).save(this.entityManager);
   }
 
   @ResolveField()
@@ -52,4 +55,5 @@ export class DirectoryMutationResolver {
 
     return result;
   }
+
 }

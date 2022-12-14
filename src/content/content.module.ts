@@ -24,6 +24,7 @@ import { ElementResolver } from './resolver/element/element.resolver';
 import { BlockStringResolver } from './resolver/block-string/block-string.resolver';
 import { PropertyEntity } from "../property/model/property.entity";
 import { ContentResolver } from './resolver/content/content.resolver';
+import { LangEntity } from "../lang/model/lang.entity";
 
 @Module({
   imports: [
@@ -32,13 +33,14 @@ import { ContentResolver } from './resolver/content/content.resolver';
       SectionEntity, SectionValueEntity, SectionStringEntity,
       BlockEntity, BlockStringEntity,
       PropertyEntity,
+      LangEntity,
     ])
   ],
   providers: [
     ElementResolver, ElementPropertyResolver, ContentRootResolver, ElementQueryResolver,
     SectionQueryResolver, SectionMutationResolver,
     ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
-    BlockResolver, BlockStringResolver, ContentResolver
+    BlockResolver, BlockStringResolver, ContentResolver,
   ]
 })
 export class ContentModule {

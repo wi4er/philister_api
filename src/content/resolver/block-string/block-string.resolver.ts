@@ -3,6 +3,7 @@ import { BlockStringSchema } from "../../schema/block-string.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { Repository } from "typeorm";
+import { LangEntity } from "../../../lang/model/lang.entity";
 
 @Resolver(
   of => BlockStringSchema,
@@ -12,6 +13,8 @@ export class BlockStringResolver {
   constructor(
     @InjectRepository(PropertyEntity)
     private propertyRepo: Repository<PropertyEntity>,
+    @InjectRepository(LangEntity)
+    private langRepo: Repository<LangEntity>,
   ) {
   }
 
@@ -21,6 +24,21 @@ export class BlockStringResolver {
       current: { property: string }
   ) {
     return await this.propertyRepo.findOne({ where: { id: current.property } });
+  }
+
+  @ResolveField()
+  async lang(
+    @Parent()
+      current: { lang: string }
+  ) {
+    if (!current.lang) {
+      return null;
+    }
+
+    return this.langRepo.findOne({
+      where: { id: current.lang },
+      loadRelationIds: true,
+    });
   }
 
 }
