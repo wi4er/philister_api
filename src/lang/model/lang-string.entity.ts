@@ -11,9 +11,7 @@ import { PropertyEntity } from "../../property/model/property.entity";
 import { LangEntity } from "./lang.entity";
 import { CommonStringEntity } from "../../common/model/common-string.entity";
 
-@Entity(
-  'lang-string'
-)
+@Entity('lang-string')
 export class LangStringEntity extends BaseEntity implements CommonStringEntity<LangEntity> {
 
   @PrimaryGeneratedColumn()
@@ -26,7 +24,7 @@ export class LangStringEntity extends BaseEntity implements CommonStringEntity<L
   updated_at: Date;
 
   @DeleteDateColumn()
-  deleted_at: Date;
+  deleted_at: Date | null;
 
   @VersionColumn()
   version: number;

@@ -1,20 +1,20 @@
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
-import { PropertyMutationSchema } from "../../../property/schema/property-mutation.schema";
 import { FlagQuerySchema } from "../../schema/flag-query.schema";
+import { FlagMutationSchema } from "../../schema/flag-mutation.schema";
 
 @Resolver()
 export class FlagRootResolver {
 
   @Query(returns => FlagQuerySchema, { name: 'flag' })
-  async getProperty() {
+  async getFlag() {
     return {};
   }
 
   @Mutation(
-    returns => PropertyMutationSchema,
+    returns => FlagMutationSchema,
     { name: 'flag' }
   )
-  async setProperty() {
+  async setFlag() {
     return {}
   }
 

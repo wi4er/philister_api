@@ -7,7 +7,6 @@ import {
   UpdateDateColumn,
   VersionColumn
 } from "typeorm";
-import { PropertyPropertyEntity } from "../../property/model/property-property.entity";
 import { LangStringEntity } from "./lang-string.entity";
 import { LangFlagEntity } from "./lang-flag.entity";
 
@@ -30,7 +29,7 @@ export class LangEntity extends BaseEntity {
   updated_at: Date;
 
   @DeleteDateColumn()
-  deleted_at: Date;
+  deleted_at: Date | null;
 
   @VersionColumn()
   version: number;
@@ -43,7 +42,7 @@ export class LangEntity extends BaseEntity {
 
   @OneToMany(
     type => LangFlagEntity,
-    string => string.parent,
+    flag => flag.parent,
   )
   flag: LangFlagEntity[];
 

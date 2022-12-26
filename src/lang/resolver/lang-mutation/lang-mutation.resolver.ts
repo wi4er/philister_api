@@ -6,7 +6,6 @@ import { LangInputSchema } from "../../schema/lang-input.schema";
 import { LangEntity } from "../../model/lang.entity";
 import { LangInsertOperation } from "../../operation/lang-insert.operation";
 import { LangUpdateOperation } from "../../operation/lang-update.operation";
-import { LangService } from "../../service/lang/lang.service";
 
 @Resolver(of => LangMutationSchema)
 export class LangMutationResolver {
@@ -16,7 +15,6 @@ export class LangMutationResolver {
     private langRepo: Repository<LangEntity>,
     @InjectEntityManager()
     private entityManager: EntityManager,
-    private langService: LangService,
   ) {
 
   }

@@ -11,7 +11,8 @@ export class LangResolver {
 
   constructor(
     @InjectRepository(LangStringEntity)
-    private stingRepo: Repository<LangStringEntity>,
+    private stringRepo: Repository<LangStringEntity>,
+
     @InjectRepository(LangFlagEntity)
     private flagRepo: Repository<LangFlagEntity>,
   ) {
@@ -38,7 +39,7 @@ export class LangResolver {
     @Parent()
       current: { id: string }
   ) {
-    return this.stingRepo.find({
+    return this.stringRepo.find({
       where: { parent: { id: current.id } },
       loadRelationIds: true,
     });
@@ -51,7 +52,7 @@ export class LangResolver {
     @Parent()
       current: { id: string }
   ) {
-    return this.stingRepo.findOne({
+    return this.stringRepo.findOne({
       where: {
         property: { id },
         parent: { id: current.id },
@@ -67,7 +68,7 @@ export class LangResolver {
     @Parent()
       current: { id: string }
   ) {
-    return this.stingRepo.findOne({
+    return this.stringRepo.findOne({
       where: {
         property: { id },
         parent: { id: current.id },

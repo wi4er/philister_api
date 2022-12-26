@@ -1,45 +1,89 @@
-import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { FlagSchema } from "../../schema/flag.schema";
-import { PropertyEntity } from "../../../property/model/property.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { FlagStringEntity } from "../../model/flag-string.entity";
 import { FlagFlagEntity } from "../../model/flag-flag.entity";
-import { FlagFlagSchema } from "../../schema/flag-flag.schema";
-import { FlagStringSchema } from "../../schema/flag-string.schema";
 
 @Resolver(of => FlagSchema)
 export class FlagResolver {
 
   constructor(
-    @InjectRepository(FlagStringEntity)
-    private propertyRepo: Repository<FlagStringEntity>,
-
     @InjectRepository(FlagFlagEntity)
     private flagRepo: Repository<FlagFlagEntity>,
+
+    @InjectRepository(FlagStringEntity)
+    private stringRepo: Repository<FlagStringEntity>,
   ) {
   }
 
-  @ResolveField("property", type => FlagStringSchema)
-  async property(
+  @ResolveField()
+  async propertyList(
     @Parent()
-      prop: PropertyEntity
+      current: { id: string }
   ) {
-    return this.propertyRepo.find({
-      where: {parent: {id: prop.id}},
+    return this.stringRepo.find({
+      where: { parent: { id: current.id } },
       loadRelationIds: true,
     });
   }
 
-  @ResolveField("flag", type => FlagFlagSchema)
-  async flag(
+  @ResolveField()
+  async propertyItem(
+    @Args('id')
+      id: string,
     @Parent()
-      prop: PropertyEntity
+      current: { id: string }
+  ) {
+    return this.stringRepo.findOne({
+      where: {
+        property: { id },
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    });
+  }
+
+  @ResolveField()
+  async propertyString(
+    @Args('id')
+      id: string,
+    @Parent()
+      current: { id: string }
+  ) {
+    return this.stringRepo.findOne({
+      where: {
+        property: { id },
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    }).then(item => item.string);
+  }
+
+  @ResolveField()
+  async flagList(
+    @Parent()
+      current: { id: string }
   ) {
     return this.flagRepo.find({
-      where: {parent: {id: prop.id}},
+      where: {
+        parent: { id: current.id },
+      },
       loadRelationIds: true,
     });
+  }
+
+  @ResolveField()
+  async flagString(
+    @Parent()
+      current: { id: string }
+  ) {
+    return this.flagRepo.find({
+      where: {
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    }).then(list => list.map(item => item.flag));
   }
 
 }

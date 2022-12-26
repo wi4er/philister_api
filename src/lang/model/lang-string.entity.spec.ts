@@ -15,7 +15,7 @@ describe("Lang entity", () => {
   beforeEach(() => source.synchronize(true));
 
   describe('LangString fields', () => {
-    test('Should add item with id', async () => {
+    test('Should create item', async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
       const parent = await Object.assign(new LangEntity(), { id: 'UA' }).save();
@@ -43,11 +43,10 @@ describe("Lang entity", () => {
       inst.parent = parent;
       await inst.save();
 
-       // expect(inst.save()).rejects.toThrow();
+      expect(inst.lang).toBeUndefined() ;
     });
 
     test('Shouldn`t create without parent', async () => {
-      const parent = await Object.assign(new LangEntity(), { id: 'UA' }).save();
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
@@ -55,6 +54,7 @@ describe("Lang entity", () => {
       inst.property = property;
       inst.string = 'VALUE';
       inst.lang = lang;
+
       await expect(inst.save()).rejects.toThrow();
     });
 
@@ -66,6 +66,7 @@ describe("Lang entity", () => {
       inst.parent = parent;
       inst.string = 'VALUE';
       inst.lang = lang;
+
       await expect(inst.save()).rejects.toThrow();
     });
   });
@@ -74,36 +75,38 @@ describe("Lang entity", () => {
     test('Should create lang with strings', async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new LangEntity(), { id: 'UA' }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       for (let i = 0; i < 10; i++) {
         const inst = new LangStringEntity();
         inst.property = property;
         inst.parent = parent;
         inst.string = `VALUE_${i}`;
-        inst.lang = parent;
+        inst.lang = lang;
 
         await inst.save();
       }
 
       const repo = source.getRepository(LangEntity);
-      const lang = await repo.findOne({
+      const inst = await repo.findOne({
         where: { id: 'UA' },
         relations: { string: true },
       });
 
-      expect(lang.string).toHaveLength(10);
+      expect(inst.string).toHaveLength(10);
     });
 
     test('Should delete string with lang', async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new LangEntity(), { id: 'GR' }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       for (let i = 0; i < 10; i++) {
         const inst = new LangStringEntity();
         inst.property = property;
         inst.parent = parent;
         inst.string = `VALUE_${i}`;
-        inst.lang = parent;
+        inst.lang = lang;
 
         await inst.save();
       }
@@ -119,13 +122,14 @@ describe("Lang entity", () => {
     test('Should delete string with property', async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new LangEntity(), { id: 'GR' }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       for (let i = 0; i < 10; i++) {
         const inst = new LangStringEntity();
         inst.property = property;
         inst.parent = parent;
         inst.string = `VALUE_${i}`;
-        inst.lang = parent;
+        inst.lang = lang;
 
         await inst.save();
       }

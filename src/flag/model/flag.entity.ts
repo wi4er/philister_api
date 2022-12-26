@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { FlagStringEntity } from "./flag-string.entity";
 import { FlagFlagEntity } from "./flag-flag.entity";
 

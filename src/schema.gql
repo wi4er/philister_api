@@ -62,9 +62,12 @@ type FlagFlag {
 
 type Flag {
   id: String!
-  label: String!
-  property: [FlagProperty!]!
-  flag: [FlagFlag!]!
+  label: String
+  propertyList: [FlagProperty!]!
+  propertyItem(id: String!): FlagProperty
+  propertyString(id: String!): String
+  flagList: [FlagFlag!]!
+  flagString: [String!]!
 }
 
 type User {
@@ -428,6 +431,29 @@ type FlagQuery {
   item(id: String!): Flag
 }
 
+type FlagMutation {
+  """Adding new flag"""
+  add(item: FlagInput!): Flag!
+
+  """Deletion existent flag"""
+  delete(id: [String!]!): [String!]!
+
+  """Updating existent flag"""
+  update(item: FlagInput!): Flag!
+}
+
+input FlagInput {
+  id: String!
+  property: [FlagPropertyInput!]!
+  flag: [String!]!
+}
+
+input FlagPropertyInput {
+  property: String!
+  string: String!
+  lang: String
+}
+
 type FlagString implements FlagProperty {
   id: Int!
   string: String!
@@ -497,6 +523,6 @@ type Mutation {
   property: PropertyMutation!
   directory: DirectoryMutation!
   value: ValueMutation!
-  flag: PropertyMutation!
+  flag: FlagMutation!
   lang: LangMutation!
 }

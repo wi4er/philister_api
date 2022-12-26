@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { FlagResolver } from './flag.resolver';
 import { gql } from "apollo-server-express";
 import { AppModule } from "../../../app.module";
@@ -16,19 +16,30 @@ const flagPropertyQuery = gql`
       item(id: $id) {
         id
         label
-        flag {
+        flagList {
           id
           flag {
             id
           }
         }
-        property {
+        propertyList {
           id
           string
           property {
             id
           }
         }
+      }
+    }
+  }
+`;
+
+const flagStringQuery = gql`
+  query PropertyPropertyQuery ($id: String!, $property: String!){
+    flag {
+      item(id: $id) {
+        id
+        name: propertyString(id: $property)
       }
     }
   }
@@ -50,7 +61,7 @@ describe('FlagResolver', () => {
 
   describe('Flag fields', () => {
     test('Should get flag with id', async () => {
-      await Object.assign(new FlagEntity(), {id: 'ACTIVE', label: 'active'}).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE', label: 'active' }).save();
 
       const res = await request(app.getHttpServer())
         .query(flagPropertyQuery, { id: 'ACTIVE' })
@@ -61,36 +72,53 @@ describe('FlagResolver', () => {
     });
 
     test('Should get flag with flag', async () => {
-      await Object.assign(new FlagEntity(), {id: 'STATUS', label: 'status'}).save();
+      await Object.assign(new FlagEntity(), { id: 'STATUS', label: 'status' }).save();
       const parent = await Object.assign(new FlagEntity(), {
         id: 'ACTIVE',
         label: 'active',
       }).save();
-      await Object.assign(new FlagFlagEntity(), {flag: 'STATUS', parent}).save()
+      await Object.assign(new FlagFlagEntity(), { flag: 'STATUS', parent }).save()
 
       const res = await request(app.getHttpServer())
         .query(flagPropertyQuery, { id: 'ACTIVE' })
         .expectNoErrors();
 
-      expect(res.data['flag']['item']['flag']).toHaveLength(1);
-      expect(res.data['flag']['item']['flag'][0]['flag']['id']).toBe('STATUS');
+      expect(res.data['flag']['item']['flagList']).toHaveLength(1);
+      expect(res.data['flag']['item']['flagList'][0]['flag']['id']).toBe('STATUS');
+    });
+  });
+
+  describe('Flag property', () => {
+    test('Should get flag with property list', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'STATUS' }).save();
+      const parent = await Object.assign(new FlagEntity(), {
+        id: 'ACTIVE',
+        label: 'active',
+      }).save();
+      await Object.assign(new FlagStringEntity(), { string: 'OK', property: 'STATUS', parent }).save()
+
+      const res = await request(app.getHttpServer())
+        .query(flagPropertyQuery, { id: 'ACTIVE' })
+        .expectNoErrors();
+
+      expect(res.data['flag']['item']['propertyList']).toHaveLength(1);
+      expect(res.data['flag']['item']['propertyList'][0]['string']).toBe('OK');
+      expect(res.data['flag']['item']['propertyList'][0]['property']['id']).toBe('STATUS');
     });
 
-    test('Should get flag with property', async () => {
-      await Object.assign(new PropertyEntity(), {id: 'STATUS'}).save();
+    test('Should get flag with property string', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new FlagEntity(), {
         id: 'ACTIVE',
         label: 'active',
       }).save();
-      await Object.assign(new FlagStringEntity(), {string: 'OK', property: 'STATUS', parent}).save()
+      await Object.assign(new FlagStringEntity(), { string: 'active', property: 'NAME', parent }).save()
 
       const res = await request(app.getHttpServer())
-        .query(flagPropertyQuery, { id: 'ACTIVE' })
+        .query(flagStringQuery, { id: 'ACTIVE', property: 'NAME' })
         .expectNoErrors();
 
-      expect(res.data['flag']['item']['property']).toHaveLength(1);
-      expect(res.data['flag']['item']['property'][0]['string']).toBe('OK');
-      expect(res.data['flag']['item']['property'][0]['property']['id']).toBe('STATUS');
+      expect(res.data['flag']['item']['name']).toBe('active');
     });
   });
 });

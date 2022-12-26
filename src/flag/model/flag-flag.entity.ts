@@ -1,10 +1,8 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { FlagEntity } from "./flag.entity";
 
-@Entity({
-  name: 'flag-flag',
-})
-@Index(['parent', 'flag'], {unique: true})
+@Entity('flag-flag')
+@Index([ 'parent', 'flag' ], { unique: true })
 export class FlagFlagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

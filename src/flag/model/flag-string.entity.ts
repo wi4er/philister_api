@@ -1,14 +1,34 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn, DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn, VersionColumn
+} from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { FlagEntity } from "./flag.entity";
+import { CommonStringEntity } from "../../common/model/common-string.entity";
+import { LangEntity } from "../../lang/model/lang.entity";
 
-@Entity({
-  name: 'flag-string',
-})
-export class FlagStringEntity extends BaseEntity {
+@Entity('flag-string')
+export class FlagStringEntity extends BaseEntity implements CommonStringEntity<FlagEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date | null;
+
+  @VersionColumn()
+  version: number;
 
   @Column()
   string: string;
@@ -16,7 +36,10 @@ export class FlagStringEntity extends BaseEntity {
   @ManyToOne(
     () => FlagEntity,
     flag => flag.string,
-    {onDelete: 'CASCADE'},
+    {
+      onDelete: 'CASCADE',
+      nullable: false,
+    },
   )
   parent: FlagEntity;
 
@@ -28,5 +51,14 @@ export class FlagStringEntity extends BaseEntity {
     },
   )
   property: PropertyEntity;
+
+  @ManyToOne(
+    () => LangEntity,
+    {
+      onDelete: 'CASCADE',
+      nullable: true,
+    },
+  )
+  lang?: LangEntity;
 
 }

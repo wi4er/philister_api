@@ -2,9 +2,7 @@ import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { LangPropertySchema } from "./lang-property.schema";
 import { LangFlagSchema } from "./lang-flag.schema";
 
-@ObjectType(
-  'Lang'
-)
+@ObjectType('Lang')
 export class LangSchema {
 
   @Field()

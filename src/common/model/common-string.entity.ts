@@ -1,7 +1,8 @@
 import { LangEntity } from "../../lang/model/lang.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
+import { BaseEntity } from "typeorm";
 
-export interface CommonStringEntity<P> {
+export interface CommonStringEntity<P extends BaseEntity> {
 
   id: number;
   created_at: Date;

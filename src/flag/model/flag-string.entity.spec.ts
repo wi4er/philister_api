@@ -23,17 +23,24 @@ describe("Flag property entity", () => {
     });
 
     test('Should create flag with property', async () => {
+      const repo = source.getRepository(FlagEntity);
+
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
-      const item = await Object.assign(new FlagEntity(), {
+      const parent = await Object.assign(new FlagEntity(), {
         id: 'ACTIVE',
         label: 'activity',
-        property: [
-          await Object.assign(new FlagStringEntity(), { string: 'Flag name', property: 'NAME' }).save()
-        ]
       }).save();
 
-      expect(item['property']).toHaveLength(1);
-      expect(item['property'][0]['id']).toBe(1);
+      await Object.assign(new FlagStringEntity(), {
+        string: 'Flag name',
+        property: 'NAME',
+        parent
+      }).save()
+
+      const item = await repo.findOne({ where: { id: 'ACTIVE' }, relations: { string: true } });
+
+      expect(item['string']).toHaveLength(1);
+      expect(item['string'][0]['id']).toBe(1);
     });
 
     test('Should delete flag property with property', async () => {
@@ -41,13 +48,12 @@ describe("Flag property entity", () => {
       const flagRepo = source.getRepository(FlagEntity);
 
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
-      await Object.assign(new FlagEntity(), {
+      const parent = await Object.assign(new FlagEntity(), {
         id: 'ACTIVE',
         label: 'activity',
-        property: [
-          await Object.assign(new FlagStringEntity(), { string: 'Flag name', property: 'NAME' }).save()
-        ]
       }).save();
+
+      await Object.assign(new FlagStringEntity(), { string: 'Flag name', property: 'NAME', parent }).save()
 
       await propRepo.delete({ id: 'NAME' });
       const list = await flagRepo.find({ relations: { string: true } });
