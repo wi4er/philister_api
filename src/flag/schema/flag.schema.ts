@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { FlagFlagSchema } from "./flag-flag.schema";
 import { FlagPropertySchema } from "./flag-property.schema";
 
@@ -7,6 +7,15 @@ export class FlagSchema {
 
   @Field()
   id: string;
+
+  @Field()
+  created_at: string;
+
+  @Field()
+  updated_at: string;
+
+  @Field(type => Int)
+  version: number;
 
   @Field({ nullable: true })
   label: string

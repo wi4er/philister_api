@@ -13,7 +13,7 @@ export class FlagQueryResolver {
   ) {
   }
 
-  @ResolveField('list', type => [ FlagEntity ])
+  @ResolveField()
   list(
     @Args('limit', { nullable: true, type: () => Int })
       limit: number,
@@ -26,7 +26,7 @@ export class FlagQueryResolver {
     });
   }
 
-  @ResolveField('count', type => Int)
+  @ResolveField()
   count(
     @Args('limit', { nullable: true, type: () => Int })
       limit: number,
@@ -39,9 +39,9 @@ export class FlagQueryResolver {
     });
   }
 
-  @ResolveField('item', type => FlagEntity)
+  @ResolveField()
   item(
-    @Args('id', { type: () => String })
+    @Args('id')
       id: string
   ) {
     return this.flagRepo.findOne({ where: { id } });

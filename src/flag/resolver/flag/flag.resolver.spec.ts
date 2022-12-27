@@ -88,7 +88,7 @@ describe('FlagResolver', () => {
     });
   });
 
-  describe('Flag property', () => {
+  describe('Flag property list', () => {
     test('Should get flag with property list', async () => {
       await Object.assign(new PropertyEntity(), { id: 'STATUS' }).save();
       const parent = await Object.assign(new FlagEntity(), {
@@ -106,6 +106,9 @@ describe('FlagResolver', () => {
       expect(res.data['flag']['item']['propertyList'][0]['property']['id']).toBe('STATUS');
     });
 
+  });
+
+  describe('Flag property string', () => {
     test('Should get flag with property string', async () => {
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new FlagEntity(), {
@@ -119,6 +122,18 @@ describe('FlagResolver', () => {
         .expectNoErrors();
 
       expect(res.data['flag']['item']['name']).toBe('active');
+    });
+
+    test('Should get flag with wrong property id', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const parent = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new FlagStringEntity(), { string: 'active', property: 'NAME', parent }).save()
+
+      const res = await request(app.getHttpServer())
+        .query(flagStringQuery, { id: 'ACTIVE', property: 'WRONG' })
+        .expectNoErrors();
+
+      expect(res.data['flag']['item']['name']).toBe('');
     });
   });
 });

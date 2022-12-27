@@ -100,7 +100,7 @@ export class LangResolver {
         parent: { id: current.id },
       },
       loadRelationIds: true,
-    }).then(list => list.map(item => item.flag));
+    }).then(list => list.map(item => item?.flag ?? ''));
   }
 
 }

@@ -59,6 +59,6 @@ export class FlagStringEntity extends BaseEntity implements CommonStringEntity<F
       nullable: true,
     },
   )
-  lang?: LangEntity;
+  lang?: LangEntity | null;
 
 }

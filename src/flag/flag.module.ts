@@ -10,10 +10,15 @@ import { FlagStringEntity } from "./model/flag-string.entity";
 import { FlagStringResolver } from './resolver/flag-string/flag-string.resolver';
 import { FlagFlagResolver } from './resolver/flag-flag/flag-flag.resolver';
 import { PropertyEntity } from "../property/model/property.entity";
+import { LangEntity } from "../lang/model/lang.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ FlagEntity, FlagFlagEntity, FlagStringEntity, PropertyEntity ])
+    TypeOrmModule.forFeature([
+      FlagEntity, FlagFlagEntity, FlagStringEntity,
+      PropertyEntity,
+      LangEntity,
+    ])
   ],
   providers: [FlagRootResolver, FlagQueryResolver, FlagMutationResolver, FlagResolver, FlagStringResolver, FlagFlagResolver]
 })

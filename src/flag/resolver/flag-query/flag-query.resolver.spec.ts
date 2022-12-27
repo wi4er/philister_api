@@ -12,7 +12,7 @@ const flagListQuery = gql`
     flag {
       list(offset: $offset, limit: $limit) {
         id
-        property {
+        propertyList {
           string
           property {
             id
@@ -22,7 +22,6 @@ const flagListQuery = gql`
     }
   }
 `;
-
 
 const flagCountQuery = gql`
   query getFlagList($offset: Int, $limit: Int) {
@@ -37,7 +36,7 @@ const flagItemQuery = gql`
     flag {
       item(id: $id) {
         id
-        property {
+        propertyList {
           string
           property {
             id
@@ -71,9 +70,9 @@ describe('FlagQueryResolver', () => {
       expect(res.data['flag']['list']).toHaveLength(0);
     });
 
-    test("Should get  list", async () => {
+    test("Should get list", async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new FlagEntity(), { id: `FLAG_${i}`, label: 'flag' }).save();
+        await Object.assign(new FlagEntity(), { id: `FLAG_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
@@ -85,7 +84,7 @@ describe('FlagQueryResolver', () => {
 
     test("Should get list with limit", async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new FlagEntity(), { id: `FLAG_${i}`, label: 'flag' }).save();
+        await Object.assign(new FlagEntity(), { id: `FLAG_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
@@ -98,7 +97,7 @@ describe('FlagQueryResolver', () => {
 
     test("Should get list with offset", async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new FlagEntity(), { id: `FLAG_${i}`, label: 'flag' }).save();
+        await Object.assign(new FlagEntity(), { id: `FLAG_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
@@ -127,11 +126,11 @@ describe('FlagQueryResolver', () => {
   describe('Flag item', () => {
     test('Should get item by id', async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new FlagEntity(), { id: `FLAG_${i}`, label: 'flag' }).save();
+        await Object.assign(new FlagEntity(), { id: `FLAG_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
-        .query(flagItemQuery, {id: 'FLAG_3'})
+        .query(flagItemQuery, { id: 'FLAG_3' })
         .expectNoErrors();
 
       expect(res.data['flag']['item']['id']).toBe('FLAG_3');
@@ -139,14 +138,29 @@ describe('FlagQueryResolver', () => {
 
     test('Shouldn`t get item with wrong id', async () => {
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new FlagEntity(), { id: `FLAG_${i}`, label: 'flag' }).save();
+        await Object.assign(new FlagEntity(), { id: `FLAG_${i}` }).save();
       }
 
       const res = await request(app.getHttpServer())
-        .query(flagItemQuery, {id: 'FLAG_88'})
+        .query(flagItemQuery, { id: 'FLAG_88' })
         .expectNoErrors();
 
       expect(res.data['flag']['item']).toBe(null);
+    });
+
+    test('Should get item in empty list', async () => {
+      const res = await request(app.getHttpServer())
+        .query(flagItemQuery, { id: 'FLAG_88' })
+        .expectNoErrors();
+
+      expect(res.data['flag']['item']).toBe(null);
+    });
+
+    test('Shouldn`t get item without id', async () => {
+      const res = await request(app.getHttpServer())
+        .query(flagItemQuery);
+
+      expect(res.errors).toHaveLength(1);
     });
   });
 });

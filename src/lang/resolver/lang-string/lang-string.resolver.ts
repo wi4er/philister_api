@@ -11,6 +11,7 @@ export class LangStringResolver {
   constructor(
     @InjectRepository(PropertyEntity)
     private propertyRepo: Repository<PropertyEntity>,
+
     @InjectRepository(LangEntity)
     private langRepo: Repository<LangEntity>,
   ) {

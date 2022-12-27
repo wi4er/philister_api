@@ -5,6 +5,7 @@ import { EntityManager, In, Repository } from "typeorm";
 import { FlagEntity } from "../../model/flag.entity";
 import { FlagInputSchema } from "../../schema/flag-input.schema";
 import { FlagInsertOperation } from "../../operation/flag-insert.operation";
+import { FlagUpdateOperation } from "../../operation/flag-update.operation";
 
 @Resolver(of => FlagMutationSchema)
 export class FlagMutationResolver {
@@ -32,7 +33,7 @@ export class FlagMutationResolver {
     @Args('item')
       item: FlagInputSchema
   ) {
-    // return new FlagUpdateOperation(item).save(this.entityManager);
+    return new FlagUpdateOperation(item).save(this.entityManager);
   }
 
   @ResolveField()

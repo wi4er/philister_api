@@ -10,6 +10,9 @@ interface UserPropertySchema {
 
 interface FlagProperty {
   id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
   string: String!
   property: Property!
 }
@@ -62,6 +65,9 @@ type FlagFlag {
 
 type Flag {
   id: String!
+  created_at: String!
+  updated_at: String!
+  version: Int!
   label: String
   propertyList: [FlagProperty!]!
   propertyItem(id: String!): FlagProperty
@@ -456,9 +462,12 @@ input FlagPropertyInput {
 
 type FlagString implements FlagProperty {
   id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
   string: String!
   property: Property!
-  value: String!
+  lang: Lang
 }
 
 type LangQuery {

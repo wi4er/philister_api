@@ -13,13 +13,13 @@ const FlagAddMutation = gql`
       add(item: $item) {
         id
         label
-        flag {
+        flagList {
           id
           flag {
             id
           }
         }
-        property {
+        propertyList {
           id
           string
           property {
@@ -67,18 +67,18 @@ describe('FlagMutationResolver', () => {
         .mutate(FlagAddMutation, {
           item: {
             id: 'ACTIVE',
-            property: [{
+            property: [ {
               property: 'NAME',
               string: 'VALUE'
-            }],
+            } ],
             flag: [],
           }
         })
         .expectNoErrors();
 
-      console.dir(res.data['flag']['add'], {depth: 5});
-
       expect(res.data['flag']['add']['id']).toBe('ACTIVE');
+      expect(res.data['flag']['add']['propertyList']).toHaveLength(1);
+      expect(res.data['flag']['add']['propertyList'][0]['string']).toBe('VALUE');
     });
   });
 });
