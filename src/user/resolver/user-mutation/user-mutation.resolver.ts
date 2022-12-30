@@ -1,4 +1,4 @@
-import { Args, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { EntityManager, In, Repository } from "typeorm";
 import { UserUpdateOperation } from "../../operation/user-update.operation";
@@ -6,15 +6,15 @@ import { UserInputSchema } from "../../schema/user-input.schema";
 import { UserEntity } from "../../model/user.entity";
 import { UserMutationSchema } from "../../schema/user-mutation.schema";
 import { UserInsertOperation } from "../../operation/user-insert.operation";
+import { UserService } from "../../service/user/user.service";
 
 @Resolver(of => UserMutationSchema)
 export class UserMutationResolver {
 
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepo: Repository<UserEntity>,
     @InjectEntityManager()
     private entityManager: EntityManager,
+    private userService: UserService,
   ) {
 
   }
@@ -37,17 +37,10 @@ export class UserMutationResolver {
 
   @ResolveField()
   async delete(
-    @Args('id', { type: () => [ String ] })
-      id: string[]
-  ) {
-    const result = [];
-    const list = await this.userRepo.find({ where: { id: In(id) } });
-
-    for (const item of list) {
-      await this.userRepo.delete(item.id);
-      result.push(item.id);
-    }
-
-    return result;
+    @Args('id', { type: () => [ Int ] })
+      id: number[]
+  ): Promise<number[]> {
+    return this.userService.deleteUser(id);
   }
+
 }

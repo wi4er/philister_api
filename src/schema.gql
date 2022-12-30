@@ -113,7 +113,7 @@ type UserMutation {
   add(item: UserInput!): User!
 
   """Deletion existent user"""
-  delete(id: [String!]!): User!
+  delete(id: [Int!]!): [Int!]!
 
   """Updating existent user"""
   update(item: UserInput!): User!

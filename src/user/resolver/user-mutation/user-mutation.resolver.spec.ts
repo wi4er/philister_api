@@ -43,6 +43,14 @@ const userUpdateMutation = gql`
   }
 `;
 
+const userDeleteMutation = gql`
+  mutation DeleteUser($id: [Int!]!) {
+    user {
+      delete(id: $id)
+    }
+  }
+`;
+
 describe('UserRootMutationResolver', () => {
   let source;
   let app;
@@ -75,7 +83,7 @@ describe('UserRootMutationResolver', () => {
 
   describe('User addition', () => {
     test('Should update user', async () => {
-      const user = await Object.assign(new UserEntity(), { login: 'NAME'}).save();
+      const user = await Object.assign(new UserEntity(), { login: 'NAME' }).save();
       const res = await request(app.getHttpServer())
         .mutate(userUpdateMutation, {
           item: {
@@ -87,6 +95,16 @@ describe('UserRootMutationResolver', () => {
         });
 
       expect(res.data['user']['update']['login']).toBe('admin');
+    });
+  });
+
+  describe('User deletion', () => {
+    test('Should delete', async () => {
+      const user = await Object.assign(new UserEntity(), { login: 'NAME' }).save();
+      const res = await request(app.getHttpServer())
+        .mutate(userDeleteMutation, { id: 1 });
+
+      expect(res.data['user']['delete']).toEqual([1])
     });
   });
 });

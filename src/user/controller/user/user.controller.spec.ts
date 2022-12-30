@@ -20,7 +20,7 @@ describe('UserController', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('User fields', () => {
+  describe('User getting', () => {
     test('Should get user list', async () => {
       await Object.assign(new UserEntity(), { login: 'USER' }).save();
 
@@ -40,6 +40,22 @@ describe('UserController', () => {
 
       expect(res.body.id).toBe(1);
       expect(res.body.login).toBe('USER');
+    });
+  });
+
+  describe('User deletion', () => {
+    test('Should delete', async () => {
+      await Object.assign(new UserEntity(), { login: 'USER' }).save();
+
+      const drop = await request(app.getHttpServer())
+        .delete('/user/1');
+
+      expect(drop.body).toEqual([ 1 ]);
+
+      const rest = await request(app.getHttpServer())
+        .get('/user');
+
+      expect(rest.body).toEqual([]);
     });
   });
 
@@ -68,6 +84,31 @@ describe('UserController', () => {
         .get(`/user/myself`);
 
       expect(res.status).toBe(401);
+    });
+
+    test('Should update myself', async () => {
+      await Object.assign(new UserEntity(), {
+        login: 'user',
+        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
+      }).save();
+
+      const { headers } = await request(app.getHttpServer())
+        .get(`/auth`)
+        .set('login', 'user')
+        .set('password', 'qwerty');
+
+      const res = await request(app.getHttpServer())
+        .put(`/user/myself`)
+        .send({
+          login: 'admin',
+          hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5',
+          contact: [],
+          property: [],
+        })
+        .set('cookie', headers['set-cookie']);
+
+      expect(res.body.login).toBe('admin');
+      expect(res.body.id).toBe(1);
     });
   });
 });

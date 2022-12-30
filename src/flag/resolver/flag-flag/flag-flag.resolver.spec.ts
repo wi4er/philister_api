@@ -13,7 +13,7 @@ const flagItemQuery = gql`
     flag {
       item(id: $id) {
         id
-        flag {
+        flagList {
           id
           flag {
             id
@@ -41,14 +41,8 @@ describe('FlagFlagResolver', () => {
   describe('Flag fields', () => {
     test('Should get flag with id', async () => {
       await Object.assign(new FlagEntity(), { id: 'ACTIVE', label: 'active' }).save();
-
-      await Object.assign(new FlagEntity(), {
-        id: 'FLAG',
-        label: 'active',
-        flag: [
-          await Object.assign(new FlagFlagEntity(), {flag: 'ACTIVE'}).save(),
-        ]
-      }).save();
+      const parent = await Object.assign(new FlagEntity(), { id: 'FLAG', label: 'active' }).save();
+      await Object.assign(new FlagFlagEntity(), { flag: 'ACTIVE', parent }).save();
 
       const res = await request(app.getHttpServer())
         .query(flagItemQuery, { id: 'FLAG' })
@@ -56,6 +50,5 @@ describe('FlagFlagResolver', () => {
 
       expect(res.data['flag']['item']['id']).toBe('FLAG');
     });
-
   });
 });

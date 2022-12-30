@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from "../../model/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { EncodeService } from "../encode/encode.service";
 
 @Injectable()
@@ -14,6 +14,9 @@ export class UserService {
 
   }
 
+  /**
+   *
+   */
   async findByPassword(login: string, password: string): Promise<UserEntity | null> {
     const user = await this.userRepo.findOne({ where: { login } });
 
@@ -25,6 +28,9 @@ export class UserService {
     return user;
   }
 
+  /**
+   *
+   */
   async createByPassword(login: string, password: string): Promise<UserEntity> {
     const user = new UserEntity();
 
@@ -33,6 +39,21 @@ export class UserService {
     await user.save();
 
     return user;
+  }
+
+  /**
+   *
+   */
+  async deleteUser(id: number[]): Promise<number[]> {
+    const result = [];
+    const list = await this.userRepo.find({ where: { id: In(id) } });
+
+    for (const item of list) {
+      await this.userRepo.delete(item.id);
+      result.push(item.id);
+    }
+
+    return result;
   }
 
 }

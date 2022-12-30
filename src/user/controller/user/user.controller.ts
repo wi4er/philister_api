@@ -1,10 +1,21 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "../../model/user.entity";
 import { EntityManager, Repository } from "typeorm";
 import { Request, Response } from "express";
-import { ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
+import {
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse
+} from "@nestjs/swagger";
 import { UserInputSchema } from "../../schema/user-input.schema";
+import { UserService } from "../../service/user/user.service";
+import { UserUpdateOperation } from "../../operation/user-update.operation";
+import { UserSchema } from "../../schema/user.schema";
 
 @ApiTags('User object')
 @Controller('user')
@@ -15,6 +26,7 @@ export class UserController {
     private userRepo: Repository<UserEntity>,
     @InjectEntityManager()
     private entityManager: EntityManager,
+    private userService: UserService
   ) {
   }
 
@@ -33,7 +45,7 @@ export class UserController {
     const id = req['session']?.['user']?.['id'];
 
     if (id) {
-      res.json(this.userRepo.findOne({ where: { id }, loadRelationIds: true }));
+      res.json(await this.userRepo.findOne({ where: { id }, loadRelationIds: true }));
     } else {
       res.status(HttpStatus.UNAUTHORIZED);
       res.send(null);
@@ -42,6 +54,8 @@ export class UserController {
 
   @Put('myself')
   @ApiOperation({ description: 'Update user by current session' })
+  @ApiCreatedResponse({ description: 'Current user updated successfully', type: UserSchema })
+  @ApiUnauthorizedResponse({ description: 'There is no current session' })
   async updateMyself(
     @Body()
       user: UserInputSchema,
@@ -54,11 +68,11 @@ export class UserController {
 
     if (!id) {
       res.status(HttpStatus.UNAUTHORIZED);
-      return res.send(null);
+      res.send(null);
+    } else {
+      res.status(201);
+      res.send(await new UserUpdateOperation(user).save(this.entityManager));
     }
-
-    const current = await this.userRepo.findOne({ where: { id }, loadRelationIds: true });
-
   }
 
   @Post()
@@ -90,6 +104,14 @@ export class UserController {
       id: number
   ) {
     return this.userRepo.findOne({ where: { id } });
+  }
+
+  @Delete(':id')
+  async deleteUser(
+    @Param('id')
+      id: number
+  ) {
+    return this.userService.deleteUser([ id ]);
   }
 
 }
