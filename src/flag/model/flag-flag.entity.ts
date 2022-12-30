@@ -1,4 +1,12 @@
-import { BaseEntity, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  CreateDateColumn, DeleteDateColumn,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn, VersionColumn
+} from "typeorm";
 import { FlagEntity } from "./flag.entity";
 
 @Entity('flag-flag')
@@ -7,6 +15,18 @@ export class FlagFlagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date | null;
+
+  @VersionColumn()
+  version: number;
 
   @ManyToOne(
     () => FlagEntity,

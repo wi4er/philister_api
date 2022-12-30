@@ -1,34 +1,34 @@
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserQuerySchema } from "../../schema/user-query.schema";
-import { UserMutationSchema } from "../../schema/user-mutation.schema";
-import { UserGroupQuerySchema } from "../../schema/user-group-query.schema";
-import { UserGroupMutationSchema } from "../../schema/user-group-mutation.schema";
-import { AuthMutationSchema } from "../../schema/auth-mutation.schema";
+import { UserQuerySchema } from '../../schema/user-query.schema';
+import { UserMutationSchema } from '../../schema/user-mutation.schema';
+import { UserGroupQuerySchema } from '../../schema/user-group-query.schema';
+import { UserGroupMutationSchema } from '../../schema/user-group-mutation.schema';
+import { AuthMutationSchema } from '../../schema/auth-mutation.schema';
 
 @Resolver()
 export class UserRootResolver {
 
-  @Query(returns => UserQuerySchema, {name: "user"})
+  @Query(returns => UserQuerySchema, { name: 'user' })
   async getUser() {
     return {};
   }
 
-  @Mutation(returns => UserMutationSchema, {name: "user"})
+  @Mutation(returns => UserMutationSchema, { name: 'user' })
   async setUser() {
     return {}
   }
 
-  @Mutation(returns => AuthMutationSchema, {name: "auth", nullable: true})
+  @Mutation(returns => AuthMutationSchema, { name: 'auth', nullable: true })
   async setAuth() {
     return {}
   }
 
-  @Query(returns => UserGroupQuerySchema, {name: "userGroup"})
+  @Query(returns => UserGroupQuerySchema, { name: 'userGroup' })
   async geGroup() {
     return {};
   }
 
-  @Mutation(returns => UserGroupMutationSchema, {name: "userGroup"})
+  @Mutation(returns => UserGroupMutationSchema, { name: 'userGroup' })
   async setGroup() {
     return {}
   }

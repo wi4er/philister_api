@@ -12,7 +12,7 @@ import { ElementStringEntity } from "./element-string.entity";
 import { BlockEntity } from "./block.entity";
 import { ElementValueEntity } from "./element-value.entity";
 
-@Entity('element')
+@Entity('content-element')
 export class ElementEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

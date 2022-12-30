@@ -4,7 +4,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { FlagStringEntity } from "../../model/flag-string.entity";
 import { FlagFlagEntity } from "../../model/flag-flag.entity";
-import { DirectoryEntity } from "../../../directory/model/directory.entity";
 
 @Resolver(of => FlagSchema)
 export class FlagResolver {
@@ -12,26 +11,10 @@ export class FlagResolver {
   constructor(
     @InjectRepository(FlagFlagEntity)
     private flagRepo: Repository<FlagFlagEntity>,
-
     @InjectRepository(FlagStringEntity)
     private stringRepo: Repository<FlagStringEntity>,
   ) {
-  }
 
-  @ResolveField()
-  created_at(
-    @Parent()
-      current: DirectoryEntity
-  ) {
-    return new Date(current.created_at).toISOString();
-  }
-
-  @ResolveField()
-  updated_at(
-    @Parent()
-      current: DirectoryEntity
-  ) {
-    return new Date(current.updated_at).toISOString();
   }
 
   @ResolveField()

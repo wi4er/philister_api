@@ -33,6 +33,8 @@ import { ChangeLogEntity } from "./log/model/change-log.entity";
 import { FetchLogEntity } from "./log/model/fetch-log.entity";
 import { DirectoryFlagEntity } from "./directory/model/directory-flag.entity";
 import { ValueFlagEntity } from "./directory/model/value-flag.entity";
+import { ContactEntity } from "./user/model/contact.entity";
+import { UserContactEntity } from "./user/model/user-contact.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -46,6 +48,7 @@ export function createConnectionOptions(): DataSourceOptions {
     // logging: true,
     entities: [
       UserEntity, UserStringEntity, UserFlagEntity, UserValueEntity, UserUserEntity, UserDescriptionEntity,
+      ContactEntity, UserContactEntity,
       UserGroupEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
       DirectoryEntity, DirectoryStringEntity, DirectoryFlagEntity,

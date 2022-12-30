@@ -11,7 +11,7 @@ import { ElementEntity } from "./element.entity";
 import { SectionEntity } from "./section.entity";
 import { BlockStringEntity } from "./block-string.entity";
 
-@Entity('block')
+@Entity('content-block')
 export class BlockEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

@@ -22,7 +22,7 @@ describe('UserController', () => {
 
   describe('User fields', () => {
     test('Should get user list', async () => {
-      await Object.assign(new UserEntity(), {login: 'USER'}).save();
+      await Object.assign(new UserEntity(), { login: 'USER' }).save();
 
       const res = await request(app.getHttpServer())
         .get('/user');
@@ -33,13 +33,41 @@ describe('UserController', () => {
     });
 
     test('Should get user item', async () => {
-      await Object.assign(new UserEntity(), {login: 'USER'}).save();
+      await Object.assign(new UserEntity(), { login: 'USER' }).save();
 
       const res = await request(app.getHttpServer())
         .get(`/user/1`);
 
       expect(res.body.id).toBe(1);
       expect(res.body.login).toBe('USER');
+    });
+  });
+
+  describe('Myself endpoint', () => {
+    test('Should get myself', async () => {
+      await Object.assign(new UserEntity(), {
+        login: 'user',
+        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
+      }).save();
+
+      const { headers } = await request(app.getHttpServer())
+        .get(`/auth`)
+        .set('login', 'user')
+        .set('password', 'qwerty');
+
+      const res = await request(app.getHttpServer())
+        .get(`/user/myself`)
+        .set('cookie', headers['set-cookie']);
+
+      expect(res.body.id).toBe(1);
+      expect(res.body.login).toBe('user');
+    });
+
+    test('Shouldn`t get without authorization', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/user/myself`);
+
+      expect(res.status).toBe(401);
     });
   });
 });

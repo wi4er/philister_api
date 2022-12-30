@@ -10,7 +10,7 @@ import {
 import { ElementEntity } from "./element.entity";
 import { SectionEntity } from "./section.entity";
 
-@Entity('element-section')
+@Entity('content-element-section')
 @Index([ 'parent', 'section' ], { unique: true })
 export class ElementSectionEntity extends BaseEntity {
 

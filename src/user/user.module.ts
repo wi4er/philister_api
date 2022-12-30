@@ -21,11 +21,17 @@ import { UserUserEntity } from "./model/user-user.entity";
 import { UserValueEntity } from "./model/user-value.entity";
 import { UserFlagEntity } from "./model/user-flag.entity";
 import { UserController } from './controller/user/user.controller';
+import { AuthController } from './controller/auth/auth.controller';
+import { SessionService } from './service/session/session.service';
+import { ForgotController } from './controller/forgot/forgot.controller';
+import { ContactEntity } from "./model/contact.entity";
+import { UserContactEntity } from "./model/user-contact.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserEntity, UserStringEntity, UserUserEntity, UserValueEntity, UserFlagEntity,
+      ContactEntity, UserContactEntity,
       PropertyEntity, PropertyPropertyEntity
     ])
   ],
@@ -43,8 +49,9 @@ import { UserController } from './controller/user/user.controller';
     UserService,
     UserValueResolver,
     UserUserResolver,
+    SessionService,
   ],
-  controllers: [UserController]
+  controllers: [UserController, AuthController, ForgotController]
 })
 export class UserModule {
 }

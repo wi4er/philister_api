@@ -76,6 +76,16 @@ type Flag {
   flagString: [String!]!
 }
 
+type Contact {
+  id: String!
+}
+
+type UserContact {
+  id: Int!
+  value: String!
+  contact: Contact!
+}
+
 type User {
   id: Int!
   created_at: String!
@@ -83,6 +93,7 @@ type User {
   version: Int!
   login: String!
   hash: String
+  contact: [UserContact!]!
   group: [User!]
   property: [UserPropertySchema!]
   propertyItem: UserPropertySchema
@@ -99,13 +110,30 @@ type UserQuery {
 
 type UserMutation {
   """Adding new user"""
-  add: User!
+  add(item: UserInput!): User!
 
   """Deletion existent user"""
-  delete: User!
+  delete(id: [String!]!): User!
 
   """Updating existent user"""
-  update: User!
+  update(item: UserInput!): User!
+}
+
+input UserInput {
+  id: Int
+  login: String!
+  contact: [UserContactInput!]!
+  property: [UserPropertyInput!]!
+}
+
+input UserContactInput {
+  contact: String!
+  value: String!
+}
+
+input UserPropertyInput {
+  property: String!
+  string: String!
 }
 
 type UserGroup {

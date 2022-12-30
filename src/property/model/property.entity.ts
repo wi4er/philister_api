@@ -17,7 +17,8 @@ import { PropertyPropertyEntity } from "./property-property.entity";
 export class PropertyEntity extends BaseEntity {
 
   @PrimaryColumn({
-    type: "varchar"
+    type: "varchar",
+    length: 50,
   })
   id: string;
 

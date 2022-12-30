@@ -9,7 +9,7 @@ import {
 import { ElementEntity } from "./element.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
 
-@Entity('element-element')
+@Entity('content-element-element')
 export class ElementElementEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

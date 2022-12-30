@@ -5,19 +5,18 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "../../model/user.entity";
 import { Repository } from "typeorm";
 import { EncodeService } from "../../service/encode/encode.service";
+import { UserService } from "../../service/user/user.service";
 
 @Resolver(of => AuthMutationSchema)
 export class AuthMutationResolver {
 
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepo: Repository<UserEntity>,
-    private encodeService: EncodeService,
+    private userService: UserService,
   ) {
   }
 
-  @ResolveField("authByPassword", returns => UserSchema, { nullable: true })
-  async getAuth(
+  @ResolveField()
+  async authByPassword(
     @Args(
       'login',
       { type: () => String }
@@ -28,15 +27,12 @@ export class AuthMutationResolver {
     ) password: string,
     @Context()
       context: { req: Request },
-  ) {
-    const user = await this.userRepo.findOne({ where: { login } });
+  ): Promise<UserEntity> {
+    const user = await this.userService.findByPassword(login, password);
 
-    if (
-      !user
-      || user.hash !== this.encodeService.toSha256(password)
-    ) return null;
-
-    context.req['session']['user'] = {id: user.id};
+    if (user) {
+      context.req['session']['user'] = { id: user.id };
+    }
 
     return user;
   }

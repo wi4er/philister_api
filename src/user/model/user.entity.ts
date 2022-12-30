@@ -12,6 +12,7 @@ import { UserFlagEntity } from "./user-flag.entity";
 import { UserValueEntity } from "./user-value.entity";
 import { UserUserEntity } from "./user-user.entity";
 import { UserDescriptionEntity } from "./user-description.entity";
+import { UserContactEntity } from "./user-contact.entity";
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -38,6 +39,12 @@ export class UserEntity extends BaseEntity {
 
   @Column({ nullable: true })
   hash: string;
+
+  @OneToMany(
+    type => UserContactEntity,
+    contact => contact.user,
+  )
+  contact: UserContactEntity[];
 
   @OneToMany(
     type => UserStringEntity,

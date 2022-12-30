@@ -10,10 +10,9 @@ import {
 import { ElementSectionEntity } from "./element-section.entity";
 import { BlockEntity } from "./block.entity";
 import { ElementValueEntity } from "./element-value.entity";
-import { ElementStringEntity } from "./element-string.entity";
 import { SectionStringEntity } from "./section-string.entity";
 
-@Entity('section')
+@Entity('content-section')
 export class SectionEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

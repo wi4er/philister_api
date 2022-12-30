@@ -1,10 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { PropertySchema } from "../../property/schema/property.schema";
 import { FlagSchema } from "./flag.schema";
 
-@ObjectType(
-  'FlagQuery'
-)
+@ObjectType('FlagQuery')
 export class FlagQuerySchema {
 
   @Field(type => [FlagSchema])

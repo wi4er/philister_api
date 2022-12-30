@@ -18,7 +18,7 @@ export class FlagSchema {
   version: number;
 
   @Field({ nullable: true })
-  label: string
+  label: string | null;
 
   @Field(type => [ FlagPropertySchema ])
   propertyList: FlagPropertySchema[];

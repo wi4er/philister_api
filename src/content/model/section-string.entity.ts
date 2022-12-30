@@ -11,7 +11,7 @@ import { SectionEntity } from "./section.entity";
 import { CommonStringEntity } from "../../common/model/common-string.entity";
 import { LangEntity } from "../../lang/model/lang.entity";
 
-@Entity('section-string')
+@Entity('content-section-string')
 export class SectionStringEntity extends BaseEntity implements CommonStringEntity<SectionEntity> {
 
   @PrimaryGeneratedColumn()
