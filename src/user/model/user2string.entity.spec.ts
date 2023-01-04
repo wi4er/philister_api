@@ -3,7 +3,7 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { UserEntity } from "./user.entity";
-import { UserStringEntity } from "./user-string.entity";
+import { User2stringEntity } from "./user2string.entity";
 
 describe('User entity', () => {
   let source: DataSource;
@@ -21,7 +21,7 @@ describe('User entity', () => {
         new UserEntity(), {
           login: "USER",
           string: [
-            await Object.assign(new UserStringEntity(), { string: "TEST", property: prop }).save()
+            await Object.assign(new User2stringEntity(), { string: "TEST", property: prop }).save()
           ]
         }
       ).save();
@@ -40,9 +40,9 @@ describe('User entity', () => {
         new UserEntity(), {
           login: "USER",
           string: [
-            await Object.assign(new UserStringEntity(), { string: "TEST_1", property: prop1 }).save(),
-            await Object.assign(new UserStringEntity(), { string: "TEST_2", property: prop2 }).save(),
-            await Object.assign(new UserStringEntity(), { string: "TEST_3", property: prop3 }).save(),
+            await Object.assign(new User2stringEntity(), { string: "TEST_1", property: prop1 }).save(),
+            await Object.assign(new User2stringEntity(), { string: "TEST_2", property: prop2 }).save(),
+            await Object.assign(new User2stringEntity(), { string: "TEST_3", property: prop3 }).save(),
           ]
         }
       ).save();

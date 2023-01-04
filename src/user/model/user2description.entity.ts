@@ -1,21 +1,21 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn, DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { UserEntity } from "./user.entity";
-import { PropertyEntity } from "../../property/model/property.entity";
+} from 'typeorm';
+import { UserEntity } from './user.entity';
+import { PropertyEntity } from '../../property/model/property.entity';
 
-@Entity({
-  name: 'user-user'
-})
-export class UserUserEntity extends BaseEntity {
+@Entity('user2description')
+export class User2descriptionEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
+
 
   @CreateDateColumn()
   created_at: Date;
@@ -29,21 +29,17 @@ export class UserUserEntity extends BaseEntity {
   @VersionColumn()
   version: number;
 
-  @ManyToOne(
-    () => UserEntity,
-    user => user.string,
-    {onDelete: 'CASCADE'},
-  )
-  parent: UserEntity;
+  @Column({
+    type: 'text'
+  })
+  string: string;
 
   @ManyToOne(
     () => UserEntity,
-    {
-      onDelete: 'CASCADE',
-      nullable: false,
-    },
+    user => user.description,
+    { onDelete: 'CASCADE' },
   )
-  user: UserEntity;
+  parent: UserEntity
 
   @ManyToOne(
     () => PropertyEntity,
@@ -52,6 +48,6 @@ export class UserUserEntity extends BaseEntity {
       nullable: false,
     },
   )
-  property: UserEntity;
+  property: PropertyEntity
 
 }

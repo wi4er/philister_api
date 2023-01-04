@@ -23,8 +23,8 @@ export class AuthController {
     name: 'password',
     description: 'User password',
   })
-  @ApiResponse({ status: 403, description: 'User login or password incorrect!'})
-  @ApiResponse({ status: 200, description: 'Successfully authorized!'})
+  @ApiResponse({ status: 403, description: 'User login or password incorrect!' })
+  @ApiResponse({ status: 200, description: 'Successfully authorized!' })
   async authUser(
     @Headers('login')
       login: string,
@@ -57,14 +57,30 @@ export class AuthController {
     @Res()
       res: Response,
   ) {
-    const user = await this.userService.createByPassword(login, password);
-
-    if (user) {
-      this.sessionService.open(req, user);
-      res.json(user);
-    } else {
-      res.status(HttpStatus.UNAUTHORIZED).json();
+    if (!login) {
+      res.status(400);
+      return res.send({ message: 'login expected!' });
     }
+
+    if (!password) {
+      res.status(400);
+      return res.send({ message: 'password expected!' });
+    }
+
+    return this.userService.createByPassword(login, password)
+      .then(user => {
+        this.sessionService.open(req, user);
+        res.json(user);
+      })
+      .catch(err => {
+        if (err.code === '23505') {
+          res.status(400);
+          return res.json({ message: 'Wrong login or password' });
+        }
+
+        res.status(500);
+        return res.json(err);
+      });
   }
 
 }

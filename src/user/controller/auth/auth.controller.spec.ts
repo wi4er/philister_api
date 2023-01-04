@@ -73,6 +73,23 @@ describe('AuthController', () => {
         .set('login', 'USER')
         .set('password', 'qwerty');
 
+      expect(res.status).toBe(400);
+    });
+
+    test('Shouldn`t create without login', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/auth')
+        .set('password', 'qwerty');
+
+      expect(res.status).toBe(400);
+    });
+
+    test('Shouldn`t create without password', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/auth')
+        .set('login', 'USER')
+
+      expect(res.status).toBe(400);
     });
   });
 });

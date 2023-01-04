@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm';
 import { createConnectionOptions } from '../../createConnectionOptions';
 import { PropertyEntity } from '../../property/model/property.entity';
 import { UserEntity } from './user.entity';
-import { UserUserEntity } from "./user-user.entity";
+import { User2userEntity } from "./user2user.entity";
 
 describe('User user entity', () => {
   let source: DataSource;
@@ -16,23 +16,21 @@ describe('User user entity', () => {
 
   describe('User with user property', () => {
     test('Should create user with user', async () => {
+      const repo = source.getRepository(UserEntity);
+
       await Object.assign(new PropertyEntity(), { id: 'PARENT' }).save();
       const child = await Object.assign(new UserEntity(), { login: 'child' }).save();
+      const parent = await Object.assign(new UserEntity(), { login: 'PARENT' }).save();
 
-      const user = await Object.assign(
-        new UserEntity(), {
-          login: 'PARENT',
-          child: [
-            await Object.assign(new UserUserEntity(), {user: child, property: 'PARENT'}).save()
-          ]
-        }
-      ).save();
+      await Object.assign(new User2userEntity(), {user: child, property: 'PARENT', parent: 1 }).save()
 
-      expect(user.child).toHaveLength(1);
+      const inst = await repo.findOne({ where: { id: 1 }, relations: { child: true } });
+
+      expect(inst.child).toHaveLength(1);
     });
 
     test('Shouldn`t create user with wrong relation', async () => {
-      const user = new UserUserEntity();
+      const user = new User2userEntity();
 
       await expect(user.save()).rejects.toThrow();
     });

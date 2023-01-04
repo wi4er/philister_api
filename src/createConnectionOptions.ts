@@ -1,5 +1,5 @@
 import { UserEntity } from "./user/model/user.entity";
-import { UserStringEntity } from "./user/model/user-string.entity";
+import { User2stringEntity } from "./user/model/user2string.entity";
 import { PropertyEntity } from "./property/model/property.entity";
 import { PropertyPropertyEntity } from "./property/model/property-property.entity";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
@@ -10,11 +10,11 @@ import { ValueEntity } from "./directory/model/value.entity";
 import { FlagEntity } from "./flag/model/flag.entity";
 import { FlagFlagEntity } from "./flag/model/flag-flag.entity";
 import { FlagStringEntity } from "./flag/model/flag-string.entity";
-import { UserFlagEntity } from "./user/model/user-flag.entity";
-import { UserValueEntity } from "./user/model/user-value.entity";
-import { UserUserEntity } from "./user/model/user-user.entity";
+import { User2flagEntity } from "./user/model/user2flag.entity";
+import { User2valueEntity } from "./user/model/user2value.entity";
+import { User2userEntity } from "./user/model/user2user.entity";
 import { PropertyUserEntity } from "./property/model/property-user.entity";
-import { UserDescriptionEntity } from "./user/model/user-description.entity";
+import { User2descriptionEntity } from "./user/model/user2description.entity";
 import { ValueStringEntity } from "./directory/model/value.string.entity";
 import { LangEntity } from "./lang/model/lang.entity";
 import { LangStringEntity } from "./lang/model/lang-string.entity";
@@ -33,8 +33,10 @@ import { ChangeLogEntity } from "./log/model/change-log.entity";
 import { FetchLogEntity } from "./log/model/fetch-log.entity";
 import { DirectoryFlagEntity } from "./directory/model/directory-flag.entity";
 import { ValueFlagEntity } from "./directory/model/value-flag.entity";
-import { ContactEntity } from "./user/model/contact.entity";
 import { UserContactEntity } from "./user/model/user-contact.entity";
+import { User2userContactEntity } from "./user/model/user2user-contact.entity";
+import { UserContact2flagEntity } from "./user/model/user-contact2flag.entity";
+import { UserContact2stringEntity } from "./user/model/user-contact2string.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -47,8 +49,9 @@ export function createConnectionOptions(): DataSourceOptions {
     synchronize: true,
     // logging: true,
     entities: [
-      UserEntity, UserStringEntity, UserFlagEntity, UserValueEntity, UserUserEntity, UserDescriptionEntity,
-      ContactEntity, UserContactEntity,
+      UserEntity, User2stringEntity, User2flagEntity, User2valueEntity, User2userEntity, User2descriptionEntity,
+      User2userContactEntity,
+      UserContactEntity, UserContact2stringEntity, UserContact2flagEntity,
       UserGroupEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
       DirectoryEntity, DirectoryStringEntity, DirectoryFlagEntity,

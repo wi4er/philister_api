@@ -5,7 +5,7 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../../createConnectionOptions";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { UserEntity } from "../../model/user.entity";
-import { UserStringEntity } from "../../model/user-string.entity";
+import { User2stringEntity } from "../../model/user2string.entity";
 import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
 
@@ -44,7 +44,7 @@ describe('UserPropertyResolver', () => {
       const user = await Object.assign(new UserEntity(), {
         login: 'user',
         property: [
-          await Object.assign(new UserStringEntity(), { string: "VALUE", property }).save()
+          await Object.assign(new User2stringEntity(), { string: "VALUE", property }).save()
         ]
       }).save();
 

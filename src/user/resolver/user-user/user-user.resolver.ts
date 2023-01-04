@@ -1,7 +1,7 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserUserSchema } from "../../schema/user-property/user-user.schema";
-import { UserValueEntity } from "../../model/user-value.entity";
-import { UserUserEntity } from "../../model/user-user.entity";
+import { User2valueEntity } from "../../model/user2value.entity";
+import { User2userEntity } from "../../model/user2user.entity";
 
 @Resolver(of => UserUserSchema)
 export class UserUserResolver {
@@ -9,7 +9,7 @@ export class UserUserResolver {
   @ResolveField('string')
   async string(
     @Parent()
-      value: UserUserEntity
+      value: User2userEntity
   ) {
     return 'NAME';
   }
@@ -17,7 +17,7 @@ export class UserUserResolver {
   @ResolveField('property')
   async property(
     @Parent()
-      value: UserUserEntity
+      value: User2userEntity
   ) {
     return value.property;
   }

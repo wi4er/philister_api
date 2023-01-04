@@ -1,6 +1,6 @@
 import { Field, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserValueSchema } from "../../schema/user-property/user-value.schema";
-import { UserValueEntity } from "../../model/user-value.entity";
+import { User2valueEntity } from "../../model/user2value.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { Repository } from "typeorm";
@@ -16,7 +16,7 @@ export class UserValueResolver {
   @ResolveField('string')
   async string(
     @Parent()
-      value: UserValueEntity
+      value: User2valueEntity
   ) {
     return value.value.id;
   }
@@ -24,7 +24,7 @@ export class UserValueResolver {
   @ResolveField('property')
   async property(
     @Parent()
-      value: UserValueEntity
+      value: User2valueEntity
   ) {
     return value.property;
   }
@@ -32,7 +32,7 @@ export class UserValueResolver {
   @ResolveField('value')
   async value(
     @Parent()
-      value: UserValueEntity
+      value: User2valueEntity
   ) {
     return value.value;
   }

@@ -29,6 +29,9 @@ describe('User entity', () => {
         }
       ).save();
 
+      expect(user.created_at).toBeDefined();
+      expect(user.updated_at).toBeDefined();
+      expect(user.deleted_at).toBeNull();
       expect(user.login).toBe('TEST');
       expect(user.hash).toBe('CRYPT');
     });

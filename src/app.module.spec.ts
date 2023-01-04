@@ -8,9 +8,9 @@ import { createConnectionOptions } from "./createConnectionOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
 import { DirectoryStringEntity } from "./directory/model/directory-string.entity";
 import { ValueEntity } from "./directory/model/value.entity";
-import { UserStringEntity } from "./user/model/user-string.entity";
-import { UserValueEntity } from "./user/model/user-value.entity";
-import { UserUserEntity } from "./user/model/user-user.entity";
+import { User2stringEntity } from "./user/model/user2string.entity";
+import { User2valueEntity } from "./user/model/user2value.entity";
+import { User2userEntity } from "./user/model/user2user.entity";
 import { FlagEntity } from "./flag/model/flag.entity";
 import { FlagStringEntity } from "./flag/model/flag-string.entity";
 import { LangEntity } from "./lang/model/lang.entity";
@@ -100,20 +100,20 @@ describe('App mocks', () => {
     await Object.assign(new UserEntity(), {
       login: `USER_0`,
       string: [
-        await Object.assign(new UserStringEntity(), { string: `VALUE_0`, property: name }).save(),
-        await Object.assign(new UserStringEntity(), { string: `SECOND_0`, property: second }).save(),
-        await Object.assign(new UserStringEntity(), { string: `DESCRIPTION_0`, property: descr }).save(),
+        await Object.assign(new User2stringEntity(), { string: `VALUE_0`, property: name }).save(),
+        await Object.assign(new User2stringEntity(), { string: `SECOND_0`, property: second }).save(),
+        await Object.assign(new User2stringEntity(), { string: `DESCRIPTION_0`, property: descr }).save(),
       ],
       value: [
-        await Object.assign(new UserValueEntity(), {
+        await Object.assign(new User2valueEntity(), {
           value: `VALUE_${Math.random() * 100 >> 0}`,
           property: name
         }).save(),
-        await Object.assign(new UserValueEntity(), {
+        await Object.assign(new User2valueEntity(), {
           value: `VALUE_${Math.random() * 100 >> 0}`,
           property: second
         }).save(),
-        await Object.assign(new UserValueEntity(), {
+        await Object.assign(new User2valueEntity(), {
           value: `VALUE_${Math.random() * 100 >> 0}`,
           property: descr
         }).save(),
@@ -128,28 +128,28 @@ describe('App mocks', () => {
       await Object.assign(new UserEntity(), {
         login: `USER_${i}`,
         string: [
-          await Object.assign(new UserStringEntity(), { string: `VALUE_${i}`, property: name }).save(),
-          await Object.assign(new UserStringEntity(), { string: `SECOND_${i}`, property: second }).save(),
-          await Object.assign(new UserStringEntity(), { string: `DESCRIPTION_${i}`, property: descr }).save(),
+          await Object.assign(new User2stringEntity(), { string: `VALUE_${i}`, property: name }).save(),
+          await Object.assign(new User2stringEntity(), { string: `SECOND_${i}`, property: second }).save(),
+          await Object.assign(new User2stringEntity(), { string: `DESCRIPTION_${i}`, property: descr }).save(),
         ],
         value: [
-          await Object.assign(new UserValueEntity(), {
+          await Object.assign(new User2valueEntity(), {
             value: `VALUE_${Math.random() * 100 >> 0}`,
             property: val_1
           }).save(),
-          await Object.assign(new UserValueEntity(), {
+          await Object.assign(new User2valueEntity(), {
             value: `VALUE_${Math.random() * 100 >> 0}`,
             property: val_2
           }).save(),
-          await Object.assign(new UserValueEntity(), {
+          await Object.assign(new User2valueEntity(), {
             value: `VALUE_${Math.random() * 100 >> 0}`,
             property: val_3
           }).save(),
         ],
         child: [
-          await Object.assign(new UserUserEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
-          await Object.assign(new UserUserEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
-          await Object.assign(new UserUserEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
+          await Object.assign(new User2userEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
+          await Object.assign(new User2userEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
+          await Object.assign(new User2userEntity(), { user: (Math.random() * i >> 0) + 1, property: 'PARENT' }).save(),
         ]
       }).save();
     }

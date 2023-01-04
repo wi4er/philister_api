@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { UserResolver } from './user.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
-import { UserStringEntity } from "../../model/user-string.entity";
+import { User2stringEntity } from "../../model/user2string.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { UserEntity } from "../../model/user.entity";
 import { gql } from "apollo-server-express";
@@ -59,7 +59,7 @@ describe('UserResolver', () => {
       // const user = await Object.assign(new UserEntity(),{
       //   login: 'user',
       //   property: [
-      //     await Object.assign(new UserStringEntity(), {value: "VALUE", property}).save()
+      //     await Object.assign(new User2stringEntity(), {value: "VALUE", property}).save()
       //   ],
       //
       // }).save();

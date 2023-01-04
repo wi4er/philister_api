@@ -1,14 +1,13 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   BaseEntity,
   CreateDateColumn,
-  UpdateDateColumn, DeleteDateColumn, VersionColumn
-} from 'typeorm';
-import { UserEntity } from "./user.entity";
+  DeleteDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  VersionColumn
+} from "typeorm";
 
-@Entity('user-group')
-export class UserGroupEntity extends BaseEntity {
+export class User2userGroupEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;

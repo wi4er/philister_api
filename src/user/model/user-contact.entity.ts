@@ -1,20 +1,31 @@
 import {
-  BaseEntity, Column,
+  BaseEntity, Check, Column,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity, Index, ManyToOne,
-  PrimaryGeneratedColumn,
+  Entity, OneToMany, PrimaryColumn,
   UpdateDateColumn, VersionColumn
 } from "typeorm";
-import { ContactEntity } from "./contact.entity";
-import { UserEntity } from "./user.entity";
+import { UserContact2flagEntity } from "./user-contact2flag.entity";
+import { UserContact2stringEntity } from "./user-contact2string.entity";
+
+export enum UserContactType {
+
+  EMAIL = 'EMAIL',
+  PHONE = 'PHONE',
+  GOOGLE = 'GOOGLE',
+  APPLE = 'APPLE',
+
+}
 
 @Entity('user-contact')
-@Index([ 'contact', 'value' ], { unique: true })
+@Check('not_empty_id', '"id" > \'\'')
 export class UserContactEntity extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn({
+    type: "varchar",
+    length: 50,
+  })
+  id: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -23,31 +34,28 @@ export class UserContactEntity extends BaseEntity {
   updated_at: Date;
 
   @DeleteDateColumn()
-  deleted_at: Date;
+  deleted_at: Date | null;
 
   @VersionColumn()
   version: number;
 
-  @Column()
-  value: string;
+  @Column({
+    type: 'enum',
+    enum: UserContactType,
+    nullable: false,
+  })
+  type: UserContactType;
 
-  @ManyToOne(
-    type => ContactEntity,
-    {
-      nullable: false,
-      onDelete: 'CASCADE',
-    },
+  @OneToMany(
+    type => UserContact2stringEntity,
+    property => property.parent,
   )
-  contact: ContactEntity;
+  string: UserContact2stringEntity[];
 
-  @ManyToOne(
-    type => UserEntity,
-    user => user.contact,
-    {
-      nullable: false,
-      onDelete: 'CASCADE',
-    },
+  @OneToMany(
+    type => UserContact2flagEntity,
+    flag => flag.parent,
   )
-  user: UserEntity;
+  flag: UserContact2flagEntity[];
 
 }

@@ -5,7 +5,7 @@ import { UserEntity } from "./user.entity";
 import { ValueEntity } from "../../directory/model/value.entity";
 import { DirectoryEntity } from "../../directory/model/directory.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { UserValueEntity } from "./user-value.entity";
+import { User2valueEntity } from "./user2value.entity";
 
 describe('User entity', () => {
   let source: DataSource;
@@ -27,7 +27,7 @@ describe('User entity', () => {
       const user = await Object.assign(new UserEntity(), {
         login: 'user',
         value: [
-          await Object.assign(new UserValueEntity(), {property: 'CURRENT_CITY', value: 'LONDON'}).save(),
+          await Object.assign(new User2valueEntity(), {property: 'CURRENT_CITY', value: 'LONDON'}).save(),
         ]
       }).save();
 
@@ -48,9 +48,9 @@ describe('User entity', () => {
       const user = await Object.assign(new UserEntity(), {
         login: 'user',
         value: [
-          await Object.assign(new UserValueEntity(), {property: 'CURRENT_CITY', value: 'LONDON_0'}).save(),
-          await Object.assign(new UserValueEntity(), {property: 'CURRENT_CITY', value: 'LONDON_3'}).save(),
-          await Object.assign(new UserValueEntity(), {property: 'CURRENT_CITY', value: 'LONDON_6'}).save(),
+          await Object.assign(new User2valueEntity(), {property: 'CURRENT_CITY', value: 'LONDON_0'}).save(),
+          await Object.assign(new User2valueEntity(), {property: 'CURRENT_CITY', value: 'LONDON_3'}).save(),
+          await Object.assign(new User2valueEntity(), {property: 'CURRENT_CITY', value: 'LONDON_6'}).save(),
         ]
       }).save();
 
@@ -69,8 +69,8 @@ describe('User entity', () => {
       const user = await Object.assign(new UserEntity(), {
         login: 'user',
         value: [
-          await Object.assign(new UserValueEntity(), { property: 'CURRENT_CITY', value: 'LONDON' }).save(),
-          await Object.assign(new UserValueEntity(), { property: 'CURRENT_CITY', value: 'LONDON' }).save(),
+          await Object.assign(new User2valueEntity(), { property: 'CURRENT_CITY', value: 'LONDON' }).save(),
+          await Object.assign(new User2valueEntity(), { property: 'CURRENT_CITY', value: 'LONDON' }).save(),
         ]
       });
 

@@ -2,24 +2,24 @@ import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserSchema } from "../../schema/user.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UserStringEntity } from "../../model/user-string.entity";
+import { User2stringEntity } from "../../model/user2string.entity";
 import { UserEntity } from "../../model/user.entity";
 import { UserPropertySchema } from "../../schema/user-property/user.property.schema";
-import { UserUserEntity } from "../../model/user-user.entity";
-import { UserValueEntity } from "../../model/user-value.entity";
+import { User2userEntity } from "../../model/user2user.entity";
+import { User2valueEntity } from "../../model/user2value.entity";
 
 @Resolver(of => UserSchema)
 export class UserResolver {
 
   constructor(
-    @InjectRepository(UserStringEntity)
-    private userStringRepo: Repository<UserStringEntity>,
+    @InjectRepository(User2stringEntity)
+    private userStringRepo: Repository<User2stringEntity>,
 
-    @InjectRepository(UserUserEntity)
-    private userUserRepo: Repository<UserUserEntity>,
+    @InjectRepository(User2userEntity)
+    private userUserRepo: Repository<User2userEntity>,
 
-    @InjectRepository(UserValueEntity)
-    private userValueRepo: Repository<UserValueEntity>,
+    @InjectRepository(User2valueEntity)
+    private userValueRepo: Repository<User2valueEntity>,
   ) {
   }
 

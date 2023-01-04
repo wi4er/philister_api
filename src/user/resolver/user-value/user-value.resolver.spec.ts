@@ -9,7 +9,7 @@ import { gql } from "apollo-server-express";
 import { DirectoryEntity } from "../../../directory/model/directory.entity";
 import { ValueEntity } from "../../../directory/model/value.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { UserValueEntity } from "../../model/user-value.entity";
+import { User2valueEntity } from "../../model/user2value.entity";
 
 const userItemQuery = gql`
   query getUser($id: Int!) {
@@ -58,7 +58,7 @@ describe('UserValueResolver', () => {
       const user = await Object.assign(new UserEntity(), {
         login: 'user',
         value: [
-          await Object.assign(new UserValueEntity(), { property: 'CURRENT_CITY', value: 'LONDON' }).save(),
+          await Object.assign(new User2valueEntity(), { property: 'CURRENT_CITY', value: 'LONDON' }).save(),
         ]
       }).save();
 

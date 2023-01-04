@@ -9,7 +9,7 @@ import { UserGroupQueryResolver } from './resolver/user-group-query/user-group-q
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "./model/user.entity";
 import { UserStringResolver } from './resolver/user-string/user-string.resolver';
-import { UserStringEntity } from "./model/user-string.entity";
+import { User2stringEntity } from "./model/user2string.entity";
 import { PropertyEntity } from "../property/model/property.entity";
 import { AuthMutationResolver } from './resolver/auth-mutation/auth-mutation.resolver';
 import { UserService } from './service/user/user.service';
@@ -17,21 +17,23 @@ import { EncodeService } from "./service/encode/encode.service";
 import { PropertyPropertyEntity } from "../property/model/property-property.entity";
 import { UserValueResolver } from './resolver/user-value/user-value.resolver';
 import { UserUserResolver } from './resolver/user-user/user-user.resolver';
-import { UserUserEntity } from "./model/user-user.entity";
-import { UserValueEntity } from "./model/user-value.entity";
-import { UserFlagEntity } from "./model/user-flag.entity";
+import { User2userEntity } from "./model/user2user.entity";
+import { User2valueEntity } from "./model/user2value.entity";
+import { User2flagEntity } from "./model/user2flag.entity";
 import { UserController } from './controller/user/user.controller';
 import { AuthController } from './controller/auth/auth.controller';
 import { SessionService } from './service/session/session.service';
 import { ForgotController } from './controller/forgot/forgot.controller';
-import { ContactEntity } from "./model/contact.entity";
 import { UserContactEntity } from "./model/user-contact.entity";
+import { User2userContactEntity } from "./model/user2user-contact.entity";
+import { UserContact2flagEntity } from "./model/user-contact2flag.entity";
+import { UserContact2stringEntity } from "./model/user-contact2string.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      UserEntity, UserStringEntity, UserUserEntity, UserValueEntity, UserFlagEntity,
-      ContactEntity, UserContactEntity,
+      UserEntity, User2stringEntity, User2userEntity, User2valueEntity, User2flagEntity, User2userContactEntity,
+      UserContactEntity, UserContact2flagEntity, UserContact2stringEntity,
       PropertyEntity, PropertyPropertyEntity
     ])
   ],

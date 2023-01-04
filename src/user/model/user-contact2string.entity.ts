@@ -1,21 +1,17 @@
 import {
-  BaseEntity,
-  CreateDateColumn, DeleteDateColumn,
-  Entity,
-  Index,
-  ManyToOne,
+  BaseEntity, Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
 } from 'typeorm';
-import { UserEntity } from './user.entity';
-import { ValueEntity } from '../../directory/model/value.entity';
+import { CommonStringEntity } from '../../common/model/common-string.entity';
+import { UserContactEntity } from './user-contact.entity';
 import { PropertyEntity } from '../../property/model/property.entity';
 
-@Entity({
-  name: 'user-value'
-})
-@Index([ 'value', 'property', 'parent' ], {unique: true})
-export class UserValueEntity extends BaseEntity {
+@Entity('user-contact2string')
+export class UserContact2stringEntity extends BaseEntity implements CommonStringEntity<UserContactEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -32,21 +28,15 @@ export class UserValueEntity extends BaseEntity {
   @VersionColumn()
   version: number;
 
-  @ManyToOne(
-    () => ValueEntity,
-    {
-      onDelete: 'CASCADE',
-      nullable: false,
-    },
-  )
-  value: ValueEntity;
+  @Column()
+  string: string;
 
   @ManyToOne(
-    () => UserEntity,
-    user => user.value,
+    () => UserContactEntity,
+    user => user.string,
     { onDelete: 'CASCADE' },
   )
-  parent: UserEntity;
+  parent: UserContactEntity;
 
   @ManyToOne(
     () => PropertyEntity,

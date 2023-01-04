@@ -3,7 +3,7 @@ import { FlagEntity } from "../../flag/model/flag.entity";
 import { UserInputSchema } from "../schema/user-input.schema";
 import { UserEntity } from "../model/user.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { UserStringEntity } from "../model/user-string.entity";
+import { User2stringEntity } from "../model/user2string.entity";
 
 export class UserInsertOperation {
 
@@ -40,7 +40,7 @@ export class UserInsertOperation {
     const propRepo = this.manager.getRepository(PropertyEntity);
 
     for (const item of this.item.property ?? []) {
-      const inst = new UserStringEntity();
+      const inst = new User2stringEntity();
       inst.parent = this.created;
       inst.property = await propRepo.findOne({ where: { id: item.property } });
       inst.string = item.string;

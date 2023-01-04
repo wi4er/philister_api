@@ -1,11 +1,9 @@
 import { DataSource } from "typeorm/data-source/DataSource";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
-import { UserEntity } from "./user.entity";
-import { ContactEntity, ContactType } from "./contact.entity";
-import { UserContactEntity } from "./user-contact.entity";
+import { UserContactEntity, UserContactType } from "./user-contact.entity";
 
-describe('User Contact entity', () => {
+describe('Contact entity', () => {
   let source: DataSource;
 
   beforeAll(async () => {
@@ -14,22 +12,49 @@ describe('User Contact entity', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('User with contacts', () => {
-    test('Should create user with contact', async () => {
-      const repo = source.getRepository(UserEntity);
-      const user = await Object.assign(new UserEntity(), { login: 'user' }).save();
-      const contact = await Object.assign(new ContactEntity(), { id: 'mail', type: ContactType.EMAIL }).save();
+  describe('Contact fields', () => {
+    test('Should create', async () => {
+      const inst = new UserContactEntity();
+      inst.id = 'mail';
+      inst.type = UserContactType.EMAIL;
 
-      await Object.assign(new UserContactEntity(), {
-        user,
-        contact,
-        value: 'mail@mail.com'
-      }).save();
+      await inst.save();
 
-      const res = await repo.findOne({ where: { id: user.id }, relations: { contact: true } });
+      expect(inst.created_at).toBeDefined();
+      expect(inst.updated_at).toBeDefined();
+      expect(inst.deleted_at).toBeNull();
+      expect(inst.version).toBe(1);
+      expect(inst.type).toBe('EMAIL');
+    });
 
-      expect(res.contact).toHaveLength(1);
-      expect(res.contact[0].value).toBe('mail@mail.com');
+    test('Shouldn`t create without id', async () => {
+      const inst = new UserContactEntity();
+      inst.type = UserContactType.EMAIL;
+
+      await expect(inst.save()).rejects.toThrow();
+    });
+
+    test('Shouldn`t create with blank id', async () => {
+      const inst = new UserContactEntity();
+      inst.id = '';
+      inst.type = UserContactType.EMAIL;
+
+      await expect(inst.save()).rejects.toThrow();
+    });
+
+    test('Shouldn`t create with wrong contact', async () => {
+      const inst = new UserContactEntity();
+      inst.id = 'mail';
+      inst['type'] = 'SOME' as UserContactType;
+
+      await expect(inst.save()).rejects.toThrow();
+    });
+
+    test('Shouldn`t create without type', async () => {
+      const inst = new UserContactEntity();
+      inst.id = 'mail';
+
+      await expect(inst.save()).rejects.toThrow();
     });
   });
 });

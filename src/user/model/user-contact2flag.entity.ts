@@ -1,19 +1,16 @@
 import {
   BaseEntity,
   CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  ManyToOne,
+  DeleteDateColumn, Entity, ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
+  UpdateDateColumn,
+  VersionColumn
 } from "typeorm";
 import { FlagEntity } from "../../flag/model/flag.entity";
-import { UserEntity } from "./user.entity";
+import { UserContactEntity } from "./user-contact.entity";
 
-@Entity({
-  name: 'user-flag'
-})
-export class UserFlagEntity extends BaseEntity {
+@Entity('user-contact2flag')
+export class UserContact2flagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -31,15 +28,21 @@ export class UserFlagEntity extends BaseEntity {
   version: number;
 
   @ManyToOne(
-    () => UserEntity,
+    () => UserContactEntity,
     user => user.flag,
-    {onDelete: 'CASCADE'},
+    {
+      onDelete: 'CASCADE',
+      nullable: false,
+    },
   )
-  parent: UserEntity;
+  parent: UserContactEntity;
 
   @ManyToOne(
     () => FlagEntity,
-    {onDelete: 'CASCADE'},
+    {
+      onDelete: 'CASCADE',
+      nullable: false,
+    },
   )
   flag: FlagEntity;
 

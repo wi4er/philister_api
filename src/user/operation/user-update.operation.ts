@@ -2,7 +2,7 @@ import { UserEntity } from "../model/user.entity";
 import { EntityManager } from "typeorm";
 import { UserInputSchema } from "../schema/user-input.schema";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { UserStringEntity } from "../model/user-string.entity";
+import { User2stringEntity } from "../model/user2string.entity";
 
 export class UserUpdateOperation {
 
@@ -42,7 +42,7 @@ export class UserUpdateOperation {
   async addProperty(trans: EntityManager) {
     const propRepo = this.manager.getRepository(PropertyEntity);
 
-    const current: { [key: string]: Array<UserStringEntity> } = {};
+    const current: { [key: string]: Array<User2stringEntity> } = {};
 
     for (const item of this.beforeItem.string) {
       if (!current[item.property.id]) {
@@ -58,7 +58,7 @@ export class UserUpdateOperation {
       if (current[item.property]?.[0]) {
         inst = current[item.property].shift();
       } else {
-        inst = new UserStringEntity();
+        inst = new User2stringEntity();
       }
 
       inst.parent = this.beforeItem;
@@ -70,7 +70,7 @@ export class UserUpdateOperation {
 
     for (const prop of Object.values(current)) {
       for (const item of prop) {
-        await trans.delete(UserStringEntity, item.id);
+        await trans.delete(User2stringEntity, item.id);
       }
     }
   }
