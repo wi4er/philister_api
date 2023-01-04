@@ -1,13 +1,12 @@
 import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { InjectRepository } from "@nestjs/typeorm";
-import { LangStringEntity } from "../../../lang/model/lang-string.entity";
-import { Repository } from "typeorm";
-import { LangFlagEntity } from "../../../lang/model/lang-flag.entity";
-import { DirectoryEntity } from "../../../directory/model/directory.entity";
-import { UserContact2stringEntity } from "../../model/user-contact2string.entity";
-import { UserContact2flagEntity } from "../../model/user-contact2flag.entity";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { DirectoryEntity } from '../../../directory/model/directory.entity';
+import { UserContact2stringEntity } from '../../model/user-contact2string.entity';
+import { UserContact2flagEntity } from '../../model/user-contact2flag.entity';
+import { UserContactSchema } from '../../schema/user-contact.schema';
 
-@Resolver()
+@Resolver(of => UserContactSchema)
 export class UserContactResolver {
 
   constructor(

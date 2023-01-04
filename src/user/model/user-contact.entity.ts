@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { UserContact2flagEntity } from "./user-contact2flag.entity";
 import { UserContact2stringEntity } from "./user-contact2string.entity";
+import { registerEnumType } from "@nestjs/graphql";
 
 export enum UserContactType {
 
@@ -16,6 +17,8 @@ export enum UserContactType {
   APPLE = 'APPLE',
 
 }
+
+registerEnumType(UserContactType, { name: 'UserContactType' });
 
 @Entity('user-contact')
 @Check('not_empty_id', '"id" > \'\'')

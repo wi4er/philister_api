@@ -92,8 +92,8 @@ type UserContact {
   updated_at: String!
   version: Int!
   propertyList: [UserContactProperty!]!
-  propertyItem: UserContactProperty
-  propertyString: String
+  propertyItem(id: String!): UserContactProperty
+  propertyString(id: String!): String
   flagList: [Flag!]!
   flagString: [String!]!
 }
@@ -140,11 +140,11 @@ type UserMutation {
 input UserInput {
   id: Int
   login: String!
-  contact: [UserContactInput!]!
+  contact: [UserUserContactInput!]!
   property: [UserPropertyInput!]!
 }
 
-input UserContactInput {
+input UserUserContactInput {
   contact: String!
   value: String!
 }
@@ -183,13 +183,32 @@ type UserContactQuery {
 
 type UserContactMutationSchema {
   """Adding new user contact"""
-  add: UserContact!
+  add(item: UserContactInput!): UserContact!
 
   """Deletion existent user contact"""
-  delete: [String!]!
+  delete(id: [Int!]!): [String!]!
 
   """Updating existent user contact"""
-  update: UserContact!
+  update(item: UserContactInput!): UserContact!
+}
+
+input UserContactInput {
+  id: String
+  type: UserContactType!
+  property: [UserContactPropertyInput!]!
+  flag: [String!]!
+}
+
+enum UserContactType {
+  EMAIL
+  PHONE
+  GOOGLE
+  APPLE
+}
+
+input UserContactPropertyInput {
+  property: String!
+  string: String!
 }
 
 type UserString implements UserPropertySchema {

@@ -1,7 +1,7 @@
 import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 
-@InputType('UserContactInput')
+@InputType('UserUserContactInput')
 class UserContactInputSchema {
 
   @Field()
