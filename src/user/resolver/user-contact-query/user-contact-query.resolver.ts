@@ -1,15 +1,15 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { LangQuerySchema } from "../../schema/lang-query.schema";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { LangEntity } from "../../model/lang.entity";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UserContactEntity } from '../../model/user-contact.entity';
+import { UserContactQuerySchema } from "../../schema/user-contact-query.schema";
 
-@Resolver(of => LangQuerySchema)
-export class LangQueryResolver {
+@Resolver(of => UserContactQuerySchema)
+export class UserContactQueryResolver {
 
   constructor(
-    @InjectRepository(LangEntity)
-    private langRepo: Repository<LangEntity>,
+    @InjectRepository(UserContactEntity)
+    private contactRepo: Repository<UserContactEntity>,
   ) {
   }
 
@@ -19,8 +19,8 @@ export class LangQueryResolver {
       limit: number,
     @Args('offset', { nullable: true, type: () => Int })
       offset: number,
-  ) {
-    return this.langRepo.find({
+  ): Promise<UserContactEntity[]> {
+    return this.contactRepo.find({
       skip: offset,
       take: limit,
       loadRelationIds: true,
@@ -33,8 +33,8 @@ export class LangQueryResolver {
       limit: number,
     @Args('offset', { nullable: true, type: () => Int })
       offset: number,
-  ) {
-    return this.langRepo.count({
+  ): Promise<number> {
+    return this.contactRepo.count({
       skip: offset,
       take: limit,
       loadRelationIds: true,
@@ -45,8 +45,8 @@ export class LangQueryResolver {
   item(
     @Args('id', { type: () => String })
       id: string
-  ) {
-    return this.langRepo.findOne({
+  ): Promise<UserContactEntity> {
+    return this.contactRepo.findOne({
       where: { id },
       loadRelationIds: true,
     });

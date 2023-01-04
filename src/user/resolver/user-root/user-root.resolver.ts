@@ -4,6 +4,8 @@ import { UserMutationSchema } from '../../schema/user-mutation.schema';
 import { UserGroupQuerySchema } from '../../schema/user-group-query.schema';
 import { UserGroupMutationSchema } from '../../schema/user-group-mutation.schema';
 import { AuthMutationSchema } from '../../schema/auth-mutation.schema';
+import { UserContactQuerySchema } from "../../schema/user-contact-query.schema";
+import { UserContactMutationSchema } from "../../schema/user-contact-mutation.schema";
 
 @Resolver()
 export class UserRootResolver {
@@ -30,6 +32,16 @@ export class UserRootResolver {
 
   @Mutation(returns => UserGroupMutationSchema, { name: 'userGroup' })
   async setGroup() {
+    return {};
+  }
+
+  @Query(returns => UserContactQuerySchema, { name: 'userContact' })
+  async getContact() {
+    return {};
+  }
+
+  @Mutation(returns => UserContactMutationSchema, { name: 'userContact' })
+  async setContact() {
     return {}
   }
 

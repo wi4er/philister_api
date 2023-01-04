@@ -17,6 +17,15 @@ interface FlagProperty {
   property: Property!
 }
 
+interface UserContactProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
 interface LangProperty {
   id: Int!
   created_at: String!
@@ -76,14 +85,23 @@ type Flag {
   flagString: [String!]!
 }
 
-type Contact {
+type UserContact {
   id: String!
+  type: String!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  propertyList: [UserContactProperty!]!
+  propertyItem: UserContactProperty
+  propertyString: String
+  flagList: [Flag!]!
+  flagString: [String!]!
 }
 
-type UserContact {
+type UserUserContact {
   id: Int!
   value: String!
-  contact: Contact!
+  contact: UserContact!
 }
 
 type User {
@@ -93,7 +111,7 @@ type User {
   version: Int!
   login: String!
   hash: String
-  contact: [UserContact!]!
+  contact: [UserUserContact!]!
   group: [User!]
   property: [UserPropertySchema!]
   propertyItem: UserPropertySchema
@@ -155,6 +173,23 @@ type UserGroupMutation {
 
 type AuthMutation {
   authByPassword(login: String!, password: String!): User
+}
+
+type UserContactQuery {
+  list(limit: Int, offset: Int): [UserContact!]!
+  count(limit: Int, offset: Int): Int!
+  item(id: String!): UserContact
+}
+
+type UserContactMutationSchema {
+  """Adding new user contact"""
+  add: UserContact!
+
+  """Deletion existent user contact"""
+  delete: [String!]!
+
+  """Updating existent user contact"""
+  update: UserContact!
 }
 
 type UserString implements UserPropertySchema {
@@ -234,6 +269,16 @@ type UserUser implements UserPropertySchema {
   string: String!
   property: Property!
   user: User!
+}
+
+type UserContactString implements UserPropertySchema {
+  id: Int!
+  string: String!
+  property: Property!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  lang: Lang!
 }
 
 type Element {
@@ -540,6 +585,7 @@ type LangString implements LangProperty {
 type Query {
   user: UserQuery!
   userGroup: UserGroupQuery!
+  userContact: UserContactQuery!
   element: ElementQuery!
   section: SectionQuery!
   block: BlockQuery!
@@ -556,6 +602,7 @@ type Mutation {
   user: UserMutation!
   auth: AuthMutation
   userGroup: UserGroupMutation!
+  userContact: UserContactMutationSchema!
   block: BlockMutation!
   property: PropertyMutation!
   directory: DirectoryMutation!

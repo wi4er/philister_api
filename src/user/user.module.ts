@@ -28,13 +28,19 @@ import { UserContactEntity } from "./model/user-contact.entity";
 import { User2userContactEntity } from "./model/user2user-contact.entity";
 import { UserContact2flagEntity } from "./model/user-contact2flag.entity";
 import { UserContact2stringEntity } from "./model/user-contact2string.entity";
+import { UserContactQueryResolver } from './resolver/user-contact-query/user-contact-query.resolver';
+import { UserContactMutationResolver } from './resolver/user-contact-mutation/user-contact-mutation.resolver';
+import { UserContactResolver } from './resolver/user-contact/user-contact.resolver';
+import { UserContactStringResolver } from './resolver/user-contact-string/user-contact-string.resolver';
+import { LangEntity } from "../lang/model/lang.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserEntity, User2stringEntity, User2userEntity, User2valueEntity, User2flagEntity, User2userContactEntity,
       UserContactEntity, UserContact2flagEntity, UserContact2stringEntity,
-      PropertyEntity, PropertyPropertyEntity
+      PropertyEntity, PropertyPropertyEntity,
+      LangEntity,
     ])
   ],
   providers: [
@@ -52,6 +58,10 @@ import { UserContact2stringEntity } from "./model/user-contact2string.entity";
     UserValueResolver,
     UserUserResolver,
     SessionService,
+    UserContactQueryResolver,
+    UserContactMutationResolver,
+    UserContactResolver,
+    UserContactStringResolver,
   ],
   controllers: [UserController, AuthController, ForgotController]
 })
