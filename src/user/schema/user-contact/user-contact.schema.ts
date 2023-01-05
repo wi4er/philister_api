@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { UserContactPropertySchema } from "./user-contact-property.schema";
 import { FlagSchema } from "../../../flag/schema/flag.schema";
+import { UserContactType } from "../../model/user-contact.entity";
 
 @ObjectType('UserContact')
 export class UserContactSchema {
@@ -8,8 +9,8 @@ export class UserContactSchema {
   @Field()
   id: string;
 
-  @Field()
-  type: string;
+  @Field(type => UserContactType)
+  type: UserContactType;
 
   @Field()
   created_at: string;

@@ -13,6 +13,10 @@ class UserContactPropertyInputSchema {
   @ApiProperty()
   string: string
 
+  @Field({ nullable: true })
+  @ApiProperty()
+  lang: string;
+
 }
 
 @InputType('UserContactInput')

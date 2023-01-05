@@ -6,12 +6,21 @@ import { createConnectionOptions } from "../../../createConnectionOptions";
 import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
 import { UserContactEntity, UserContactType } from "../../model/user-contact.entity";
+import { PropertyEntity } from "../../../property/model/property.entity";
+import { LangEntity } from "../../../lang/model/lang.entity";
 
 const addUserContact = gql`
   mutation AddUserContact($item: UserContactInput!) {
     userContact {
       add(item: $item) {
         id
+        propertyList {
+          id
+          string
+          property {
+            id
+          }
+        }
       }
     }
   }
@@ -64,6 +73,57 @@ describe('UserContactMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['userContact']['add']['id']).toBe('mail');
+    });
+
+    test('Should add user contact with property', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(addUserContact, {
+          item: {
+            id: 'mail',
+            type: 'EMAIL',
+            property: [{
+              property: 'NAME',
+              string: 'VALUE'
+            }],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['add']['propertyList']).toHaveLength(1);
+      expect(res.data['userContact']['add']['propertyList'][0]['string']).toBe('VALUE');
+      expect(res.data['userContact']['add']['propertyList'][0]['property']['id']).toBe('NAME');
+    });
+
+    test('Should add user contact with lang properties', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new LangEntity(), { id: 'EN' }).save();
+      await Object.assign(new LangEntity(), { id: 'GR' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(addUserContact, {
+          item: {
+            id: 'phone',
+            type: 'PHONE',
+            property: [{
+              property: 'NAME',
+              string: 'telephone',
+              lang: 'EN',
+            }, {
+              property: 'NAME',
+              string: 'telefon',
+              lang: 'GR',
+            }],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['add']['propertyList']).toHaveLength(2);
+      expect(res.data['userContact']['add']['propertyList'][0]['string']).toBe('telephone');
+      expect(res.data['userContact']['add']['propertyList'][1]['string']).toBe('telefon');
     });
   });
 

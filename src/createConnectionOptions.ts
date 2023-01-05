@@ -37,6 +37,9 @@ import { UserContactEntity } from "./user/model/user-contact.entity";
 import { User2userContactEntity } from "./user/model/user2user-contact.entity";
 import { UserContact2flagEntity } from "./user/model/user-contact2flag.entity";
 import { UserContact2stringEntity } from "./user/model/user-contact2string.entity";
+import { UserGroup2stringEntity } from "./user/model/user-group2string.entity";
+import { UserGroup2flagEntity } from "./user/model/user-group2flag.entity";
+import { User2userGroupEntity } from "./user/model/user2user-group.entity";
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -50,9 +53,9 @@ export function createConnectionOptions(): DataSourceOptions {
     // logging: true,
     entities: [
       UserEntity, User2stringEntity, User2flagEntity, User2valueEntity, User2userEntity, User2descriptionEntity,
-      User2userContactEntity,
+      User2userContactEntity, User2userGroupEntity,
       UserContactEntity, UserContact2stringEntity, UserContact2flagEntity,
-      UserGroupEntity,
+      UserGroupEntity, UserGroup2stringEntity, UserGroup2flagEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
       DirectoryEntity, DirectoryStringEntity, DirectoryFlagEntity,
       ValueEntity, ValueStringEntity, ValueFlagEntity,

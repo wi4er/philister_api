@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { UserPropertySchema } from "./user.property.schema";
+import { UserPropertySchema } from "./user-property.schema";
 
 @ObjectType(
   'UserDescription',

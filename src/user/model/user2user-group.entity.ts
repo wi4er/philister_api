@@ -1,12 +1,15 @@
 import {
   BaseEntity,
   CreateDateColumn,
-  DeleteDateColumn,
+  DeleteDateColumn, Entity, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn
 } from "typeorm";
+import { UserEntity } from "./user.entity";
+import { UserGroupEntity } from "./user-group.entity";
 
+@Entity('user2userGroup')
 export class User2userGroupEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
@@ -23,5 +26,25 @@ export class User2userGroupEntity extends BaseEntity {
 
   @VersionColumn()
   version: number;
+
+  @ManyToOne(
+    type => UserGroupEntity,
+    group => group.user,
+    {
+      nullable: false,
+      onDelete: 'CASCADE',
+    },
+  )
+  group: UserGroupEntity;
+
+  @ManyToOne(
+    type => UserEntity,
+    user => user.group,
+    {
+      nullable: false,
+      onDelete: 'CASCADE',
+    },
+  )
+  parent: UserEntity;
 
 }

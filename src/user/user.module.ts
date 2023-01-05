@@ -33,11 +33,17 @@ import { UserContactMutationResolver } from './resolver/user-contact-mutation/us
 import { UserContactResolver } from './resolver/user-contact/user-contact.resolver';
 import { UserContactStringResolver } from './resolver/user-contact-string/user-contact-string.resolver';
 import { LangEntity } from "../lang/model/lang.entity";
+import { User2userGroupEntity } from "./model/user2user-group.entity";
+import { UserGroupEntity } from "./model/user-group.entity";
+import { UserGroup2stringEntity } from "./model/user-group2string.entity";
+import { UserGroup2flagEntity } from "./model/user-group2flag.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      UserEntity, User2stringEntity, User2userEntity, User2valueEntity, User2flagEntity, User2userContactEntity,
+      UserEntity, User2stringEntity, User2userEntity, User2valueEntity, User2flagEntity,
+      User2userContactEntity, User2userGroupEntity,
+      UserGroupEntity, UserGroup2stringEntity, UserGroup2flagEntity,
       UserContactEntity, UserContact2flagEntity, UserContact2stringEntity,
       PropertyEntity, PropertyPropertyEntity,
       LangEntity,

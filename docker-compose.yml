@@ -14,23 +14,23 @@ services:
       - ./init:/docker-entrypoint-initdb.d/
       - ./data/postgres:/var/lib/postgresql
 
-  dev:
-    image: node:lts
-    container_name: philister_api_node
-    restart: always
-    working_dir: /app
-    command: npm run start:dev
-    ports:
-      - "3000:3000"
-    links:
-      - postgres
-      - cache
-    environment:
-      APP_PORT: 3000
-      DB_HOST: postgres
-      CACHE_HOST: redis://cache/
-    volumes:
-      - .:/app
+#  dev:
+#    image: node:lts
+#    container_name: philister_api_node
+#    restart: always
+#    working_dir: /app
+#    command: npm run start:dev
+#    ports:
+#      - "3000:3000"
+#    links:
+#      - postgres
+#      - cache
+#    environment:
+#      APP_PORT: 3000
+#      DB_HOST: postgres
+#      CACHE_HOST: redis://cache/
+#    volumes:
+#      - .:/app
 
   cache:
     image: redis:alpine

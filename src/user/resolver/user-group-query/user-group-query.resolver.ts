@@ -1,10 +1,10 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { UserGroupQuerySchema } from "../../schema/user-group-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserGroupEntity } from "../../model/user-group.entity";
-import { UserGroupSchema } from "../../schema/user-group.schema";
+import { UserGroupQuerySchema } from "../../schema/user-group/user-group-query.schema";
+import { UserGroupSchema } from "../../schema/user-group/user-group.schema";
 
 @Resolver(of => UserGroupQuerySchema)
 export class UserGroupQueryResolver {
@@ -34,4 +34,5 @@ export class UserGroupQueryResolver {
   ) {
     return this.userGroupRepo.findOne({ where: { id } })
   }
+
 }

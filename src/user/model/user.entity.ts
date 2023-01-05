@@ -13,6 +13,7 @@ import { User2valueEntity } from "./user2value.entity";
 import { User2userEntity } from "./user2user.entity";
 import { User2descriptionEntity } from "./user2description.entity";
 import { User2userContactEntity } from "./user2user-contact.entity";
+import { User2userGroupEntity } from "./user2user-group.entity";
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -42,9 +43,15 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(
     type => User2userContactEntity,
-    contact => contact.user,
+    contact => contact.parent,
   )
   contact: User2userContactEntity[];
+
+  @OneToMany(
+    type => User2userGroupEntity,
+    contact => contact.parent,
+  )
+  group: User2userGroupEntity[];
 
   @OneToMany(
     type => User2stringEntity,

@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { UserContactSchema } from "./user-contact.schema";
 
-@ObjectType()
+@ObjectType('UserContactMutation')
 export class UserContactMutationSchema {
 
   @Field(

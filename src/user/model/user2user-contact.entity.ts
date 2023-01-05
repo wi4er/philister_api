@@ -48,7 +48,7 @@ export class User2userContactEntity extends BaseEntity {
       onDelete: 'CASCADE',
     },
   )
-  user: UserEntity;
+  parent: UserEntity;
 
   @Column({
     type: Boolean,

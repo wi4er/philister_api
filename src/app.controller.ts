@@ -9,14 +9,13 @@ export class AppController {
   getHello(
     @Req() request: Request,
   ) {
-    if (request['session'].user) {
-      request['session'].user.id = request['session'].user.id + 1;
-    } else {
-      request['session'].user = {
-        id: 1
-      };
+    // if (request['session'].user) {
+    //   request['session'].data = request['session'].data + 1;
+    // } else {
+    //   request['session'].data = 1;
+    //
+    // }
 
-    }
-    return `"Hello world ${request['session'].user.id}"`;
+    return `"Hello world ${request['session'].data}"`;
   }
 }

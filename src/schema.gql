@@ -87,7 +87,7 @@ type Flag {
 
 type UserContact {
   id: String!
-  type: String!
+  type: UserContactType!
   created_at: String!
   updated_at: String!
   version: Int!
@@ -96,6 +96,13 @@ type UserContact {
   propertyString(id: String!): String
   flagList: [Flag!]!
   flagString: [String!]!
+}
+
+enum UserContactType {
+  EMAIL
+  PHONE
+  GOOGLE
+  APPLE
 }
 
 type UserUserContact {
@@ -154,23 +161,6 @@ input UserPropertyInput {
   string: String!
 }
 
-type UserGroup {
-  id: Int!
-  name: String!
-}
-
-type UserGroupQuery {
-  list(limit: Int, offset: Int): [UserGroup!]!
-  item(id: String!): UserGroup!
-}
-
-type UserGroupMutation {
-  """Adding new user group"""
-  add: UserGroup!
-  delete: UserGroup!
-  update: UserGroup!
-}
-
 type AuthMutation {
   authByPassword(login: String!, password: String!): User
 }
@@ -181,7 +171,7 @@ type UserContactQuery {
   item(id: String!): UserContact
 }
 
-type UserContactMutationSchema {
+type UserContactMutation {
   """Adding new user contact"""
   add(item: UserContactInput!): UserContact!
 
@@ -199,16 +189,30 @@ input UserContactInput {
   flag: [String!]!
 }
 
-enum UserContactType {
-  EMAIL
-  PHONE
-  GOOGLE
-  APPLE
-}
-
 input UserContactPropertyInput {
   property: String!
   string: String!
+  lang: String
+}
+
+type UserGroup {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+}
+
+type UserGroupQuery {
+  list(limit: Int, offset: Int): [UserGroup!]!
+  item(id: String!): UserGroup!
+  count: Int!
+}
+
+type UserGroupMutation {
+  """Adding new user group"""
+  add: UserGroup!
+  delete: UserGroup!
+  update: UserGroup!
 }
 
 type UserString implements UserPropertySchema {
@@ -621,7 +625,7 @@ type Mutation {
   user: UserMutation!
   auth: AuthMutation
   userGroup: UserGroupMutation!
-  userContact: UserContactMutationSchema!
+  userContact: UserContactMutation!
   block: BlockMutation!
   property: PropertyMutation!
   directory: DirectoryMutation!

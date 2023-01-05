@@ -1,18 +1,16 @@
 import {
   BaseEntity,
-  Column,
-  CreateDateColumn, DeleteDateColumn,
-  Entity,
-  ManyToOne,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
-} from 'typeorm';
-import { UserEntity } from './user.entity';
-import { PropertyEntity } from '../../property/model/property.entity';
+} from "typeorm";
+import { FlagEntity } from "../../flag/model/flag.entity";
+import { UserGroupEntity } from "./user-group.entity";
 
-@Entity('user2string')
-export class User2stringEntity extends BaseEntity {
-
+@Entity('user-group2flag')
+export class UserGroup2flagEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -28,26 +26,23 @@ export class User2stringEntity extends BaseEntity {
   @VersionColumn()
   version: number;
 
-  @Column()
-  string: string;
-
   @ManyToOne(
-    () => UserEntity,
-    user => user.string,
+    () => UserGroupEntity,
+    user => user.flag,
     {
       onDelete: 'CASCADE',
       nullable: false,
     },
   )
-  parent: UserEntity;
+  parent: UserGroupEntity;
 
   @ManyToOne(
-    () => PropertyEntity,
+    () => FlagEntity,
     {
       onDelete: 'CASCADE',
       nullable: false,
     },
   )
-  property: PropertyEntity;
+  flag: FlagEntity;
 
 }
