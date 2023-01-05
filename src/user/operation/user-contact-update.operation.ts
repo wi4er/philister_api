@@ -1,9 +1,9 @@
 import { EntityManager } from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { User2stringEntity } from "../model/user2string.entity";
-import { UserContactInputSchema } from "../schema/user-contact-input.schema";
 import { UserContactEntity } from "../model/user-contact.entity";
 import { UserContact2stringEntity } from "../model/user-contact2string.entity";
+import { UserContactInputSchema } from "../schema/user-contact/user-contact-input.schema";
 
 export class UserContactUpdateOperation {
 
@@ -12,7 +12,7 @@ export class UserContactUpdateOperation {
   manager: EntityManager;
 
   constructor(
-    private updateItem: UserContactInputSchema
+    private updateItem: UserContactInputSchema,
   ) {
   }
 

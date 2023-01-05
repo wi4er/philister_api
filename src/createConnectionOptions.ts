@@ -41,7 +41,7 @@ import { UserContact2stringEntity } from "./user/model/user-contact2string.entit
 export function createConnectionOptions(): DataSourceOptions {
   return {
     type: 'postgres',
-    host: 'localhost',
+    host: process.env.DB_HOST || 'localhost',
     port: 5432,
     username: 'postgres',
     password: 'example',

@@ -1,9 +1,9 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { UserContactStringSchema } from "../../schema/user-contact-string.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { Repository } from "typeorm";
 import { LangEntity } from "../../../lang/model/lang.entity";
+import { UserContactStringSchema } from "../../schema/user-contact/user-contact-string.schema";
 
 @Resolver(of => UserContactStringSchema)
 export class UserContactStringResolver {

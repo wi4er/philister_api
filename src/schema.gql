@@ -186,7 +186,7 @@ type UserContactMutationSchema {
   add(item: UserContactInput!): UserContact!
 
   """Deletion existent user contact"""
-  delete(id: [Int!]!): [String!]!
+  delete(id: [String!]!): [String!]!
 
   """Updating existent user contact"""
   update(item: UserContactInput!): UserContact!
@@ -290,13 +290,13 @@ type UserUser implements UserPropertySchema {
   user: User!
 }
 
-type UserContactString implements UserPropertySchema {
+type UserContactString implements UserContactProperty {
   id: Int!
-  string: String!
-  property: Property!
   created_at: String!
   updated_at: String!
   version: Int!
+  string: String!
+  property: Property!
   lang: Lang!
 }
 

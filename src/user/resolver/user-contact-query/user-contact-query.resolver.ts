@@ -2,7 +2,7 @@ import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserContactEntity } from '../../model/user-contact.entity';
-import { UserContactQuerySchema } from "../../schema/user-contact-query.schema";
+import { UserContactQuerySchema } from "../../schema/user-contact/user-contact-query.schema";
 
 @Resolver(of => UserContactQuerySchema)
 export class UserContactQueryResolver {

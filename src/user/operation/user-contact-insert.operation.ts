@@ -1,8 +1,8 @@
 import { EntityManager } from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { UserContactInputSchema } from "../schema/user-contact-input.schema";
 import { UserContactEntity } from "../model/user-contact.entity";
 import { UserContact2stringEntity } from "../model/user-contact2string.entity";
+import { UserContactInputSchema } from "../schema/user-contact/user-contact-input.schema";
 
 export class UserContactInsertOperation {
 

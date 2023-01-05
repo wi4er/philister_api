@@ -1,5 +1,5 @@
 import { Field, Int, InterfaceType } from "@nestjs/graphql";
-import { PropertySchema } from "../../property/schema/property.schema";
+import { PropertySchema } from "../../../property/schema/property.schema";
 
 @InterfaceType(
   'UserContactProperty',

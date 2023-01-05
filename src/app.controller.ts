@@ -1,6 +1,5 @@
 import { Controller, Get, Req, Res } from '@nestjs/common';
-import { Context } from "@nestjs/graphql";
-import { ServerResponse } from "http";
+import { Request } from "express";
 
 @Controller()
 export class AppController {

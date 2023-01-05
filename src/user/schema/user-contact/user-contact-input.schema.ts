@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { UserContactType } from "../model/user-contact.entity";
+import { UserContactType } from "../../model/user-contact.entity";
 
 @InputType('UserContactPropertyInput')
 class UserContactPropertyInputSchema {

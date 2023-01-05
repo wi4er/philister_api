@@ -4,8 +4,8 @@ import { UserMutationSchema } from '../../schema/user-mutation.schema';
 import { UserGroupQuerySchema } from '../../schema/user-group-query.schema';
 import { UserGroupMutationSchema } from '../../schema/user-group-mutation.schema';
 import { AuthMutationSchema } from '../../schema/auth-mutation.schema';
-import { UserContactQuerySchema } from "../../schema/user-contact-query.schema";
-import { UserContactMutationSchema } from "../../schema/user-contact-mutation.schema";
+import { UserContactQuerySchema } from "../../schema/user-contact/user-contact-query.schema";
+import { UserContactMutationSchema } from "../../schema/user-contact/user-contact-mutation.schema";
 
 @Resolver()
 export class UserRootResolver {

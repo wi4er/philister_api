@@ -1,11 +1,11 @@
-import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, ResolveField, Resolver } from '@nestjs/graphql';
 import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { EntityManager, In, Repository } from "typeorm";
 import { UserContactInsertOperation } from "../../operation/user-contact-insert.operation";
 import { UserContactUpdateOperation } from "../../operation/user-contact-update.operation";
 import { UserContactEntity } from "../../model/user-contact.entity";
-import { UserContactInputSchema } from "../../schema/user-contact-input.schema";
-import { UserContactMutationSchema } from "../../schema/user-contact-mutation.schema";
+import { UserContactMutationSchema } from "../../schema/user-contact/user-contact-mutation.schema";
+import { UserContactInputSchema } from "../../schema/user-contact/user-contact-input.schema";
 
 @Resolver(of => UserContactMutationSchema)
 export class UserContactMutationResolver {
@@ -37,9 +37,9 @@ export class UserContactMutationResolver {
 
   @ResolveField()
   async delete(
-    @Args('id', { type: () => [ Int ] })
-      id: number[]
-  ): Promise<number[]> {
+    @Args('id', { type: () => [ String ] })
+      id: string[]
+  ): Promise<string[]> {
     const result = [];
     const list = await this.contactRepo.find({ where: { id: In(id) } });
 

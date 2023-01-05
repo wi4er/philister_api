@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { UserContactPropertySchema } from "./user-contact-property.schema";
-import { FlagSchema } from "../../flag/schema/flag.schema";
+import { FlagSchema } from "../../../flag/schema/flag.schema";
 
 @ObjectType('UserContact')
 export class UserContactSchema {
