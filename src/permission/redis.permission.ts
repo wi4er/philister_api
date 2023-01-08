@@ -3,13 +3,14 @@ const redis = require('redis');
 
 const RedisStore = require('connect-redis')(session);
 const redisClient = redis.createClient({
-    url: 'redis://localhost:6379',
+  url: process.env.REDIS_URL ?? 'redis://localhost:6379',
+  legacyMode: true,
 });
 
 redisClient.connect()
   .then(
     conn => {
-      console.log('Redis connection successful!');
+      // console.log('Redis connection successful!');
     },
     err => {
       console.log('Redis error!!!');

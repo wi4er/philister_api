@@ -1,11 +1,9 @@
 import { EntityManager } from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { User2stringEntity } from "../model/user2string.entity";
 import { UserContactEntity } from "../model/user-contact.entity";
 import { UserContact2stringEntity } from "../model/user-contact2string.entity";
 import { UserContactInputSchema } from "../schema/user-contact/user-contact-input.schema";
 import { FlagEntity } from "../../flag/model/flag.entity";
-import { LangFlagEntity } from "../../lang/model/lang-flag.entity";
 import { UserContact2flagEntity } from "../model/user-contact2flag.entity";
 
 export class UserContactUpdateOperation {

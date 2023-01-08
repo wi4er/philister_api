@@ -41,16 +41,15 @@ describe('UserPropertyResolver', () => {
   describe('User string property', () => {
     test('Should get user with property', async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'name' }).save();
-      const user = await Object.assign(new UserEntity(), {
-        login: 'user',
-        property: [
-          await Object.assign(new User2stringEntity(), { string: "VALUE", property }).save()
-        ]
-      }).save();
+      const parent = await Object.assign(new UserEntity(), { login: 'user' }).save();
+      await Object.assign(new User2stringEntity(), { string: "VALUE", property, parent }).save()
 
       const res = await request(app.getHttpServer())
-        .query(userItemQuery, { id: user.id })
+        .query(userItemQuery, { id: 1 })
         .expectNoErrors();
+
+      // console.log(res)
+      console.log(res.data['user']['item'])
     });
   });
 });

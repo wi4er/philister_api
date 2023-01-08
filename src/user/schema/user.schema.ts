@@ -3,9 +3,12 @@ import { UserPropertySchema } from './user-property/user-property.schema';
 import { FlagSchema } from '../../flag/schema/flag.schema';
 import { UserUserContactSchema } from "./user-user-contact.schema";
 import { UserGroupSchema } from "./user-group/user-group.schema";
+import { WithFlagSchema } from "../../common/schema/withFlag.schema";
 
-@ObjectType('User')
-export class UserSchema {
+@ObjectType('User', {
+  implements: () => [ WithFlagSchema ]
+})
+export class UserSchema implements WithFlagSchema {
 
   @Field(type => Int)
   id: number;
@@ -38,9 +41,9 @@ export class UserSchema {
   propertyItem: UserPropertySchema;
 
   @Field(type => [ FlagSchema ])
-  flag: FlagSchema[];
+  flagList: FlagSchema[];
 
-  @Field(type => FlagSchema)
-  flagItem: FlagSchema;
+  @Field(type => [ String ])
+  flagString: string[];
 
 }

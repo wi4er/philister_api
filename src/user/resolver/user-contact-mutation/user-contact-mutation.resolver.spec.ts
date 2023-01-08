@@ -8,6 +8,8 @@ import { gql } from "apollo-server-express";
 import { UserContactEntity, UserContactType } from "../../model/user-contact.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { LangEntity } from "../../../lang/model/lang.entity";
+import { FlagEntity } from "../../../flag/model/flag.entity";
+import { UserContact2flagEntity } from "../../model/user-contact2flag.entity";
 
 const addUserContact = gql`
   mutation AddUserContact($item: UserContactInput!) {
@@ -21,6 +23,7 @@ const addUserContact = gql`
             id
           }
         }
+        flagString
       }
     }
   }
@@ -32,6 +35,14 @@ const updateUserContact = gql`
       update(item: $item) {
         id
         type
+        flagString
+        propertyList {
+          id
+          string
+          property {
+            id
+          }
+        }
       }
     }
   }
@@ -41,6 +52,24 @@ const deleteUserContact = gql`
   mutation DeleteUserContact($id: [String!]!) {
     userContact {
       delete(id: $id)
+    }
+  }
+`;
+
+const getUserContactItem = gql`
+  query GetUserContact($id: String!) {
+    userContact {
+      item(id: $id) {
+        id
+        propertyList {
+          id
+          string
+          property {
+            id
+          }
+        }
+        flagString
+      }
     }
   }
 `;
@@ -83,10 +112,10 @@ describe('UserContactMutationResolver', () => {
           item: {
             id: 'mail',
             type: 'EMAIL',
-            property: [{
+            property: [ {
               property: 'NAME',
               string: 'VALUE'
-            }],
+            } ],
             flag: [],
           }
         })
@@ -107,7 +136,7 @@ describe('UserContactMutationResolver', () => {
           item: {
             id: 'phone',
             type: 'PHONE',
-            property: [{
+            property: [ {
               property: 'NAME',
               string: 'telephone',
               lang: 'EN',
@@ -115,7 +144,7 @@ describe('UserContactMutationResolver', () => {
               property: 'NAME',
               string: 'telefon',
               lang: 'GR',
-            }],
+            } ],
             flag: [],
           }
         })
@@ -124,6 +153,23 @@ describe('UserContactMutationResolver', () => {
       expect(res.data['userContact']['add']['propertyList']).toHaveLength(2);
       expect(res.data['userContact']['add']['propertyList'][0]['string']).toBe('telephone');
       expect(res.data['userContact']['add']['propertyList'][1]['string']).toBe('telefon');
+    });
+
+    test('Should add user contact with flag', async () => {
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(addUserContact, {
+          item: {
+            id: 'phone',
+            type: 'PHONE',
+            property: [],
+            flag: [ 'ACTIVE' ],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['add']['flagString']).toEqual([ 'ACTIVE' ]);
     });
   });
 
@@ -144,6 +190,95 @@ describe('UserContactMutationResolver', () => {
 
       expect(res.data['userContact']['update']['id']).toBe('mail');
       expect(res.data['userContact']['update']['type']).toBe('PHONE');
+    });
+
+    test('Should add property to contact', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContact, {
+          item: {
+            id: 'mail',
+            type: 'PHONE',
+            property: [{
+              property: 'NAME',
+              string: 'VALUE'
+            }],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['update']['propertyList']).toHaveLength(1)
+    });
+
+    test('Should add flag to user contact', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContact, {
+          item: {
+            id: 'mail',
+            type: 'PHONE',
+            property: [],
+            flag: [ 'ACTIVE' ],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['update']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should update flag in user contact', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new FlagEntity(), { id: 'PASSIVE' }).save();
+      await Object.assign(new UserContact2flagEntity(), {
+        parent: 'mail',
+        flag: 'ACTIVE',
+      }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContact, {
+          item: {
+            id: 'mail',
+            type: 'PHONE',
+            property: [],
+            flag: [ 'PASSIVE' ],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['update']['flagString']).toEqual([ 'PASSIVE' ]);
+    });
+
+    test('Should remove flag from user contact', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new FlagEntity(), { id: 'PASSIVE' }).save();
+      await Object.assign(new UserContact2flagEntity(), {
+        parent: 'mail',
+        flag: 'PASSIVE',
+      }).save();
+
+      const before = await request(app.getHttpServer())
+        .query(getUserContactItem, { id: 'mail' })
+
+      expect(before.data['userContact']['item']['flagString']).toEqual([ 'PASSIVE' ]);
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContact, {
+          item: {
+            id: 'mail',
+            type: 'PHONE',
+            property: [],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['update']['flagString']).toEqual([]);
     });
   });
 

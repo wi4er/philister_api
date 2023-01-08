@@ -9,6 +9,7 @@ import {
 import { CommonStringEntity } from '../../common/model/common-string.entity';
 import { UserContactEntity } from './user-contact.entity';
 import { PropertyEntity } from '../../property/model/property.entity';
+import { LangEntity } from "../../lang/model/lang.entity";
 
 @Entity('user-contact2string')
 export class UserContact2stringEntity extends BaseEntity implements CommonStringEntity<UserContactEntity> {
@@ -46,5 +47,14 @@ export class UserContact2stringEntity extends BaseEntity implements CommonString
     },
   )
   property: PropertyEntity;
+
+  @ManyToOne(
+    () => LangEntity,
+    {
+      onDelete: 'CASCADE',
+      nullable: true,
+    },
+  )
+  lang?: LangEntity;
 
 }

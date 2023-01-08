@@ -37,6 +37,7 @@ import { User2userGroupEntity } from "./model/user2user-group.entity";
 import { UserGroupEntity } from "./model/user-group.entity";
 import { UserGroup2stringEntity } from "./model/user-group2string.entity";
 import { UserGroup2flagEntity } from "./model/user-group2flag.entity";
+import { UserGroupStringResolver } from './resolver/user-group-string/user-group-string.resolver';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { UserGroup2flagEntity } from "./model/user-group2flag.entity";
     UserContactMutationResolver,
     UserContactResolver,
     UserContactStringResolver,
+    UserGroupStringResolver,
   ],
   controllers: [UserController, AuthController, ForgotController]
 })

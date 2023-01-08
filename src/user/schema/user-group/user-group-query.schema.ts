@@ -7,7 +7,7 @@ export class UserGroupQuerySchema {
   @Field(type => [ UserGroupSchema ])
   list: [ UserGroupSchema ];
 
-  @Field(type => UserGroupSchema)
+  @Field(type => UserGroupSchema, { nullable: true })
   item: UserGroupSchema;
 
   @Field(type => Int)

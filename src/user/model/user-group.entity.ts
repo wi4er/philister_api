@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   BaseEntity,
   CreateDateColumn,
-  UpdateDateColumn, DeleteDateColumn, VersionColumn, OneToMany
+  UpdateDateColumn, DeleteDateColumn, VersionColumn, OneToMany, ManyToOne
 } from 'typeorm';
 import { UserGroup2stringEntity } from "./user-group2string.entity";
 import { User2flagEntity } from "./user2flag.entity";
@@ -27,6 +27,22 @@ export class UserGroupEntity extends BaseEntity {
 
   @VersionColumn()
   version: number;
+
+  @ManyToOne(
+    type => UserGroupEntity,
+    group => group.children,
+    {
+      onDelete: 'CASCADE',
+      nullable: true,
+    },
+  )
+  parent: UserGroupEntity;
+
+  @OneToMany(
+    type => UserGroupEntity,
+    group => group.parent,
+  )
+  children: UserGroupEntity[]
 
   @OneToMany(
     type => User2userGroupEntity,

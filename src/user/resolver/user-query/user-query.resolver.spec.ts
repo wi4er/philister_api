@@ -144,12 +144,12 @@ describe('UserRootQueryResolver', () => {
 
       const session = res.response.headers['set-cookie'];
 
-      // const myself = await request(app.getHttpServer())
-      //   .set("cookie", session)
-      //   .query(myselfQuery, {})
-      //   .expectNoErrors();
-      //
-      // expect(myself.data['user']['myself']['login']).toBe('myself');
+      const myself = await request(app.getHttpServer())
+        .set("cookie", session)
+        .query(myselfQuery, {})
+        .expectNoErrors();
+
+      expect(myself.data['user']['myself']['login']).toBe('myself');
     });
   });
 });

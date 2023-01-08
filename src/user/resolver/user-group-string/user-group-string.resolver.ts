@@ -1,12 +1,12 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { UserGroupStringSchema } from "../../schema/user-group/user-group-string.schema";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { UserStringSchema } from "../../schema/user-property/user-string.schema";
+import { Repository } from "typeorm";
 import { LangEntity } from "../../../lang/model/lang.entity";
 
-@Resolver(of => UserStringSchema)
-export class UserStringResolver {
+@Resolver(of => UserGroupStringSchema)
+export class UserGroupStringResolver {
 
   constructor(
     @InjectRepository(PropertyEntity)

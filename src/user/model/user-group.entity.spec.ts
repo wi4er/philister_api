@@ -19,40 +19,40 @@ describe('UserGroup entity', () => {
 
       await inst.save();
 
+      expect(inst.id).toBe(1);
       expect(inst.created_at).toBeDefined();
       expect(inst.updated_at).toBeDefined();
       expect(inst.deleted_at).toBeNull();
       expect(inst.version).toBe(1);
     });
+  });
 
-    test('Shouldn`t create without id', async () => {
-      const inst = new UserContactEntity();
-      inst.type = UserContactType.EMAIL;
+  describe('Group with parent', () => {
+    test('Should create with parent', async () => {
+      const repo = source.getRepository(UserGroupEntity);
+      const parent = await new UserGroupEntity().save();
 
-      await expect(inst.save()).rejects.toThrow();
+      const inst = new UserGroupEntity();
+      inst.parent = parent;
+      await inst.save();
+
+      const some = await repo.findOne({ where: { id: inst.id }, relations: { parent: true } });
+
+      expect(some.parent.id).toBe(parent.id);
     });
 
-    test('Shouldn`t create with blank id', async () => {
-      const inst = new UserContactEntity();
-      inst.id = '';
-      inst.type = UserContactType.EMAIL;
+    test('Should create with child', async () => {
+      const repo = source.getRepository(UserGroupEntity);
+      const parent = await new UserGroupEntity().save();
 
-      await expect(inst.save()).rejects.toThrow();
-    });
+      const inst = new UserGroupEntity();
+      inst.parent = parent;
+      await inst.save();
 
-    test('Shouldn`t create with wrong contact', async () => {
-      const inst = new UserContactEntity();
-      inst.id = 'mail';
-      inst['type'] = 'SOME' as UserContactType;
+      const some = await repo.findOne({ where: { id: parent.id }, relations: { children: true } });
 
-      await expect(inst.save()).rejects.toThrow();
-    });
-
-    test('Shouldn`t create without type', async () => {
-      const inst = new UserContactEntity();
-      inst.id = 'mail';
-
-      await expect(inst.save()).rejects.toThrow();
+      expect(some.children).toHaveLength(1);
+      expect(some.children[0].id).toBe(2);
     });
   });
 });

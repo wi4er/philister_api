@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
 } from "typeorm";
-import { UserEntity } from "./user.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { CommonStringEntity } from "../../common/model/common-string.entity";
 import { UserGroupEntity } from "./user-group.entity";
+import { LangEntity } from "../../lang/model/lang.entity";
 
 @Entity('user-group2string')
 export class UserGroup2stringEntity extends BaseEntity implements CommonStringEntity<UserGroupEntity> {
@@ -50,5 +50,14 @@ export class UserGroup2stringEntity extends BaseEntity implements CommonStringEn
     },
   )
   property: PropertyEntity;
+
+  @ManyToOne(
+    () => LangEntity,
+    {
+      onDelete: 'CASCADE',
+      nullable: true,
+    },
+  )
+  lang?: LangEntity;
 
 }

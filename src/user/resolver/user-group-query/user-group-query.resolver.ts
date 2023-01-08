@@ -1,38 +1,55 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { PropertyEntity } from "../../../property/model/property.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserGroupEntity } from "../../model/user-group.entity";
 import { UserGroupQuerySchema } from "../../schema/user-group/user-group-query.schema";
-import { UserGroupSchema } from "../../schema/user-group/user-group.schema";
 
 @Resolver(of => UserGroupQuerySchema)
 export class UserGroupQueryResolver {
+
   constructor(
-    @InjectRepository(PropertyEntity)
+    @InjectRepository(UserGroupEntity)
     private userGroupRepo: Repository<UserGroupEntity>,
   ) {
   }
 
-  @ResolveField('list', type => [ UserGroupSchema ])
+  @ResolveField()
   list(
-    @Args('limit', {nullable: true, type: () => Int})
+    @Args('limit', { nullable: true, type: () => Int })
       limit: number,
-    @Args('offset', {nullable: true, type: () => Int})
+    @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
     return this.userGroupRepo.find({
       skip: offset,
       take: limit,
+      loadRelationIds: true,
     });
   }
 
-  @ResolveField('item', type => UserGroupSchema)
+  @ResolveField()
+  count(
+    @Args('limit', { nullable: true, type: () => Int })
+      limit: number,
+    @Args('offset', { nullable: true, type: () => Int })
+      offset: number,
+  ): Promise<number> {
+    return this.userGroupRepo.count({
+      skip: offset,
+      take: limit,
+      loadRelationIds: true,
+    });
+  }
+
+  @ResolveField()
   item(
-    @Args('id', { type: () => String })
+    @Args('id', { type: () => Int })
       id: number
-  ) {
-    return this.userGroupRepo.findOne({ where: { id } })
+  ): Promise<UserGroupEntity | null> {
+    return this.userGroupRepo.findOne({
+      where: { id },
+      loadRelationIds: true,
+    });
   }
 
 }
