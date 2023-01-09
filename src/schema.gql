@@ -231,9 +231,22 @@ type UserGroupQuery {
 
 type UserGroupMutation {
   """Adding new user group"""
-  add: UserGroup!
-  delete: UserGroup!
-  update: UserGroup!
+  add(item: UserGroupInput!): UserGroup!
+  delete(id: [String!]!): UserGroup!
+  update(item: UserGroupInput!): UserGroup!
+}
+
+input UserGroupInput {
+  id: Float
+  parent: Int
+  property: [UserGroupPropertyInput!]!
+  flag: [String!]!
+}
+
+input UserGroupPropertyInput {
+  property: String!
+  string: String!
+  lang: String
 }
 
 type LangFlag {
@@ -333,7 +346,7 @@ type UserGroupString implements UserGroupProperty {
   version: Int!
   string: String!
   property: Property!
-  lang: Lang!
+  lang: Lang
 }
 
 type Element {

@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { WithFlagSchema } from "../../../common/schema/withFlag.schema";
+import { WithFlagSchema } from "../../../common/schema/with-flag.schema";
 import { FlagSchema } from "../../../flag/schema/flag.schema";
 import { UserGroupPropertySchema } from "./user-group-property.schema";
 

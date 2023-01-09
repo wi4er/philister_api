@@ -6,66 +6,40 @@ import { UserContactInputSchema } from "../schema/user-contact/user-contact-inpu
 import { FlagEntity } from "../../flag/model/flag.entity";
 import { LangFlagEntity } from "../../lang/model/lang-flag.entity";
 import { UserContact2flagEntity } from "../model/user-contact2flag.entity";
+import { UserGroupEntity } from "../model/user-group.entity";
+import { UserGroupInputSchema } from "../schema/user-group/user-group-input.schema";
+import { UserGroup2stringEntity } from "../model/user-group2string.entity";
+import { UserGroup2flagEntity } from "../model/user-group2flag.entity";
+import { InsertOperation } from "../../common/operation/insert-operation";
 
-export class UserContactInsertOperation {
+export class UserGroupInsertOperation extends InsertOperation<UserGroupEntity> {
 
-  created: UserContactEntity;
-  manager: EntityManager;
+  created: UserGroupEntity;
 
   constructor(
-    private item: UserContactInputSchema
+    protected input: UserGroupInputSchema
   ) {
-    this.created = new UserContactEntity();
-    this.created.id = this.item.id;
-    this.created.type = this.item.type;
+    super();
+
+    this.created = new UserGroupEntity();
+    this.created.id = this.input.id;
   }
 
-  async save(manager: EntityManager): Promise<UserContactEntity> {
+  async save(manager: EntityManager): Promise<UserGroupEntity> {
     this.manager = manager;
-    const langRepo = this.manager.getRepository(UserContactEntity);
+    const groupRepo = this.manager.getRepository(UserGroupEntity);
 
     await this.manager.transaction(async (trans: EntityManager) => {
       await trans.save(this.created);
 
-      for await (const prop of this.addProperty()) {
-        await trans.save(prop);
-      }
-
-      for await (const flag of this.addFlag()) {
-        await trans.save(flag);
-      }
+      await this.addString(trans, UserGroup2stringEntity);
+      await this.addFlag(trans, UserGroup2flagEntity);
     });
 
-    return langRepo.findOne({
-      where: { id: this.item.id },
+    return groupRepo.findOne({
+      where: { id: this.input.id },
       loadRelationIds: true,
     });
-  }
-
-  async* addProperty() {
-    const propRepo = this.manager.getRepository(PropertyEntity);
-
-    for (const item of this.item.property ?? []) {
-      const inst = new UserContact2stringEntity();
-      inst.parent = this.created;
-      inst.property = await propRepo.findOne({ where: { id: item.property } });
-      inst.string = item.string;
-
-      yield inst;
-    }
-  }
-
-
-  async* addFlag() {
-    const flagRepo = this.manager.getRepository(FlagEntity);
-
-    for (const item of this.item.flag ?? []) {
-      const inst = new UserContact2flagEntity();
-      inst.parent = this.created;
-      inst.flag = await flagRepo.findOne({ where: { id: item } });
-
-      yield inst;
-    }
   }
 
 }

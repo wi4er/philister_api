@@ -8,10 +8,14 @@ import {
 } from "typeorm";
 import { FlagEntity } from "../../flag/model/flag.entity";
 import { UserContactEntity } from "./user-contact.entity";
+import { CommonFlagEntity } from "../../common/model/common-flag.entity";
 
 @Entity('user-contact2flag')
 @Index([ 'parent', 'flag' ], { unique: true })
-export class UserContact2flagEntity extends BaseEntity {
+export class UserContact2flagEntity
+  extends BaseEntity
+  implements CommonFlagEntity<UserContactEntity>
+{
 
   @PrimaryGeneratedColumn()
   id: number;

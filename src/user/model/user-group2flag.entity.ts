@@ -8,10 +8,15 @@ import {
 } from "typeorm";
 import { FlagEntity } from "../../flag/model/flag.entity";
 import { UserGroupEntity } from "./user-group.entity";
+import { CommonFlagEntity } from "../../common/model/common-flag.entity";
 
 @Entity('user-group2flag')
 @Index([ 'parent', 'flag' ], { unique: true })
-export class UserGroup2flagEntity extends BaseEntity {
+export class UserGroup2flagEntity
+  extends BaseEntity
+  implements CommonFlagEntity<UserGroupEntity>
+{
+
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -26,7 +26,7 @@ export class UserGroupStringSchema extends UserGroupPropertySchema {
   @Field(type => PropertySchema)
   property: PropertySchema;
 
-  @Field(type => LangSchema)
+  @Field(type => LangSchema, { nullable: true })
   lang: LangSchema;
 
 }

@@ -58,6 +58,6 @@ export class UserGroup2stringEntity extends BaseEntity implements CommonStringEn
       nullable: true,
     },
   )
-  lang?: LangEntity;
+  lang?: LangEntity | null;
 
 }
