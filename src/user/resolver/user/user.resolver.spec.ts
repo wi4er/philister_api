@@ -2,7 +2,6 @@ import { Test } from '@nestjs/testing';
 import { UserResolver } from './user.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
-import { User2stringEntity } from "../../model/user2string.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { UserEntity } from "../../model/user.entity";
 import { gql } from "apollo-server-express";
@@ -15,9 +14,12 @@ const userItemQuery = gql`
       item(id: $id) {
         id
         login
-        property {
+        propertyList {
           id
           string
+          property {
+            id
+          }
         }
       }
     }

@@ -1,5 +1,11 @@
 import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
+import { WithFlagInputSchema } from "../../common/schema/with-flag.input.schema";
+import { WithPropertySchema } from "../../common/schema/with-property.schema";
+import { UserSchema } from "./user.schema";
+import { UserPropertySchema } from "./user-property/user-property.schema";
+import { FlagSchema } from "../../flag/schema/flag.schema";
+import { WithPropertyInputSchema } from "../../common/schema/with-property-input.schema";
 
 @InputType('UserUserContactInput')
 class UserContactInputSchema {
@@ -25,10 +31,14 @@ class UserPropertyInputSchema {
   @ApiProperty()
   string: string
 
+  @Field({ nullable: true })
+  @ApiProperty()
+  lang: string;
+
 }
 
 @InputType('UserInput')
-export class UserInputSchema {
+export class UserInputSchema implements WithFlagInputSchema, WithPropertyInputSchema {
 
   @Field(returns => Int, { nullable: true })
   @ApiProperty()
@@ -51,5 +61,9 @@ export class UserInputSchema {
     description: 'User property data list',
   })
   property: UserPropertyInputSchema[];
+
+  @Field(type => [ String ])
+  @ApiProperty({ type: [ String ] })
+  flag: string[];
 
 }

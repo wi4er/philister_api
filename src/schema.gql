@@ -136,8 +136,9 @@ type User implements WithFlagSchema {
   hash: String
   contact: [UserUserContact!]!
   group: [User!]
-  property: [UserPropertySchema!]
-  propertyItem: UserPropertySchema
+  propertyList: [UserPropertySchema!]!
+  propertyItem(id: String!): UserPropertySchema
+  propertyString(id: String!, lang: String): String
 }
 
 type UserQuery {
@@ -163,6 +164,7 @@ input UserInput {
   login: String!
   contact: [UserUserContactInput!]!
   property: [UserPropertyInput!]!
+  flag: [String!]!
 }
 
 input UserUserContactInput {
@@ -173,6 +175,7 @@ input UserUserContactInput {
 input UserPropertyInput {
   property: String!
   string: String!
+  lang: String
 }
 
 type AuthMutation {
@@ -220,7 +223,7 @@ type UserGroup implements WithFlagSchema {
   children: [UserGroup!]!
   propertyList: [UserGroupProperty!]!
   propertyItem(id: String!): UserGroupProperty
-  propertyString(id: String!): String
+  propertyString(id: String!, lang: String): String
 }
 
 type UserGroupQuery {

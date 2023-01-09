@@ -14,9 +14,13 @@ import { User2userEntity } from "./user2user.entity";
 import { User2descriptionEntity } from "./user2description.entity";
 import { User2userContactEntity } from "./user2user-contact.entity";
 import { User2userGroupEntity } from "./user2user-group.entity";
+import { WithFlagEntity } from "../../common/model/with-flag.entity";
+import { WithStringEntity } from "../../common/model/with-string.entity";
 
 @Entity('user')
-export class UserEntity extends BaseEntity {
+export class UserEntity
+  extends BaseEntity
+  implements WithFlagEntity<UserEntity>, WithStringEntity<UserEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;

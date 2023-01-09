@@ -34,11 +34,14 @@ export class UserSchema implements WithFlagSchema {
   @Field(type => [ UserSchema ], { nullable: true })
   group?: UserGroupSchema[];
 
-  @Field(type => [ UserPropertySchema ], { nullable: true })
-  property?: UserPropertySchema[];
+  @Field(type => [ UserPropertySchema ])
+  propertyList: UserPropertySchema[];
 
   @Field(type => UserPropertySchema, { nullable: true })
   propertyItem: UserPropertySchema;
+
+  @Field({ nullable: true })
+  propertyString: string;
 
   @Field(type => [ FlagSchema ])
   flagList: FlagSchema[];

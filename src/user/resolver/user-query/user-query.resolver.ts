@@ -1,10 +1,8 @@
 import { Args, Context, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { UserSchema } from "../../schema/user.schema";
 import { UserQuerySchema } from "../../schema/user-query.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "../../model/user.entity";
 import { Repository } from "typeorm";
-import { ServerResponse } from "http";
 
 @Resolver(of => UserQuerySchema)
 export class UserQueryResolver {
@@ -15,11 +13,11 @@ export class UserQueryResolver {
   ) {
   }
 
-  @ResolveField('list', returns => [ UserSchema ])
+  @ResolveField()
   async list(
-    @Args('limit', {nullable: true, type: () => Int})
+    @Args('limit', { nullable: true, type: () => Int })
       limit: number,
-    @Args('offset', {nullable: true, type: () => Int})
+    @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
     return this.userRepo.find({
@@ -28,11 +26,11 @@ export class UserQueryResolver {
     });
   }
 
-  @ResolveField('count', returns => Int)
+  @ResolveField()
   async count(
-    @Args('limit', {nullable: true, type: () => Int})
+    @Args('limit', { nullable: true, type: () => Int })
       limit: number,
-    @Args('offset', {nullable: true, type: () => Int})
+    @Args('offset', { nullable: true, type: () => Int })
       offset: number,
   ) {
     return this.userRepo.count({
@@ -41,17 +39,17 @@ export class UserQueryResolver {
     });
   }
 
-  @ResolveField('item', returns => [ UserSchema ])
+  @ResolveField()
   async item(
     @Args('id', { type: () => Int })
       id: number,
     @Context()
       context: { req: Request },
   ) {
-    return this.userRepo.findOne({where: {id}});
+    return this.userRepo.findOne({ where: { id } });
   }
 
-  @ResolveField('myself', returns => [ UserSchema ])
+  @ResolveField()
   async myself(
     @Context()
       context: { req: Request },

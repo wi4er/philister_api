@@ -9,6 +9,7 @@ import { PropertyEntity } from "../../../property/model/property.entity";
 import { LangEntity } from "../../../lang/model/lang.entity";
 import { UserGroupEntity } from "../../model/user-group.entity";
 import { UserGroup2stringEntity } from "../../model/user-group2string.entity";
+import { FlagEntity } from "../../../flag/model/flag.entity";
 
 const userGroupAdditionMutation = gql`
   mutation AddGroupContact ($item: UserGroupInput!) {
@@ -210,6 +211,24 @@ describe('UserGroupMutationResolver', () => {
       expect(res.data['userGroup']['update']['propertyList'][0]['string']).toBe('NEW');
       expect(res.data['userGroup']['update']['propertyList'][0]['property']['id']).toBe('NAME');
       expect(res.data['userGroup']['update']['propertyList'][0]['lang']['id']).toBe('GR');
+    });
+
+    test('Should add flag to user group', async () => {
+      await new UserGroupEntity().save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new LangEntity(), { id: 'GR' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(userGroupUpdateMutation, {
+          item: {
+            id: 1,
+            flag: [ 'ACTIVE' ],
+            property: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userGroup']['update']['flagString']).toEqual([ 'ACTIVE' ]);
     });
   });
 });

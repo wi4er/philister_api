@@ -4,8 +4,9 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../../createConnectionOptions";
 import { gql } from "apollo-server-express";
 import request from "supertest-graphql";
-import { log } from "util";
 import { UserEntity } from "../../model/user.entity";
+import { FlagEntity } from "../../../flag/model/flag.entity";
+import { PropertyEntity } from "../../../property/model/property.entity";
 
 const userAddMutation = gql`
   mutation AddUser($item: UserInput!) {
@@ -13,6 +14,14 @@ const userAddMutation = gql`
       add(item: $item) {
         id
         login
+        flagString
+        propertyList {
+          id
+          string
+          property {
+            id
+          }
+        }
         contact {
           id
           value
@@ -73,15 +82,53 @@ describe('UserRootMutationResolver', () => {
             login: 'admin',
             contact: [],
             property: [],
+            flag: [],
           }
         });
 
       expect(res.data['user']['add']['id']).toBe(1);
       expect(res.data['user']['add']['login']).toBe('admin');
     });
+
+    test('Should add user with flag', async () => {
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(userAddMutation, {
+          item: {
+            login: 'admin',
+            contact: [],
+            property: [],
+            flag: [ 'ACTIVE' ],
+          }
+        });
+
+      expect(res.data['user']['add']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should add user with string', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'SIZE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(userAddMutation, {
+          item: {
+            login: 'admin',
+            contact: [],
+            property: [{
+              property: 'SIZE',
+              string: 'XXL',
+            }],
+            flag: [],
+          }
+        });
+
+      expect(res.data['user']['add']['propertyList']).toHaveLength(1);
+      expect(res.data['user']['add']['propertyList'][0]['string']).toBe('XXL');
+      expect(res.data['user']['add']['propertyList'][0]['property']['id']).toBe('SIZE');
+    });
   });
 
-  describe('User addition', () => {
+  describe('User update', () => {
     test('Should update user', async () => {
       const user = await Object.assign(new UserEntity(), { login: 'NAME' }).save();
       const res = await request(app.getHttpServer())
@@ -91,6 +138,7 @@ describe('UserRootMutationResolver', () => {
             login: 'admin',
             contact: [],
             property: [],
+            flag: [],
           }
         });
 
@@ -100,11 +148,11 @@ describe('UserRootMutationResolver', () => {
 
   describe('User deletion', () => {
     test('Should delete', async () => {
-      const user = await Object.assign(new UserEntity(), { login: 'NAME' }).save();
+      await Object.assign(new UserEntity(), { login: 'NAME' }).save();
       const res = await request(app.getHttpServer())
         .mutate(userDeleteMutation, { id: 1 });
 
-      expect(res.data['user']['delete']).toEqual([1])
+      expect(res.data['user']['delete']).toEqual([1]);
     });
   });
 });

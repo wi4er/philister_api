@@ -3,13 +3,10 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class WithPropertyPropertyInputSchema {
 
-  @Field()
   property: string;
 
-  @Field()
   string: string
 
-  @Field({ nullable: true })
   lang: string;
 
 }

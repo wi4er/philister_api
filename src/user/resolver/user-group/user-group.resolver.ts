@@ -89,16 +89,19 @@ export class UserGroupResolver {
   async propertyString(
     @Args('id')
       id: string,
+    @Args('lang', { nullable: true })
+      lang: string | null,
     @Parent()
       current: { id: number }
   ) {
     return this.stringRepo.findOne({
       where: {
         property: { id },
+        lang: { id: lang },
         parent: { id: current.id },
       },
       loadRelationIds: true,
-    }).then(item => item.string);
+    }).then(item => item?.string ?? '');
   }
 
   @ResolveField()

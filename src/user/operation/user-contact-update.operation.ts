@@ -7,16 +7,18 @@ import { UserContactInputSchema } from "../schema/user-contact/user-contact-inpu
 import { FlagEntity } from "../../flag/model/flag.entity";
 import { LangFlagEntity } from "../../lang/model/lang-flag.entity";
 import { UserContact2flagEntity } from "../model/user-contact2flag.entity";
+import { UpdateOperation } from "../../common/operation/update-operation";
 
-export class UserContactUpdateOperation {
+export class UserContactUpdateOperation extends UpdateOperation<UserContactEntity>{
 
   beforeItem: UserContactEntity;
 
   manager: EntityManager;
 
   constructor(
-    private updateItem: UserContactInputSchema,
+    protected input: UserContactInputSchema,
   ) {
+    super();
   }
 
   async save(manager: EntityManager): Promise<UserContactEntity> {
@@ -25,85 +27,24 @@ export class UserContactUpdateOperation {
 
     await this.manager.transaction(async (trans: EntityManager) => {
       this.beforeItem = await langRepo.findOne({
-        where: { id: this.updateItem.id },
+        where: { id: this.input.id },
         relations: {
           string: { property: true },
           flag: {flag: true},
         },
       });
 
-      this.beforeItem.type = this.updateItem.type;
-      await this.addProperty(trans);
-      await this.addFlag(trans);
+      this.beforeItem.type = this.input.type;
+      await this.addString(trans, UserContact2stringEntity);
+      await this.addFlag(trans, UserContact2flagEntity);
 
       await this.beforeItem.save();
     });
 
     return langRepo.findOne({
-      where: { id: this.updateItem.id },
+      where: { id: this.input.id },
       loadRelationIds: true,
     });
-  }
-
-  async addProperty(trans: EntityManager) {
-    const propRepo = this.manager.getRepository(PropertyEntity);
-
-    const current: { [key: string]: Array<UserContact2stringEntity> } = {};
-
-    for (const item of this.beforeItem.string) {
-      if (!current[item.property.id]) {
-        current[item.property.id] = [];
-      }
-
-      current[item.property.id].push(item);
-    }
-
-    for (const item of this.updateItem.property ?? []) {
-      let inst;
-
-      if (current[item.property]?.[0]) {
-        inst = current[item.property].shift();
-      } else {
-        inst = new UserContact2stringEntity();
-      }
-
-      inst.parent = this.beforeItem;
-      inst.property = await propRepo.findOne({ where: { id: item.property } });
-      inst.string = item.string;
-
-      await trans.save(inst);
-    }
-
-    for (const prop of Object.values(current)) {
-      for (const item of prop) {
-        await trans.delete(UserContact2stringEntity, item.id);
-      }
-    }
-  }
-
-  async addFlag(trans: EntityManager) {
-    const flagRepo = this.manager.getRepository(FlagEntity);
-
-    const current: Array<string> = this.beforeItem.flag.map(it => it.flag.id);
-
-    for (const item of this.updateItem.flag ?? []) {
-      if (current.includes(item)) {
-        current.splice(current.indexOf(item), 1);
-      } else {
-        const inst = new UserContact2flagEntity();
-        inst.parent = this.beforeItem;
-        inst.flag = await flagRepo.findOne({ where: { id: item } });
-
-        await trans.save(inst);
-      }
-    }
-
-    for (const item of current) {
-      await trans.delete(UserContact2flagEntity, {
-        parent: this.beforeItem.id,
-        flag: item
-      });
-    }
   }
 
 }

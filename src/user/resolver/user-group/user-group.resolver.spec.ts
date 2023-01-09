@@ -6,6 +6,9 @@ import { gql } from "apollo-server-express";
 import request from "supertest-graphql";
 import { createConnectionOptions } from "../../../createConnectionOptions";
 import { UserGroupEntity } from "../../model/user-group.entity";
+import { UserGroup2stringEntity } from "../../model/user-group2string.entity";
+import { PropertyEntity } from "../../../property/model/property.entity";
+import { LangEntity } from "../../../lang/model/lang.entity";
 
 const userGroupItemQuery = gql`
   query getUserGroupItem($id: Int!) {
@@ -24,6 +27,17 @@ const userGroupItemQuery = gql`
   }
 `;
 
+const userGroupPropertyStringQuery = gql`
+  query getUserGroupItem($id: Int!, $property: String!, $lang: String) {
+    userGroup {
+      item(id: $id) {
+        id
+        propertyString(id: $property, lang: $lang)
+      }
+    }
+  }
+`;
+
 describe('UserGroupResolver', () => {
   let source;
   let app;
@@ -37,6 +51,34 @@ describe('UserGroupResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+
+  describe('UserGroup properties', () => {
+    test('Should get property string', async () => {
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const parent = await new UserGroupEntity().save();
+      await Object.assign(new UserGroup2stringEntity(), { parent, property, string: 'VALUE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(userGroupPropertyStringQuery, { id: 1, property: 'NAME' })
+        .expectNoErrors()
+
+      expect(res.data['userGroup']['item']['propertyString']).toBe('VALUE');
+    });
+
+    test('Should get property lang string', async () => {
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const parent = await new UserGroupEntity().save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
+      await Object.assign(new UserGroup2stringEntity(), { parent, property, string: 'WRONG' }).save();
+      await Object.assign(new UserGroup2stringEntity(), { parent, property, lang, string: 'VALUE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(userGroupPropertyStringQuery, { id: 1, property: 'NAME', lang: 'EN' })
+        .expectNoErrors()
+
+      expect(res.data['userGroup']['item']['propertyString']).toBe('VALUE');
+    });
+  });
 
   describe('UserGroup parent', () => {
     it('Should get group with parent', async () => {
