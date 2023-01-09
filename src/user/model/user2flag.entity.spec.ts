@@ -66,5 +66,15 @@ describe('User2flag entity', () => {
       expect(list[0].flag[0].id).toBe(1);
       expect(list[0].flag[0].flag.id).toBe('DATA');
     });
+
+    test('Shouldn`t create with duplicate flag', async () => {
+      const flag = await Object.assign(new FlagEntity(), { id: 'DATA' }).save();
+      const parent = await Object.assign(new UserEntity(), { login: 'USER' }).save();
+
+      await Object.assign(new User2flagEntity(), { flag, parent }).save()
+      await expect(
+        Object.assign(new User2flagEntity(), { flag, parent }).save()
+      ).rejects.toThrow('duplicate key');
+    });
   });
 });

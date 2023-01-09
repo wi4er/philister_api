@@ -1,7 +1,7 @@
 import {
   BaseEntity,
   CreateDateColumn,
-  DeleteDateColumn, Entity, ManyToOne,
+  DeleteDateColumn, Entity, Index, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn
@@ -10,6 +10,7 @@ import { FlagEntity } from "../../flag/model/flag.entity";
 import { UserContactEntity } from "./user-contact.entity";
 
 @Entity('user-contact2flag')
+@Index([ 'parent', 'flag' ], { unique: true })
 export class UserContact2flagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

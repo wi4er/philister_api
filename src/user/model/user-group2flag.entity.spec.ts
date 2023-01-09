@@ -63,5 +63,14 @@ describe('UserGroup 2 flag entity', () => {
       expect(inst.flag[0].id).toBe(1);
       expect(inst.flag[0].flag.id).toBe('ACTIVE');
     });
+
+    test('Shouldn`t create duplicate flag', async () => {
+      const parent = await new UserGroupEntity().save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new UserGroup2flagEntity(), { parent, flag }).save();
+      await expect(
+        Object.assign(new UserGroup2flagEntity(), { parent, flag }).save()
+      ).rejects.toThrow('duplicate key');
+    });
   });
 });

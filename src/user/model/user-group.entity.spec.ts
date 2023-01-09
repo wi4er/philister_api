@@ -1,7 +1,6 @@
 import { DataSource } from "typeorm/data-source/DataSource";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
-import { UserContactEntity, UserContactType } from "./user-contact.entity";
 import { UserGroupEntity } from "./user-group.entity";
 
 describe('UserGroup entity', () => {

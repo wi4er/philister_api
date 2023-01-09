@@ -2,7 +2,7 @@ import {
   BaseEntity,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity, ManyToOne,
+  Entity, Index, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
 } from "typeorm";
@@ -10,6 +10,7 @@ import { FlagEntity } from "../../flag/model/flag.entity";
 import { UserGroupEntity } from "./user-group.entity";
 
 @Entity('user-group2flag')
+@Index([ 'parent', 'flag' ], { unique: true })
 export class UserGroup2flagEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

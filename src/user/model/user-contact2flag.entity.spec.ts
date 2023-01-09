@@ -73,5 +73,18 @@ describe('UserContact 2 flag entity', () => {
       expect(inst.flag[0].id).toBe(1);
       expect(inst.flag[0].flag.id).toBe('ACTIVE');
     });
+
+    test('Shouldn`t create duplicate flag', async () => {
+      const parent = await Object.assign(new UserContactEntity(), {
+        id: 'EMAIL',
+        type: UserContactType.EMAIL,
+      }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new UserContact2flagEntity(), { parent, flag }).save();
+
+      await expect(
+        Object.assign(new UserContact2flagEntity(), { parent, flag }).save()
+      ).rejects.toThrow('duplicate key');
+    });
   });
 });
