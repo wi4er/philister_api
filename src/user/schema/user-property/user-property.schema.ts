@@ -5,7 +5,7 @@ import { User2userEntity } from "../../model/user2user.entity";
 import { User2valueEntity } from "../../model/user2value.entity";
 import { User2descriptionEntity } from "../../model/user2description.entity";
 
-@InterfaceType({
+@InterfaceType('UserProperty', {
   resolveType(prop) {
     if (prop instanceof User2stringEntity) {
       return 'UserString';

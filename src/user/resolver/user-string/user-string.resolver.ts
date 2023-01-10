@@ -11,7 +11,6 @@ export class UserStringResolver {
   constructor(
     @InjectRepository(PropertyEntity)
     private propertyRepo: Repository<PropertyEntity>,
-
     @InjectRepository(LangEntity)
     private langRepo: Repository<LangEntity>,
   ) {

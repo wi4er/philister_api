@@ -6,10 +6,10 @@ import { LangSchema } from "../../../lang/schema/lang.schema";
 @ObjectType(
   'UserString',
   {
-    implements: () => UserPropertySchema
+    implements: () => [ UserPropertySchema ]
   }
 )
-export class UserStringSchema {
+export class UserStringSchema extends UserPropertySchema {
 
   @Field(type => Int)
   id: number;
@@ -20,7 +20,7 @@ export class UserStringSchema {
   @Field(type => PropertySchema)
   property: PropertySchema
 
-  @Field(type => LangSchema)
+  @Field(type => LangSchema, { nullable: true })
   lang: LangSchema;
 
 }

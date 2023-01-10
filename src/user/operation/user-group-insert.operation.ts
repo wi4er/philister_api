@@ -37,7 +37,7 @@ export class UserGroupInsertOperation extends InsertOperation<UserGroupEntity> {
     });
 
     return groupRepo.findOne({
-      where: { id: this.input.id },
+      where: { id: this.created.id },
       loadRelationIds: true,
     });
   }

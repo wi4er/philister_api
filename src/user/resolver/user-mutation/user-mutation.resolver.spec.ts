@@ -60,7 +60,7 @@ const userDeleteMutation = gql`
   }
 `;
 
-describe('UserRootMutationResolver', () => {
+describe('UserMutationResolver', () => {
   let source;
   let app;
 
@@ -79,6 +79,22 @@ describe('UserRootMutationResolver', () => {
       const res = await request(app.getHttpServer())
         .mutate(userAddMutation, {
           item: {
+            login: 'admin',
+            contact: [],
+            property: [],
+            flag: [],
+          }
+        });
+
+      expect(res.data['user']['add']['id']).toBe(1);
+      expect(res.data['user']['add']['login']).toBe('admin');
+    });
+
+    it('Should add user with 0 id', async () => {
+      const res = await request(app.getHttpServer())
+        .mutate(userAddMutation, {
+          item: {
+            id: 0,
             login: 'admin',
             contact: [],
             property: [],

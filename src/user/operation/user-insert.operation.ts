@@ -16,7 +16,6 @@ export class UserInsertOperation extends InsertOperation<UserEntity> {
     super();
 
     this.created = new UserEntity();
-    this.created.id = input.id;
     this.created.login = input.login;
   }
 
@@ -32,7 +31,7 @@ export class UserInsertOperation extends InsertOperation<UserEntity> {
     });
 
     return userRepo.findOne({
-      where: { id: this.input.id },
+      where: { id: this.created.id },
       loadRelationIds: true,
     });
   }

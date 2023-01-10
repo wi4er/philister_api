@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-interface UserPropertySchema {
+interface UserProperty {
   id: Int!
   string: String!
   property: Property!
@@ -136,8 +136,8 @@ type User implements WithFlagSchema {
   hash: String
   contact: [UserUserContact!]!
   group: [User!]
-  propertyList: [UserPropertySchema!]!
-  propertyItem(id: String!): UserPropertySchema
+  propertyList: [UserProperty!]!
+  propertyItem(id: String!): UserProperty
   propertyString(id: String!, lang: String): String
 }
 
@@ -269,11 +269,11 @@ type Lang {
   flagString: [String!]!
 }
 
-type UserString implements UserPropertySchema {
+type UserString implements UserProperty {
   id: Int!
   string: String!
   property: Property!
-  lang: Lang!
+  lang: Lang
 }
 
 type DirectoryString implements DirectoryProperty {
@@ -317,7 +317,7 @@ type Directory {
   flagString: [String!]!
 }
 
-type UserValue implements UserPropertySchema {
+type UserValue implements UserProperty {
   id: Int!
   string: String!
   property: Property!
@@ -325,7 +325,7 @@ type UserValue implements UserPropertySchema {
   value: Value!
 }
 
-type UserUser implements UserPropertySchema {
+type UserUser implements UserProperty {
   id: Int!
   string: String!
   property: Property!
@@ -339,7 +339,7 @@ type UserContactString implements UserContactProperty {
   version: Int!
   string: String!
   property: Property!
-  lang: Lang!
+  lang: Lang
 }
 
 type UserGroupString implements UserGroupProperty {

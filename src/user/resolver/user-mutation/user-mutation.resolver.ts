@@ -1,6 +1,6 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
-import { EntityManager, In, Repository } from "typeorm";
+import { InjectEntityManager } from "@nestjs/typeorm";
+import { EntityManager } from "typeorm";
 import { UserUpdateOperation } from "../../operation/user-update.operation";
 import { UserInputSchema } from "../../schema/user-input.schema";
 import { UserEntity } from "../../model/user.entity";
@@ -24,6 +24,7 @@ export class UserMutationResolver {
     @Args('item')
       item: UserInputSchema
   ): Promise<UserEntity> {
+    console.log(item)
     return new UserInsertOperation(item).save(this.entityManager);
   }
 

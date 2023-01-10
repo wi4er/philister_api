@@ -1,15 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { UserContactStringResolver } from './user-contact-string.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../../createConnectionOptions";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { UserEntity } from "../../model/user.entity";
-import { User2stringEntity } from "../../model/user2string.entity";
 import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
 import { UserContactEntity, UserContactType } from "../../model/user-contact.entity";
 import { UserContact2stringEntity } from "../../model/user-contact2string.entity";
+import { LangEntity } from "../../../lang/model/lang.entity";
 
 
 const contactItemQuery = gql`
@@ -22,6 +21,12 @@ const contactItemQuery = gql`
           string
           property {
             id
+          }
+          
+          ... on UserContactString {
+            lang {
+              id
+            }
           }
         }
       }
@@ -55,6 +60,22 @@ describe('UserContactStringResolver', () => {
 
       expect(res.data['userContact']['item']['propertyList']).toHaveLength(1);
       expect(res.data['userContact']['item']['propertyList'][0]['string']).toBe('VALUE');
+    });
+
+    test('Should get user with lang property', async () => {
+      const property = await Object.assign(new PropertyEntity(), { id: 'name' }).save();
+      const parent = await Object.assign(new UserContactEntity(), { id: 'phone', type: UserContactType.PHONE }).save();
+      const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
+      await Object.assign(new UserContact2stringEntity(), { string: "VALUE", property, parent, lang }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(contactItemQuery, { id: 'phone' })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['item']['propertyList']).toHaveLength(1);
+      expect(res.data['userContact']['item']['propertyList'][0]['string']).toBe('VALUE');
+      expect(res.data['userContact']['item']['propertyList'][0]['property']['id']).toBe('name');
+      expect(res.data['userContact']['item']['propertyList'][0]['lang']['id']).toBe('EN');
     });
   });
 });
