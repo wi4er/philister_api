@@ -38,6 +38,8 @@ import { UserGroupEntity } from "./model/user-group.entity";
 import { UserGroup2stringEntity } from "./model/user-group2string.entity";
 import { UserGroup2flagEntity } from "./model/user-group2flag.entity";
 import { UserGroupStringResolver } from './resolver/user-group-string/user-group-string.resolver';
+import { FlagEntity } from "../flag/model/flag.entity";
+import { UserUserContactResolver } from './resolver/user-user-contact/user-user-contact.resolver';
 
 @Module({
   imports: [
@@ -47,7 +49,7 @@ import { UserGroupStringResolver } from './resolver/user-group-string/user-group
       UserGroupEntity, UserGroup2stringEntity, UserGroup2flagEntity,
       UserContactEntity, UserContact2flagEntity, UserContact2stringEntity,
       PropertyEntity, PropertyPropertyEntity,
-      LangEntity,
+      LangEntity, FlagEntity,
     ])
   ],
   providers: [
@@ -70,6 +72,7 @@ import { UserGroupStringResolver } from './resolver/user-group-string/user-group
     UserContactResolver,
     UserContactStringResolver,
     UserGroupStringResolver,
+    UserUserContactResolver,
   ],
   controllers: [UserController, AuthController, ForgotController]
 })

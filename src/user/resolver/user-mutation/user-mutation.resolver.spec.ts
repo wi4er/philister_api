@@ -7,6 +7,7 @@ import request from "supertest-graphql";
 import { UserEntity } from "../../model/user.entity";
 import { FlagEntity } from "../../../flag/model/flag.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
+import { UserContactEntity, UserContactType } from "../../model/user-contact.entity";
 
 const userAddMutation = gql`
   mutation AddUser($item: UserInput!) {
@@ -141,6 +142,27 @@ describe('UserMutationResolver', () => {
       expect(res.data['user']['add']['propertyList']).toHaveLength(1);
       expect(res.data['user']['add']['propertyList'][0]['string']).toBe('XXL');
       expect(res.data['user']['add']['propertyList'][0]['property']['id']).toBe('SIZE');
+    });
+
+    test('Should add user with contact', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(userAddMutation, {
+          item: {
+            login: 'admin',
+            contact: [{
+              contact: 'mail',
+              value: 'user@mail.com'
+            }],
+            property: [],
+            flag: [],
+          }
+        });
+
+      expect(res.data['user']['add']['contact']).toHaveLength(1);
+      expect(res.data['user']['add']['contact'][0]['value']).toBe('user@mail.com');
+      expect(res.data['user']['add']['contact'][0]['contact']['id']).toBe('mail');
     });
   });
 

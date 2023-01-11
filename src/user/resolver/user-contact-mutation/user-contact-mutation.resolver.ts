@@ -6,6 +6,8 @@ import { UserContactUpdateOperation } from "../../operation/user-contact-update.
 import { UserContactEntity } from "../../model/user-contact.entity";
 import { UserContactMutationSchema } from "../../schema/user-contact/user-contact-mutation.schema";
 import { UserContactInputSchema } from "../../schema/user-contact/user-contact-input.schema";
+import { FlagEntity } from "../../../flag/model/flag.entity";
+import { UserContact2flagEntity } from "../../model/user-contact2flag.entity";
 
 @Resolver(of => UserContactMutationSchema)
 export class UserContactMutationResolver {
@@ -15,6 +17,10 @@ export class UserContactMutationResolver {
     private entityManager: EntityManager,
     @InjectRepository(UserContactEntity)
     private contactRepo: Repository<UserContactEntity>,
+    @InjectRepository(FlagEntity)
+    private flagRepo: Repository<FlagEntity>,
+    @InjectRepository(UserContact2flagEntity)
+    private contactStringRepo: Repository<UserContact2flagEntity>,
   ) {
 
   }
@@ -33,6 +39,25 @@ export class UserContactMutationResolver {
       item: UserContactInputSchema
   ): Promise<UserContactEntity> {
     return new UserContactUpdateOperation(item).save(this.entityManager);
+  }
+
+  @ResolveField()
+  async updateFlag(
+    @Args('id')
+      id: string,
+    @Args('flag')
+      flag: string
+  ): Promise<UserContactEntity> {
+    const parent = await this.contactRepo.findOne({ where: { id }, relations: { flag: { flag: true } } });
+    const rel = parent.flag.find(item => item.flag.id === flag);
+
+    if (rel) {
+      await this.contactStringRepo.delete({id: rel.id});
+    } else {
+      await Object.assign(new UserContact2flagEntity(), { parent, flag }).save();
+    }
+
+    return await this.contactRepo.findOne({ where: { id }, loadRelationIds: true });
   }
 
   @ResolveField()

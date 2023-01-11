@@ -56,4 +56,7 @@ export class User2userContactEntity extends BaseEntity {
   })
   verify: boolean;
 
+  @Column()
+  verifyCode: string;
+
 }

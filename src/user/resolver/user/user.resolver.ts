@@ -8,6 +8,8 @@ import { User2userEntity } from "../../model/user2user.entity";
 import { User2valueEntity } from "../../model/user2value.entity";
 import { DirectoryEntity } from "../../../directory/model/directory.entity";
 import { User2flagEntity } from "../../model/user2flag.entity";
+import { UserContactEntity } from "../../model/user-contact.entity";
+import { User2userContactEntity } from "../../model/user2user-contact.entity";
 
 @Resolver(of => UserSchema)
 export class UserResolver {
@@ -23,6 +25,8 @@ export class UserResolver {
     private flagRepo: Repository<User2flagEntity>,
     @InjectRepository(UserEntity)
     private userRepo: Repository<UserEntity>,
+    @InjectRepository(User2userContactEntity)
+    private contactRepo: Repository<User2userContactEntity>,
   ) {
   }
 
@@ -40,6 +44,17 @@ export class UserResolver {
       current: DirectoryEntity
   ) {
     return new Date(current.updated_at).toISOString();
+  }
+
+  @ResolveField()
+  async contact(
+    @Parent()
+      current: { id: number },
+  ) {
+    return this.contactRepo.find({
+      where: { parent: { id: current.id } },
+      loadRelationIds: true,
+    });
   }
 
   @ResolveField()
@@ -70,7 +85,7 @@ export class UserResolver {
     @Args('id')
       id: string,
     @Parent()
-      current: { id: number }
+      current: { id: number },
   ) {
     return this.userStringRepo.findOne({
       where: {

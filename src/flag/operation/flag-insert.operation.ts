@@ -5,6 +5,7 @@ import { FlagFlagEntity } from "../model/flag-flag.entity";
 import { FlagInputSchema } from "../schema/flag-input.schema";
 import { FlagEntity } from "../model/flag.entity";
 import { LangEntity } from "../../lang/model/lang.entity";
+import { CommonFlagEntity } from "../../common/model/common-flag.entity";
 
 export class FlagInsertOperation {
 
@@ -12,7 +13,7 @@ export class FlagInsertOperation {
   manager: EntityManager;
 
   constructor(
-    private item: FlagInputSchema
+    private item: FlagInputSchema,
   ) {
     this.created = new FlagEntity();
     this.created.id = this.item.id;

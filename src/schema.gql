@@ -197,6 +197,9 @@ type UserContactMutation {
 
   """Updating existent user contact"""
   update(item: UserContactInput!): UserContact!
+
+  """Updating flag of user contact"""
+  updateFlag(id: String!, flag: String!): UserContact!
 }
 
 input UserContactInput {

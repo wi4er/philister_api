@@ -19,4 +19,9 @@ export class UserContactMutationSchema {
     { description: 'Updating existent user contact' }
   ) update: UserContactSchema;
 
+  @Field(
+    type => UserContactSchema,
+    { description: 'Updating flag of user contact' }
+  ) updateFlag: UserContactSchema;
+
 }

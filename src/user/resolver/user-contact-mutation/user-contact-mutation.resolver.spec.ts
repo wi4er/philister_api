@@ -48,6 +48,17 @@ const updateUserContact = gql`
   }
 `;
 
+const updateUserContactFlagMutation = gql`
+  mutation UpdateContactFlag($id: String!, $flag: String!) {
+    userContact {
+      updateFlag(id: $id, flag: $flag) {
+        id
+        flagString
+      }
+    }
+  }
+`;
+
 const deleteUserContact = gql`
   mutation DeleteUserContact($id: [String!]!) {
     userContact {
@@ -279,6 +290,31 @@ describe('UserContactMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['userContact']['update']['flagString']).toEqual([]);
+    });
+  });
+
+  describe('UserContact flag update', () => {
+    test('Should update user contact flag', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContactFlagMutation, { id: 'mail', flag: 'ACTIVE'})
+        .expectNoErrors();
+
+      expect(res.data['userContact']['updateFlag']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should remove user contact flag', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new UserContact2flagEntity(), { parent: 'mail', flag: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContactFlagMutation, { id: 'mail', flag: 'ACTIVE'})
+        .expectNoErrors();
+
+      expect(res.data['userContact']['updateFlag']['flagString']).toEqual([]);
     });
   });
 
