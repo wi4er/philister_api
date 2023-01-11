@@ -10,6 +10,7 @@ import { PropertyEntity } from "../../../property/model/property.entity";
 import { LangEntity } from "../../../lang/model/lang.entity";
 import { FlagEntity } from "../../../flag/model/flag.entity";
 import { UserContact2flagEntity } from "../../model/user-contact2flag.entity";
+import { UserContact2stringEntity } from "../../model/user-contact2string.entity";
 
 const addUserContact = gql`
   mutation AddUserContact($item: UserContactInput!) {
@@ -202,7 +203,9 @@ describe('UserContactMutationResolver', () => {
       expect(res.data['userContact']['update']['id']).toBe('mail');
       expect(res.data['userContact']['update']['type']).toBe('PHONE');
     });
+  });
 
+  describe('UserContact property update', () => {
     test('Should add property to contact', async () => {
       await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
@@ -212,10 +215,10 @@ describe('UserContactMutationResolver', () => {
           item: {
             id: 'mail',
             type: 'PHONE',
-            property: [{
+            property: [ {
               property: 'NAME',
               string: 'VALUE'
-            }],
+            } ],
             flag: [],
           }
         })
@@ -224,6 +227,63 @@ describe('UserContactMutationResolver', () => {
       expect(res.data['userContact']['update']['propertyList']).toHaveLength(1)
     });
 
+    test('Should remove property from contact', async () => {
+      const parent = await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new UserContact2stringEntity(), { parent, property, string: 'VALUE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContact, {
+          item: {
+            id: 'mail',
+            type: 'PHONE',
+            property: [],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['update']['propertyList']).toHaveLength(0)
+    });
+
+    test('Should change properties in contact', async () => {
+      const parent = await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      for (let i = 0; i < 10; i++) {
+        await Object.assign(new PropertyEntity(), { id: `NAME_${i}` }).save();
+      }
+
+      for (let i = 0; i < 5; i++) {
+        await Object.assign(new UserContact2stringEntity(), {
+          parent,
+          property: `NAME_${i}`,
+          string: `VALUE_${i}`,
+        }).save();
+      }
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContact, {
+          item: {
+            id: 'mail',
+            type: 'PHONE',
+            property: [{
+              property: 'NAME_6',
+              string: 'VALUE_6',
+            }, {
+              property: 'NAME_8',
+              string: 'VALUE_8',
+            }],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['userContact']['update']['propertyList']).toHaveLength(2)
+      expect(res.data['userContact']['update']['propertyList'][0]['property']['id']).toBe('NAME_6');
+      expect(res.data['userContact']['update']['propertyList'][1]['property']['id']).toBe('NAME_8');
+    });
+  });
+
+  describe('UserContact flag update', () => {
     test('Should add flag to user contact', async () => {
       await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
       await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
@@ -290,31 +350,6 @@ describe('UserContactMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['userContact']['update']['flagString']).toEqual([]);
-    });
-  });
-
-  describe('UserContact flag update', () => {
-    test('Should update user contact flag', async () => {
-      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
-      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
-
-      const res = await request(app.getHttpServer())
-        .mutate(updateUserContactFlagMutation, { id: 'mail', flag: 'ACTIVE'})
-        .expectNoErrors();
-
-      expect(res.data['userContact']['updateFlag']['flagString']).toEqual([ 'ACTIVE' ]);
-    });
-
-    test('Should remove user contact flag', async () => {
-      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
-      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
-      await Object.assign(new UserContact2flagEntity(), { parent: 'mail', flag: 'ACTIVE' }).save();
-
-      const res = await request(app.getHttpServer())
-        .mutate(updateUserContactFlagMutation, { id: 'mail', flag: 'ACTIVE'})
-        .expectNoErrors();
-
-      expect(res.data['userContact']['updateFlag']['flagString']).toEqual([]);
     });
   });
 

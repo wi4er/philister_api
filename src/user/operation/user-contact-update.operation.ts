@@ -1,15 +1,12 @@
 import { EntityManager } from "typeorm";
-import { PropertyEntity } from "../../property/model/property.entity";
-import { User2stringEntity } from "../model/user2string.entity";
 import { UserContactEntity } from "../model/user-contact.entity";
 import { UserContact2stringEntity } from "../model/user-contact2string.entity";
 import { UserContactInputSchema } from "../schema/user-contact/user-contact-input.schema";
-import { FlagEntity } from "../../flag/model/flag.entity";
-import { LangFlagEntity } from "../../lang/model/lang-flag.entity";
 import { UserContact2flagEntity } from "../model/user-contact2flag.entity";
-import { UpdateOperation } from "../../common/operation/update-operation";
+import { PropertyUpdateOperation } from "../../common/operation/property-update.operation";
+import { FlagUpdateOperation } from "../../common/operation/flag-update.operation";
 
-export class UserContactUpdateOperation extends UpdateOperation<UserContactEntity>{
+export class UserContactUpdateOperation {
 
   beforeItem: UserContactEntity;
 
@@ -18,7 +15,7 @@ export class UserContactUpdateOperation extends UpdateOperation<UserContactEntit
   constructor(
     protected input: UserContactInputSchema,
   ) {
-    super();
+
   }
 
   async save(manager: EntityManager): Promise<UserContactEntity> {
@@ -35,8 +32,8 @@ export class UserContactUpdateOperation extends UpdateOperation<UserContactEntit
       });
 
       this.beforeItem.type = this.input.type;
-      await this.addString(trans, UserContact2stringEntity);
-      await this.addFlag(trans, UserContact2flagEntity);
+      await new PropertyUpdateOperation(trans, UserContact2stringEntity).save(this.beforeItem, this.input);
+      await new FlagUpdateOperation(trans, UserContact2flagEntity).save(this.beforeItem, this.input);
 
       await this.beforeItem.save();
     });

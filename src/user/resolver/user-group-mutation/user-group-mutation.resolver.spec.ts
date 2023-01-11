@@ -71,8 +71,8 @@ describe('UserGroupMutationResolver', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('User addition', () => {
-    it('should be defined', async () => {
+  describe('UserGroup addition', () => {
+    it('Should add user group', async () => {
       const res = await request(app.getHttpServer())
         .query(userGroupAdditionMutation, {
           item: {

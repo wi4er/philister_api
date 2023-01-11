@@ -8,6 +8,7 @@ import { UserEntity } from "../../model/user.entity";
 import { FlagEntity } from "../../../flag/model/flag.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { UserContactEntity, UserContactType } from "../../model/user-contact.entity";
+import { User2stringEntity } from "../../model/user2string.entity";
 
 const userAddMutation = gql`
   mutation AddUser($item: UserInput!) {
@@ -41,6 +42,13 @@ const userUpdateMutation = gql`
       update(item: $item) {
         id
         login
+        propertyList {
+          id
+          string
+          property {
+            id
+          }
+        }
         contact {
           id
           value
@@ -181,6 +189,48 @@ describe('UserMutationResolver', () => {
         });
 
       expect(res.data['user']['update']['login']).toBe('admin');
+    });
+
+    test('Should add property to user', async () => {
+      const user = await Object.assign(new UserEntity(), { login: 'user' }).save();
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(userUpdateMutation, {
+          item: {
+            id: user.id,
+            login: 'admin',
+            contact: [],
+            property: [{
+              property: 'NAME',
+              string: 'John',
+            }],
+            flag: [],
+          }
+        });
+
+      expect(res.data['user']['update']['propertyList']).toHaveLength(1);
+      expect(res.data['user']['update']['propertyList'][0]['string']).toBe('John');
+      expect(res.data['user']['update']['propertyList'][0]['property']['id']).toBe('NAME');
+    });
+
+    test('Should remove property from user', async () => {
+      const parent = await Object.assign(new UserEntity(), { login: 'user' }).save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new User2stringEntity(), { parent, property, string: 'VALUE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(userUpdateMutation, {
+          item: {
+            id: 1,
+            login: 'admin',
+            contact: [],
+            property: [],
+            flag: [],
+          }
+        });
+
+      expect(res.data['user']['update']['propertyList']).toHaveLength(0);
     });
   });
 

@@ -1,8 +1,8 @@
 import { UserEntity } from "../model/user.entity";
 import { EntityManager } from "typeorm";
 import { UserInputSchema } from "../schema/user-input.schema";
-import { PropertyEntity } from "../../property/model/property.entity";
 import { User2stringEntity } from "../model/user2string.entity";
+import { PropertyUpdateOperation } from "../../common/operation/property-update.operation";
 
 export class UserUpdateOperation {
 
@@ -10,68 +10,33 @@ export class UserUpdateOperation {
   manager: EntityManager;
 
   constructor(
-    private updateItem: UserInputSchema
+    private input: UserInputSchema
   ) {
   }
 
   async save(manager: EntityManager): Promise<UserEntity> {
     this.manager = manager;
-    const langRepo = this.manager.getRepository(UserEntity);
+    const userRepo = this.manager.getRepository(UserEntity);
 
     await this.manager.transaction(async (trans: EntityManager) => {
-      this.beforeItem = await langRepo.findOne({
-        where: { id: this.updateItem.id },
+      this.beforeItem = await userRepo.findOne({
+        where: { id: this.input.id },
         relations: {
           string: { property: true },
-          flag: {flag: true},
+          flag: { flag: true },
         },
       });
 
-      this.beforeItem.login = this.updateItem.login;
-      await this.addProperty(trans);
-
+      this.beforeItem.login = this.input.login;
       await this.beforeItem.save();
+
+      await new PropertyUpdateOperation(trans, User2stringEntity).save(this.beforeItem, this.input);
     });
 
-    return langRepo.findOne({
-      where: { id: this.updateItem.id },
+    return userRepo.findOne({
+      where: { id: this.input.id },
       loadRelationIds: true,
     });
   }
 
-  async addProperty(trans: EntityManager) {
-    const propRepo = this.manager.getRepository(PropertyEntity);
-
-    const current: { [key: string]: Array<User2stringEntity> } = {};
-
-    for (const item of this.beforeItem.string) {
-      if (!current[item.property.id]) {
-        current[item.property.id] = [];
-      }
-
-      current[item.property.id].push(item);
-    }
-
-    for (const item of this.updateItem.property ?? []) {
-      let inst;
-
-      if (current[item.property]?.[0]) {
-        inst = current[item.property].shift();
-      } else {
-        inst = new User2stringEntity();
-      }
-
-      inst.parent = this.beforeItem;
-      inst.property = await propRepo.findOne({ where: { id: item.property } });
-      inst.string = item.string;
-
-      await trans.save(inst);
-    }
-
-    for (const prop of Object.values(current)) {
-      for (const item of prop) {
-        await trans.delete(User2stringEntity, item.id);
-      }
-    }
-  }
 }

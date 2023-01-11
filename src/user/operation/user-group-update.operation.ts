@@ -3,9 +3,10 @@ import { UserGroupEntity } from "../model/user-group.entity";
 import { UserGroupInputSchema } from "../schema/user-group/user-group-input.schema";
 import { UserGroup2stringEntity } from "../model/user-group2string.entity";
 import { UserGroup2flagEntity } from "../model/user-group2flag.entity";
-import { UpdateOperation } from "../../common/operation/update-operation";
+import { PropertyUpdateOperation } from "../../common/operation/property-update.operation";
+import { FlagUpdateOperation } from "../../common/operation/flag-update.operation";
 
-export class UserGroupUpdateOperation extends UpdateOperation<UserGroupEntity> {
+export class UserGroupUpdateOperation {
 
   beforeItem: UserGroupEntity;
 
@@ -14,7 +15,7 @@ export class UserGroupUpdateOperation extends UpdateOperation<UserGroupEntity> {
   constructor(
     protected input: UserGroupInputSchema,
   ) {
-    super();
+
   }
 
   async save(manager: EntityManager): Promise<UserGroupEntity> {
@@ -30,8 +31,8 @@ export class UserGroupUpdateOperation extends UpdateOperation<UserGroupEntity> {
         },
       });
 
-      await this.addString(trans, UserGroup2stringEntity);
-      await this.addFlag(trans, UserGroup2flagEntity);
+      await new PropertyUpdateOperation(trans, UserGroup2stringEntity).save(this.beforeItem, this.input);
+      await new FlagUpdateOperation(trans, UserGroup2flagEntity).save(this.beforeItem, this.input);
 
       await this.beforeItem.save();
     });
