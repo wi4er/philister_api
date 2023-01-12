@@ -1,7 +1,7 @@
 import {
   BaseEntity,
   CreateDateColumn, DeleteDateColumn,
-  Entity,
+  Entity, Index,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
@@ -10,6 +10,7 @@ import { UserEntity } from "./user.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
 
 @Entity('user2user')
+@Index([ 'user', 'parent', 'property'], { unique: true })
 export class User2userEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

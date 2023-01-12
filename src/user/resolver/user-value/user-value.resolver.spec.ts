@@ -17,7 +17,7 @@ const userItemQuery = gql`
       item(id: $id) {
         id
         login
-        property {
+        propertyList {
           id
           string
           property {
@@ -54,21 +54,22 @@ describe('UserValueResolver', () => {
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
       await Object.assign(new ValueEntity(), { id: 'LONDON', directory: 'CITY' }).save();
       await Object.assign(new PropertyEntity(), { id: 'CURRENT_CITY' }).save();
+      const user = await Object.assign(new UserEntity(), { login: 'user' }).save();
 
-      const user = await Object.assign(new UserEntity(), {
-        login: 'user',
-        value: [
-          await Object.assign(new User2valueEntity(), { property: 'CURRENT_CITY', value: 'LONDON' }).save(),
-        ]
+      await Object.assign(new User2valueEntity(), {
+        property: 'CURRENT_CITY',
+        value: 'LONDON',
+        parent: 1,
       }).save();
 
       const res = await request(app.getHttpServer())
         .query(userItemQuery, { id: user.id })
         .expectNoErrors();
 
-      expect(res.data['user']['item']['property']).toHaveLength(1);
-      expect(res.data['user']['item']['property'][0]['string']).toBe('LONDON');
-      expect(res.data['user']['item']['property'][0]['property']['id']).toBe('CURRENT_CITY');
+      expect(res.data['user']['item']['propertyList']).toHaveLength(1);
+      expect(res.data['user']['item']['propertyList'][0]['string']).toBe('LONDON');
+      expect(res.data['user']['item']['propertyList'][0]['property']['id']).toBe('CURRENT_CITY');
+      expect(res.data['user']['item']['propertyList'][0]['value']['id']).toBe('LONDON');
     });
   });
 });

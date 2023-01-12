@@ -11,6 +11,7 @@ import { ValueSchema } from "../../../directory/schema/value.schema";
   }
 )
 export class UserValueSchema {
+
   @Field(type => Int)
   id: number;
 
@@ -25,4 +26,5 @@ export class UserValueSchema {
 
   @Field(type => ValueSchema)
   value: ValueSchema;
+
 }

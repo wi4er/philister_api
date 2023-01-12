@@ -13,4 +13,9 @@ export class UserMutationSchema {
   @Field(type => UserSchema, { description: 'Updating existent user' })
   update: UserSchema;
 
+  @Field(
+    type => UserSchema,
+    { description: 'Updating flag of user' }
+  ) updateFlag: UserSchema;
+
 }

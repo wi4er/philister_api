@@ -185,7 +185,7 @@ describe('UserContactMutationResolver', () => {
     });
   });
 
-  describe('UserContact update', () => {
+  describe('UserContact field update', () => {
     test('Should update contact', async () => {
       await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
 
@@ -350,6 +350,31 @@ describe('UserContactMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['userContact']['update']['flagString']).toEqual([]);
+    });
+  });
+
+  describe('UserContact updateFlag mutation', () => {
+    test('Should update user contact flag', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContactFlagMutation, { id: 'mail', flag: 'ACTIVE'})
+        .expectNoErrors();
+
+      expect(res.data['userContact']['updateFlag']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should remove user contact flag', async () => {
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new UserContact2flagEntity(), { parent: 'mail', flag: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserContactFlagMutation, { id: 'mail', flag: 'ACTIVE'})
+        .expectNoErrors();
+
+      expect(res.data['userContact']['updateFlag']['flagString']).toEqual([]);
     });
   });
 

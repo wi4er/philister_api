@@ -157,6 +157,9 @@ type UserMutation {
 
   """Updating existent user"""
   update(item: UserInput!): User!
+
+  """Updating flag of user"""
+  updateFlag(id: Int!, flag: String!): User!
 }
 
 input UserInput {
@@ -352,6 +355,14 @@ type UserGroupString implements UserGroupProperty {
   version: Int!
   string: String!
   property: Property!
+  lang: Lang
+}
+
+type UserDescription implements UserProperty {
+  id: Int!
+  string: String!
+  property: Property!
+  description: String!
   lang: Lang
 }
 

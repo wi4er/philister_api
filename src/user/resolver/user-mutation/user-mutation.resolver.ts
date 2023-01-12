@@ -1,12 +1,13 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { InjectEntityManager } from "@nestjs/typeorm";
-import { EntityManager } from "typeorm";
+import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { UserUpdateOperation } from "../../operation/user-update.operation";
 import { UserInputSchema } from "../../schema/user-input.schema";
 import { UserEntity } from "../../model/user.entity";
 import { UserMutationSchema } from "../../schema/user-mutation.schema";
 import { UserInsertOperation } from "../../operation/user-insert.operation";
 import { UserService } from "../../service/user/user.service";
+import { User2flagEntity } from "../../model/user2flag.entity";
 
 @Resolver(of => UserMutationSchema)
 export class UserMutationResolver {
@@ -15,6 +16,10 @@ export class UserMutationResolver {
     @InjectEntityManager()
     private entityManager: EntityManager,
     private userService: UserService,
+    @InjectRepository(User2flagEntity)
+    private flagRepo: Repository<User2flagEntity>,
+    @InjectRepository(UserEntity)
+    private userRepo: Repository<UserEntity>,
   ) {
   }
 
@@ -32,6 +37,32 @@ export class UserMutationResolver {
       item: UserInputSchema
   ) {
     return new UserUpdateOperation(item).save(this.entityManager);
+  }
+
+  @ResolveField()
+  async updateFlag(
+    @Args('id', { type: () => Int })
+      id: number,
+    @Args('flag')
+      flag: string
+  ): Promise<UserEntity> {
+    const rel = await this.flagRepo.findOne({
+      where: {
+        parent: { id },
+        flag: { id: flag },
+      }
+    });
+
+    if (rel) {
+      await this.flagRepo.delete({ id: rel.id });
+    } else {
+      await Object.assign(new User2flagEntity(), { parent: id, flag }).save();
+    }
+
+    return await this.userRepo.findOne({
+      where: { id },
+      loadRelationIds: true,
+    });
   }
 
   @ResolveField()

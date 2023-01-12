@@ -5,7 +5,7 @@ import {
   OneToMany,
   BaseEntity,
   CreateDateColumn,
-  UpdateDateColumn, DeleteDateColumn, VersionColumn
+  UpdateDateColumn, DeleteDateColumn, VersionColumn, Check
 } from 'typeorm';
 import { User2stringEntity } from './user2string.entity';
 import { User2flagEntity } from "./user2flag.entity";
@@ -18,6 +18,7 @@ import { WithFlagEntity } from "../../common/model/with-flag.entity";
 import { WithStringEntity } from "../../common/model/with-string.entity";
 
 @Entity('user')
+@Check('not_empty_login', '"login" > \'\'')
 export class UserEntity
   extends BaseEntity
   implements WithFlagEntity<UserEntity>, WithStringEntity<UserEntity> {

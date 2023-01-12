@@ -8,15 +8,17 @@ import { User2userEntity } from "../../model/user2user.entity";
 import { User2valueEntity } from "../../model/user2value.entity";
 import { DirectoryEntity } from "../../../directory/model/directory.entity";
 import { User2flagEntity } from "../../model/user2flag.entity";
-import { UserContactEntity } from "../../model/user-contact.entity";
 import { User2userContactEntity } from "../../model/user2user-contact.entity";
+import { User2descriptionEntity } from "../../model/user2description.entity";
 
 @Resolver(of => UserSchema)
 export class UserResolver {
 
   constructor(
     @InjectRepository(User2stringEntity)
-    private userStringRepo: Repository<User2stringEntity>,
+    private stringRepo: Repository<User2stringEntity>,
+    @InjectRepository(User2descriptionEntity)
+    private descriptionRepo: Repository<User2descriptionEntity>,
     @InjectRepository(User2userEntity)
     private userUserRepo: Repository<User2userEntity>,
     @InjectRepository(User2valueEntity)
@@ -63,7 +65,7 @@ export class UserResolver {
       current: { id: number }
   ) {
     const list = [].concat(
-      await this.userStringRepo.find({
+      await this.stringRepo.find({
         where: { parent: { id: current.id } },
         loadRelationIds: true,
       }),
@@ -72,6 +74,10 @@ export class UserResolver {
         loadRelationIds: true,
       }),
       await this.userValueRepo.find({
+        where: { parent: { id: current.id } },
+        loadRelationIds: true,
+      }),
+      await this.descriptionRepo.find({
         where: { parent: { id: current.id } },
         loadRelationIds: true,
       }),
@@ -87,7 +93,7 @@ export class UserResolver {
     @Parent()
       current: { id: number },
   ) {
-    return this.userStringRepo.findOne({
+    return this.stringRepo.findOne({
       where: {
         property: { id },
         parent: { id: current.id },
@@ -105,7 +111,7 @@ export class UserResolver {
     @Parent()
       current: { id: number }
   ) {
-    return this.userStringRepo.findOne({
+    return this.stringRepo.findOne({
       where: {
         property: { id },
         lang: { id: lang },

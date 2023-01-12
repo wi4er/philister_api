@@ -9,13 +9,13 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { PropertyEntity } from '../../property/model/property.entity';
+import { LangEntity } from "../../lang/model/lang.entity";
 
 @Entity('user2description')
 export class User2descriptionEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
-
 
   @CreateDateColumn()
   created_at: Date;
@@ -32,14 +32,17 @@ export class User2descriptionEntity extends BaseEntity {
   @Column({
     type: 'text'
   })
-  string: string;
+  description: string;
 
   @ManyToOne(
     () => UserEntity,
     user => user.description,
-    { onDelete: 'CASCADE' },
+    {
+      onDelete: 'CASCADE',
+      nullable: false,
+    },
   )
-  parent: UserEntity
+  parent: UserEntity;
 
   @ManyToOne(
     () => PropertyEntity,
@@ -48,6 +51,15 @@ export class User2descriptionEntity extends BaseEntity {
       nullable: false,
     },
   )
-  property: PropertyEntity
+  property: PropertyEntity;
+
+  @ManyToOne(
+    () => LangEntity,
+    {
+      onDelete: 'CASCADE',
+      nullable: true,
+    },
+  )
+  lang?: LangEntity;
 
 }

@@ -40,16 +40,20 @@ import { UserGroup2flagEntity } from "./model/user-group2flag.entity";
 import { UserGroupStringResolver } from './resolver/user-group-string/user-group-string.resolver';
 import { FlagEntity } from "../flag/model/flag.entity";
 import { UserUserContactResolver } from './resolver/user-user-contact/user-user-contact.resolver';
+import { ValueEntity } from "../directory/model/value.entity";
+import { UserDescriptionResolver } from './resolver/user-description/user-description.resolver';
+import { User2descriptionEntity } from "./model/user2description.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserEntity, User2stringEntity, User2userEntity, User2valueEntity, User2flagEntity,
-      User2userContactEntity, User2userGroupEntity,
+      User2userContactEntity, User2userGroupEntity, User2descriptionEntity,
       UserGroupEntity, UserGroup2stringEntity, UserGroup2flagEntity,
       UserContactEntity, UserContact2flagEntity, UserContact2stringEntity,
       PropertyEntity, PropertyPropertyEntity,
       LangEntity, FlagEntity,
+      ValueEntity,
     ])
   ],
   providers: [
@@ -73,6 +77,7 @@ import { UserUserContactResolver } from './resolver/user-user-contact/user-user-
     UserContactStringResolver,
     UserGroupStringResolver,
     UserUserContactResolver,
+    UserDescriptionResolver,
   ],
   controllers: [UserController, AuthController, ForgotController]
 })

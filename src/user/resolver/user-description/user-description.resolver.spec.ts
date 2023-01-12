@@ -1,19 +1,20 @@
 import { Test } from '@nestjs/testing';
-import { UserUserResolver } from './user-user.resolver';
+import { UserDescriptionResolver } from './user-description.resolver';
+import { gql } from "apollo-server-express";
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../../createConnectionOptions";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import request from "supertest-graphql";
 import { UserEntity } from "../../model/user.entity";
-import { User2userEntity } from "../../model/user2user.entity";
-import { gql } from "apollo-server-express";
+import request from "supertest-graphql";
+import { User2descriptionEntity } from "../../model/user2description.entity";
 
 const userItemQuery = gql`
-  query getUserItem($id: Int!) {
+  query GetUser($id: Int!){
     user {
       item(id: $id) {
         id
+        login
         propertyList {
           id
           string
@@ -21,8 +22,9 @@ const userItemQuery = gql`
             id
           }
 
-          ... on UserUser {
-            user {
+          ... on UserDescription {
+            description
+            lang {
               id
             }
           }
@@ -30,9 +32,9 @@ const userItemQuery = gql`
       }
     }
   }
-`
+`;
 
-describe('UserUserResolver', () => {
+describe('UserDescriptionResolver', () => {
   let source;
   let app;
 
@@ -46,20 +48,20 @@ describe('UserUserResolver', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('User with user', () => {
-    test('Should get with user property', async () => {
-      const parent = await Object.assign(new UserEntity(), { login: 'parent' }).save();
-      const user = await Object.assign(new UserEntity(), { login: 'child' }).save();
-      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
-      await Object.assign(new User2userEntity(), { parent, property, user }).save();
+  describe('User description property', () => {
+    test('Should get user with property', async () => {
+      const property = await Object.assign(new PropertyEntity(), { id: 'name' }).save();
+      const parent = await Object.assign(new UserEntity(), { login: 'user' }).save();
+      await Object.assign(new User2descriptionEntity(), { description: "VALUE", property, parent }).save()
 
       const res = await request(app.getHttpServer())
         .query(userItemQuery, { id: 1 })
         .expectNoErrors();
 
       expect(res.data['user']['item']['propertyList']).toHaveLength(1);
-      expect(res.data['user']['item']['propertyList'][0]['string']).toBe('2');
-      expect(res.data['user']['item']['propertyList'][0]['user']['id']).toBe(2);
+      expect(res.data['user']['item']['propertyList'][0]['property']['id']).toBe('name');
+      expect(res.data['user']['item']['propertyList'][0]['description']).toBe('VALUE');
+      expect(res.data['user']['item']['propertyList'][0]['string']).toBe('VALUE');
     });
   });
 });

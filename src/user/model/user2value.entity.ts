@@ -42,7 +42,10 @@ export class User2valueEntity extends BaseEntity {
   @ManyToOne(
     () => UserEntity,
     user => user.value,
-    { onDelete: 'CASCADE' },
+    {
+      onDelete: 'CASCADE',
+      nullable: false,
+    },
   )
   parent: UserEntity;
 

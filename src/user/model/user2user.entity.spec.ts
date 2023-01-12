@@ -22,17 +22,67 @@ describe('User user entity', () => {
       const child = await Object.assign(new UserEntity(), { login: 'child' }).save();
       const parent = await Object.assign(new UserEntity(), { login: 'PARENT' }).save();
 
-      await Object.assign(new User2userEntity(), {user: child, property: 'PARENT', parent: 1 }).save()
+      await Object.assign(new User2userEntity(), {
+        user: child,
+        property: 'PARENT',
+        parent,
+      }).save()
 
-      const inst = await repo.findOne({ where: { id: 1 }, relations: { child: true } });
+      const inst = await repo.findOne({
+        where: { id: parent.id },
+        relations: { child: true },
+      });
 
       expect(inst.child).toHaveLength(1);
+      expect(inst.child[0].id).toBe(1);
     });
 
-    test('Shouldn`t create user with wrong relation', async () => {
-      const user = new User2userEntity();
+    test('Shouldn`t create user without parent', async () => {
+      const property = await Object.assign(new PropertyEntity(), { id: 'PARENT' }).save();
+      const user = await Object.assign(new UserEntity(), { login: 'child' }).save();
 
-      await expect(user.save()).rejects.toThrow();
+      const inst = await Object.assign(new User2userEntity(), {
+        user,
+        property,
+      });
+
+      await expect(inst.save()).rejects.toThrow('parentId');
+    });
+
+    test('Shouldn`t create user without property', async () => {
+      const user = await Object.assign(new UserEntity(), { login: 'child' }).save();
+      const parent = await Object.assign(new UserEntity(), { login: 'PARENT' }).save();
+
+      const inst = await Object.assign(new User2userEntity(), {
+        user,
+        parent,
+      });
+
+      await expect(inst.save()).rejects.toThrow('propertyId');
+    });
+
+    test('Shouldn`t create user without user', async () => {
+      const property = await Object.assign(new PropertyEntity(), { id: 'PARENT' }).save();
+      const parent = await Object.assign(new UserEntity(), { login: 'PARENT' }).save();
+
+      const inst = await Object.assign(new User2userEntity(), {
+        parent,
+        property,
+      });
+
+      await expect(inst.save()).rejects.toThrow('userId');
+    });
+
+    test('Shouldn`t create user duplicate user', async () => {
+      const property = await Object.assign(new PropertyEntity(), { id: 'PARENT' }).save();
+      const user = await Object.assign(new UserEntity(), { login: 'child' }).save();
+      const parent = await Object.assign(new UserEntity(), { login: 'PARENT' }).save();
+
+      await Object.assign(new User2userEntity(), { user, property, parent }).save()
+
+      await expect(
+        Object.assign(new User2userEntity(), { user, property, parent }).save()
+      ).rejects.toThrow('duplicate key value violates unique constraint');
     });
   });
 });

@@ -9,6 +9,8 @@ import { FlagEntity } from "../../../flag/model/flag.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { UserContactEntity, UserContactType } from "../../model/user-contact.entity";
 import { User2stringEntity } from "../../model/user2string.entity";
+import { UserContact2flagEntity } from "../../model/user-contact2flag.entity";
+import { User2flagEntity } from "../../model/user2flag.entity";
 
 const userAddMutation = gql`
   mutation AddUser($item: UserInput!) {
@@ -65,6 +67,17 @@ const userDeleteMutation = gql`
   mutation DeleteUser($id: [Int!]!) {
     user {
       delete(id: $id)
+    }
+  }
+`;
+
+const updateUserFlagMutation = gql`
+  mutation UpdateContactFlag($id: Int!, $flag: String!) {
+    user {
+      updateFlag(id: $id, flag: $flag) {
+        id
+        flagString
+      }
     }
   }
 `;
@@ -231,6 +244,31 @@ describe('UserMutationResolver', () => {
         });
 
       expect(res.data['user']['update']['propertyList']).toHaveLength(0);
+    });
+  });
+
+  describe('User updateFlag mutation', () => {
+    test('Should update user flag', async () => {
+      await Object.assign(new UserEntity(), { login: 'user' }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserFlagMutation, { id: 1, flag: 'ACTIVE'})
+        .expectNoErrors();
+
+      expect(res.data['user']['updateFlag']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should remove user flag', async () => {
+      await Object.assign(new UserEntity(), { login: 'user' }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new User2flagEntity(), { parent: 1, flag: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(updateUserFlagMutation, { id: 1, flag: 'ACTIVE'})
+        .expectNoErrors();
+
+      expect(res.data['user']['updateFlag']['flagString']).toEqual([]);
     });
   });
 
