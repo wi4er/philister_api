@@ -1,6 +1,5 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserUserSchema } from "../../schema/user-property/user-user.schema";
-import { User2userEntity } from "../../model/user2user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { Repository } from "typeorm";

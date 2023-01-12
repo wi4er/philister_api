@@ -3,6 +3,9 @@ import { EntityManager } from "typeorm";
 import { UserInputSchema } from "../schema/user-input.schema";
 import { User2stringEntity } from "../model/user2string.entity";
 import { PropertyUpdateOperation } from "../../common/operation/property-update.operation";
+import { FlagUpdateOperation } from "../../common/operation/flag-update.operation";
+import { User2flagEntity } from "../model/user2flag.entity";
+import { User2userContactUpdateOperation } from "./user2user-contact-update.operation";
 
 export class UserUpdateOperation {
 
@@ -24,6 +27,7 @@ export class UserUpdateOperation {
         relations: {
           string: { property: true },
           flag: { flag: true },
+          contact: { contact: true },
         },
       });
 
@@ -31,6 +35,9 @@ export class UserUpdateOperation {
       await this.beforeItem.save();
 
       await new PropertyUpdateOperation(trans, User2stringEntity).save(this.beforeItem, this.input);
+      await new FlagUpdateOperation(trans, User2flagEntity).save(this.beforeItem, this.input);
+      await new User2userContactUpdateOperation(trans).save(this.beforeItem, this.input);
+
     });
 
     return userRepo.findOne({

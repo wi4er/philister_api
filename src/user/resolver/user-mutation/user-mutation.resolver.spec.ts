@@ -11,6 +11,7 @@ import { UserContactEntity, UserContactType } from "../../model/user-contact.ent
 import { User2stringEntity } from "../../model/user2string.entity";
 import { UserContact2flagEntity } from "../../model/user-contact2flag.entity";
 import { User2flagEntity } from "../../model/user2flag.entity";
+import { User2userContactEntity } from "../../model/user2user-contact.entity";
 
 const userAddMutation = gql`
   mutation AddUser($item: UserInput!) {
@@ -106,7 +107,8 @@ describe('UserMutationResolver', () => {
             property: [],
             flag: [],
           }
-        });
+        })
+        .expectNoErrors();
 
       expect(res.data['user']['add']['id']).toBe(1);
       expect(res.data['user']['add']['login']).toBe('admin');
@@ -122,7 +124,8 @@ describe('UserMutationResolver', () => {
             property: [],
             flag: [],
           }
-        });
+        })
+        .expectNoErrors();
 
       expect(res.data['user']['add']['id']).toBe(1);
       expect(res.data['user']['add']['login']).toBe('admin');
@@ -139,7 +142,8 @@ describe('UserMutationResolver', () => {
             property: [],
             flag: [ 'ACTIVE' ],
           }
-        });
+        })
+        .expectNoErrors();
 
       expect(res.data['user']['add']['flagString']).toEqual([ 'ACTIVE' ]);
     });
@@ -158,7 +162,8 @@ describe('UserMutationResolver', () => {
             }],
             flag: [],
           }
-        });
+        })
+        .expectNoErrors();
 
       expect(res.data['user']['add']['propertyList']).toHaveLength(1);
       expect(res.data['user']['add']['propertyList'][0]['string']).toBe('XXL');
@@ -179,7 +184,8 @@ describe('UserMutationResolver', () => {
             property: [],
             flag: [],
           }
-        });
+        })
+        .expectNoErrors();
 
       expect(res.data['user']['add']['contact']).toHaveLength(1);
       expect(res.data['user']['add']['contact'][0]['value']).toBe('user@mail.com');
@@ -199,7 +205,8 @@ describe('UserMutationResolver', () => {
             property: [],
             flag: [],
           }
-        });
+        })
+        .expectNoErrors();
 
       expect(res.data['user']['update']['login']).toBe('admin');
     });
@@ -220,7 +227,8 @@ describe('UserMutationResolver', () => {
             }],
             flag: [],
           }
-        });
+        })
+        .expectNoErrors();
 
       expect(res.data['user']['update']['propertyList']).toHaveLength(1);
       expect(res.data['user']['update']['propertyList'][0]['string']).toBe('John');
@@ -241,9 +249,54 @@ describe('UserMutationResolver', () => {
             property: [],
             flag: [],
           }
-        });
+        })
+        .expectNoErrors();
 
       expect(res.data['user']['update']['propertyList']).toHaveLength(0);
+    });
+
+    test('Should add contact to user', async () => {
+      const user = await Object.assign(new UserEntity(), { login: 'user' }).save();
+      await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(userUpdateMutation, {
+          item: {
+            id: user.id,
+            login: 'admin',
+            contact: [{
+              contact: 'mail',
+              value: 'mail@mail.com',
+            }],
+            property: [],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['user']['update']['contact']).toHaveLength(1);
+      expect(res.data['user']['update']['contact'][0]['value']).toBe('mail@mail.com');
+      expect(res.data['user']['update']['contact'][0]['contact']['id']).toBe('mail');
+    });
+
+    test('Should remove contact from user', async () => {
+      const parent = await Object.assign(new UserEntity(), { login: 'user' }).save();
+      const contact = await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
+      await Object.assign(new User2userContactEntity(), { contact, parent, value: 'mail@mail.com'})
+
+      const res = await request(app.getHttpServer())
+        .mutate(userUpdateMutation, {
+          item: {
+            id: parent.id,
+            login: 'admin',
+            contact: [],
+            property: [],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['user']['update']['contact']).toHaveLength(0);
     });
   });
 
@@ -276,7 +329,8 @@ describe('UserMutationResolver', () => {
     test('Should delete', async () => {
       await Object.assign(new UserEntity(), { login: 'NAME' }).save();
       const res = await request(app.getHttpServer())
-        .mutate(userDeleteMutation, { id: 1 });
+        .mutate(userDeleteMutation, { id: 1 })
+        .expectNoErrors();
 
       expect(res.data['user']['delete']).toEqual([1]);
     });
