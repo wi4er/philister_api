@@ -10,24 +10,23 @@ export class UserGroupInsertOperation {
 
   created: UserGroupEntity;
 
-  protected manager: EntityManager;
-
   constructor(
-    protected input: UserGroupInputSchema
+    private manager: EntityManager,
   ) {
     this.created = new UserGroupEntity();
-    this.created.id = this.input.id;
   }
 
-  async save(manager: EntityManager): Promise<UserGroupEntity> {
-    this.manager = manager;
+  async save(input: UserGroupInputSchema): Promise<UserGroupEntity> {
     const groupRepo = this.manager.getRepository(UserGroupEntity);
 
     await this.manager.transaction(async (trans: EntityManager) => {
+      this.created.parent = await groupRepo.findOne({ where: { id: input.parent } });
+      this.created.id = input.id;
+
       await trans.save(this.created);
 
-      await new PropertyInsertOperation(trans, UserGroup2stringEntity).save(this.created, this.input);
-      await new FlagInsertOperation(trans, UserGroup2flagEntity).save(this.created, this.input);
+      await new PropertyInsertOperation(trans, UserGroup2stringEntity).save(this.created, input);
+      await new FlagInsertOperation(trans, UserGroup2flagEntity).save(this.created, input);
     });
 
     return groupRepo.findOne({

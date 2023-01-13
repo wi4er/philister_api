@@ -5,10 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn, DeleteDateColumn, VersionColumn, OneToMany, ManyToOne
 } from 'typeorm';
-import { UserGroup2stringEntity } from "./user-group2string.entity";
-import { User2flagEntity } from "./user2flag.entity";
-import { UserGroup2flagEntity } from "./user-group2flag.entity";
-import { User2userGroupEntity } from "./user2user-group.entity";
+import { UserGroup2stringEntity } from './user-group2string.entity';
+import { User2flagEntity } from './user2flag.entity';
+import { UserGroup2flagEntity } from './user-group2flag.entity';
+import { User2userGroupEntity } from './user2user-group.entity';
 
 @Entity('user-group')
 export class UserGroupEntity extends BaseEntity {

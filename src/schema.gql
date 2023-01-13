@@ -125,6 +125,20 @@ type UserUserContact {
   contact: UserContact!
 }
 
+type UserGroup implements WithFlagSchema {
+  flagList: [Flag!]!
+  flagString: [String!]!
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  parent: UserGroup
+  children: [UserGroup!]!
+  propertyList: [UserGroupProperty!]!
+  propertyItem(id: String!): UserGroupProperty
+  propertyString(id: String!, lang: String): String
+}
+
 type User implements WithFlagSchema {
   flagList: [Flag!]!
   flagString: [String!]!
@@ -135,7 +149,7 @@ type User implements WithFlagSchema {
   login: String!
   hash: String
   contact: [UserUserContact!]!
-  group: [User!]
+  group: [UserGroup!]
   propertyList: [UserProperty!]!
   propertyItem(id: String!): UserProperty
   propertyString(id: String!, lang: String): String
@@ -165,6 +179,7 @@ type UserMutation {
 input UserInput {
   id: Int
   login: String!
+  group: [Int!]!
   contact: [UserUserContactInput!]!
   property: [UserPropertyInput!]!
   flag: [String!]!
@@ -216,20 +231,6 @@ input UserContactPropertyInput {
   property: String!
   string: String!
   lang: String
-}
-
-type UserGroup implements WithFlagSchema {
-  flagList: [Flag!]!
-  flagString: [String!]!
-  id: Int!
-  created_at: String!
-  updated_at: String!
-  version: Int!
-  parent: UserGroup
-  children: [UserGroup!]!
-  propertyList: [UserGroupProperty!]!
-  propertyItem(id: String!): UserGroupProperty
-  propertyString(id: String!, lang: String): String
 }
 
 type UserGroupQuery {

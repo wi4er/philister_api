@@ -26,9 +26,15 @@ describe('User to UserGroup entity', () => {
 
       const parent = await Object.assign(new UserEntity(), { login: 'user' }).save();
       const group = await Object.assign(new UserGroupEntity(), {}).save();
-
       await Object.assign(new User2userGroupEntity(), { parent, group }).save();
 
+      const inst = await repo.findOne({
+        where: { id: 1 },
+        relations: { group: { group: true } }
+      });
+
+      expect(inst.group).toHaveLength(1);
+      expect(inst.group[0].group.id).toBe(1);
     });
   });
 });

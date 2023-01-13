@@ -23,7 +23,7 @@ export class UserGroupMutationResolver {
     @Args('item')
       item: UserGroupInputSchema
   ): Promise<UserGroupEntity> {
-    return new UserGroupInsertOperation(item).save(this.entityManager);
+    return new UserGroupInsertOperation(this.entityManager).save(item);
   }
 
   @ResolveField()

@@ -71,7 +71,7 @@ export class UserController {
       res.send(null);
     } else {
       res.status(201);
-      res.send(await new UserUpdateOperation(user).save(this.entityManager));
+      res.send(await new UserUpdateOperation(this.entityManager).save(user));
     }
   }
 

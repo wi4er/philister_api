@@ -28,7 +28,7 @@ export class UserMutationResolver {
     @Args('item')
       item: UserInputSchema
   ): Promise<UserEntity> {
-    return new UserInsertOperation(item).save(this.entityManager);
+    return new UserInsertOperation(this.entityManager).save(item);
   }
 
   @ResolveField()
@@ -36,7 +36,7 @@ export class UserMutationResolver {
     @Args('item')
       item: UserInputSchema
   ) {
-    return new UserUpdateOperation(item).save(this.entityManager);
+    return new UserUpdateOperation(this.entityManager).save(item);
   }
 
   @ResolveField()

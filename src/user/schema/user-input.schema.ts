@@ -48,6 +48,9 @@ export class UserInputSchema implements WithFlagInputSchema, WithPropertyInputSc
   @ApiProperty()
   login: string;
 
+  @Field(type => [ Int ])
+  group: number[];
+
   @Field(returns => [ UserContactInputSchema ])
   @ApiProperty({
     type: () => UserContactInputSchema,

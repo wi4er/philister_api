@@ -1,7 +1,7 @@
 import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserSchema } from "../../schema/user.schema";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { User2stringEntity } from "../../model/user2string.entity";
 import { UserEntity } from "../../model/user.entity";
 import { User2userEntity } from "../../model/user2user.entity";
@@ -10,6 +10,8 @@ import { DirectoryEntity } from "../../../directory/model/directory.entity";
 import { User2flagEntity } from "../../model/user2flag.entity";
 import { User2userContactEntity } from "../../model/user2user-contact.entity";
 import { User2descriptionEntity } from "../../model/user2description.entity";
+import { UserGroupEntity } from "../../model/user-group.entity";
+import { User2userGroupEntity } from "../../model/user2user-group.entity";
 
 @Resolver(of => UserSchema)
 export class UserResolver {
@@ -27,6 +29,8 @@ export class UserResolver {
     private flagRepo: Repository<User2flagEntity>,
     @InjectRepository(UserEntity)
     private userRepo: Repository<UserEntity>,
+    @InjectRepository(UserGroupEntity)
+    private groupRepo: Repository<UserGroupEntity>,
     @InjectRepository(User2userContactEntity)
     private contactRepo: Repository<User2userContactEntity>,
   ) {
@@ -46,6 +50,19 @@ export class UserResolver {
       current: DirectoryEntity
   ) {
     return new Date(current.updated_at).toISOString();
+  }
+
+  @ResolveField()
+  async group(
+    @Parent()
+      current: { id: number },
+  ): Promise<UserGroupEntity[]> {
+    return this.groupRepo.find({
+      where: {
+        user: { parent: { id: current.id } }
+      },
+      loadRelationIds: true,
+    });
   }
 
   @ResolveField()

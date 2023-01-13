@@ -29,7 +29,7 @@ export class UserGroupInputSchema
 
   @Field({ nullable: true })
   @ApiProperty()
-  id: number | null;
+  id?: number | null;
 
   @Field(type => Int, { nullable: true })
   parent: number | null;

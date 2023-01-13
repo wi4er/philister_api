@@ -12,6 +12,7 @@ import { User2stringEntity } from "../../model/user2string.entity";
 import { UserContact2flagEntity } from "../../model/user-contact2flag.entity";
 import { User2flagEntity } from "../../model/user2flag.entity";
 import { User2userContactEntity } from "../../model/user2user-contact.entity";
+import { UserGroupEntity } from "../../model/user-group.entity";
 
 const userAddMutation = gql`
   mutation AddUser($item: UserInput!) {
@@ -19,6 +20,9 @@ const userAddMutation = gql`
       add(item: $item) {
         id
         login
+        group {
+          id
+        }
         flagString
         propertyList {
           id
@@ -103,7 +107,7 @@ describe('UserMutationResolver', () => {
         .mutate(userAddMutation, {
           item: {
             login: 'admin',
-            contact: [],
+            group: [], contact: [],
             property: [],
             flag: [],
           }
@@ -120,7 +124,7 @@ describe('UserMutationResolver', () => {
           item: {
             id: 0,
             login: 'admin',
-            contact: [],
+            group: [], contact: [],
             property: [],
             flag: [],
           }
@@ -138,7 +142,7 @@ describe('UserMutationResolver', () => {
         .mutate(userAddMutation, {
           item: {
             login: 'admin',
-            contact: [],
+            group: [], contact: [],
             property: [],
             flag: [ 'ACTIVE' ],
           }
@@ -155,11 +159,11 @@ describe('UserMutationResolver', () => {
         .mutate(userAddMutation, {
           item: {
             login: 'admin',
-            contact: [],
-            property: [{
+            group: [], contact: [],
+            property: [ {
               property: 'SIZE',
               string: 'XXL',
-            }],
+            } ],
             flag: [],
           }
         })
@@ -177,10 +181,11 @@ describe('UserMutationResolver', () => {
         .mutate(userAddMutation, {
           item: {
             login: 'admin',
-            contact: [{
+            group: [],
+            contact: [ {
               contact: 'mail',
               value: 'user@mail.com'
-            }],
+            } ],
             property: [],
             flag: [],
           }
@@ -190,6 +195,48 @@ describe('UserMutationResolver', () => {
       expect(res.data['user']['add']['contact']).toHaveLength(1);
       expect(res.data['user']['add']['contact'][0]['value']).toBe('user@mail.com');
       expect(res.data['user']['add']['contact'][0]['contact']['id']).toBe('mail');
+    });
+
+    test('Should add user with group', async () => {
+      await new UserGroupEntity().save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(userAddMutation, {
+          item: {
+            login: 'admin',
+            group: [ 1 ],
+            contact: [],
+            property: [],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['user']['add']['group']).toHaveLength(1);
+      expect(res.data['user']['add']['group'][0]['id']).toBe(1);
+    });
+
+    test('Should add user with list of groups', async () => {
+      for (let i = 0; i < 10; i++) {
+        await new UserGroupEntity().save();
+      }
+
+      const res = await request(app.getHttpServer())
+        .mutate(userAddMutation, {
+          item: {
+            login: 'admin',
+            group: [ 1, 3, 7 ],
+            contact: [],
+            property: [],
+            flag: [],
+          }
+        })
+        .expectNoErrors();
+
+      expect(res.data['user']['add']['group']).toHaveLength(3);
+      expect(res.data['user']['add']['group'][0]['id']).toBe(1);
+      expect(res.data['user']['add']['group'][1]['id']).toBe(3);
+      expect(res.data['user']['add']['group'][2]['id']).toBe(7);
     });
   });
 
@@ -201,7 +248,7 @@ describe('UserMutationResolver', () => {
           item: {
             id: user.id,
             login: 'admin',
-            contact: [],
+            group: [], contact: [],
             property: [],
             flag: [],
           }
@@ -220,11 +267,11 @@ describe('UserMutationResolver', () => {
           item: {
             id: user.id,
             login: 'admin',
-            contact: [],
-            property: [{
+            group: [], contact: [],
+            property: [ {
               property: 'NAME',
               string: 'John',
-            }],
+            } ],
             flag: [],
           }
         })
@@ -245,7 +292,7 @@ describe('UserMutationResolver', () => {
           item: {
             id: 1,
             login: 'admin',
-            contact: [],
+            group: [], contact: [],
             property: [],
             flag: [],
           }
@@ -264,10 +311,10 @@ describe('UserMutationResolver', () => {
           item: {
             id: user.id,
             login: 'admin',
-            contact: [{
+            group: [], contact: [ {
               contact: 'mail',
               value: 'mail@mail.com',
-            }],
+            } ],
             property: [],
             flag: [],
           }
@@ -282,14 +329,14 @@ describe('UserMutationResolver', () => {
     test('Should remove contact from user', async () => {
       const parent = await Object.assign(new UserEntity(), { login: 'user' }).save();
       const contact = await Object.assign(new UserContactEntity(), { id: 'mail', type: UserContactType.EMAIL }).save();
-      await Object.assign(new User2userContactEntity(), { contact, parent, value: 'mail@mail.com'})
+      await Object.assign(new User2userContactEntity(), { contact, parent, value: 'mail@mail.com' })
 
       const res = await request(app.getHttpServer())
         .mutate(userUpdateMutation, {
           item: {
             id: parent.id,
             login: 'admin',
-            contact: [],
+            group: [], contact: [],
             property: [],
             flag: [],
           }
@@ -306,7 +353,7 @@ describe('UserMutationResolver', () => {
       await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
 
       const res = await request(app.getHttpServer())
-        .mutate(updateUserFlagMutation, { id: 1, flag: 'ACTIVE'})
+        .mutate(updateUserFlagMutation, { id: 1, flag: 'ACTIVE' })
         .expectNoErrors();
 
       expect(res.data['user']['updateFlag']['flagString']).toEqual([ 'ACTIVE' ]);
@@ -318,7 +365,7 @@ describe('UserMutationResolver', () => {
       await Object.assign(new User2flagEntity(), { parent: 1, flag: 'ACTIVE' }).save();
 
       const res = await request(app.getHttpServer())
-        .mutate(updateUserFlagMutation, { id: 1, flag: 'ACTIVE'})
+        .mutate(updateUserFlagMutation, { id: 1, flag: 'ACTIVE' })
         .expectNoErrors();
 
       expect(res.data['user']['updateFlag']['flagString']).toEqual([]);
@@ -332,7 +379,7 @@ describe('UserMutationResolver', () => {
         .mutate(userDeleteMutation, { id: 1 })
         .expectNoErrors();
 
-      expect(res.data['user']['delete']).toEqual([1]);
+      expect(res.data['user']['delete']).toEqual([ 1 ]);
     });
   });
 });

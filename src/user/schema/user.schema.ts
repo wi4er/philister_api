@@ -31,7 +31,7 @@ export class UserSchema implements WithFlagSchema {
   @Field(type => [ UserUserContactSchema])
   contact: UserUserContactSchema[];
 
-  @Field(type => [ UserSchema ], { nullable: true })
+  @Field(type => [ UserGroupSchema ], { nullable: true })
   group?: UserGroupSchema[];
 
   @Field(type => [ UserPropertySchema ])

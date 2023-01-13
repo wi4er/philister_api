@@ -10,20 +10,18 @@ import { User2userContactUpdateOperation } from "./user2user-contact-update.oper
 export class UserUpdateOperation {
 
   beforeItem: UserEntity;
-  manager: EntityManager;
 
   constructor(
-    private input: UserInputSchema
+    private manager: EntityManager
   ) {
   }
 
-  async save(manager: EntityManager): Promise<UserEntity> {
-    this.manager = manager;
+  async save(input: UserInputSchema): Promise<UserEntity> {
     const userRepo = this.manager.getRepository(UserEntity);
 
     await this.manager.transaction(async (trans: EntityManager) => {
       this.beforeItem = await userRepo.findOne({
-        where: { id: this.input.id },
+        where: { id: input.id },
         relations: {
           string: { property: true },
           flag: { flag: true },
@@ -31,17 +29,17 @@ export class UserUpdateOperation {
         },
       });
 
-      this.beforeItem.login = this.input.login;
+      this.beforeItem.login = input.login;
       await this.beforeItem.save();
 
-      await new PropertyUpdateOperation(trans, User2stringEntity).save(this.beforeItem, this.input);
-      await new FlagUpdateOperation(trans, User2flagEntity).save(this.beforeItem, this.input);
-      await new User2userContactUpdateOperation(trans).save(this.beforeItem, this.input);
+      await new PropertyUpdateOperation(trans, User2stringEntity).save(this.beforeItem, input);
+      await new FlagUpdateOperation(trans, User2flagEntity).save(this.beforeItem, input);
+      await new User2userContactUpdateOperation(trans).save(this.beforeItem, input);
 
     });
 
     return userRepo.findOne({
-      where: { id: this.input.id },
+      where: { id: input.id },
       loadRelationIds: true,
     });
   }
