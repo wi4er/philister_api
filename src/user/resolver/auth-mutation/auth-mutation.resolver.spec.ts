@@ -1,16 +1,30 @@
 import { AuthMutationResolver } from './auth-mutation.resolver';
-import { createConnection } from "typeorm";
-import { UserEntity } from "../../model/user.entity";
+import { createConnection } from 'typeorm';
+import { UserEntity } from '../../model/user.entity';
 import request from 'supertest-graphql';
-import { AppModule } from "../../../app.module";
-import { gql } from "apollo-server-express";
-import { Test } from "@nestjs/testing";
-import { createConnectionOptions } from "../../../createConnectionOptions";
+import { AppModule } from '../../../app.module';
+import { gql } from 'apollo-server-express';
+import { Test } from '@nestjs/testing';
+import { createConnectionOptions } from '../../../createConnectionOptions';
+import { UserContactEntity, UserContactType } from '../../model/user-contact.entity';
+import { User2userContactEntity } from '../../model/user2user-contact.entity';
 
-const query = gql`
+const loginQuery = gql`
   mutation Auth($login: String!, $password: String!) {
     auth {
-      authByPassword(login: $login, password: $password) {
+      authByLogin(login: $login, password: $password) {
+        id
+        login
+        hash
+      }
+    }
+  }
+`;
+
+const contactQuery = gql`
+  mutation Auth($contact: String!, $value: String!, $password: String!) {
+    auth {
+      authByContact(contact: $contact, value: $value, password: $password) {
         id
         login
         hash
@@ -24,50 +38,91 @@ describe('AuthMutationResolver', () => {
   let app;
 
   beforeAll(async () => {
-    const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
+    const moduleBuilder = await Test.createTestingModule({
+      imports: [ AppModule ],
+    }).compile();
     app = moduleBuilder.createNestApplication();
-    app.init()
+    app.init();
 
     source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));
 
-  test('Should auth', async () => {
-    await Object.assign(
-      new UserEntity(),
-      {
+  describe('Auth with login and password', () => {
+    test('Should auth', async () => {
+      await Object.assign(new UserEntity(), {
         login: 'admin',
-        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
-      }
-    ).save();
+        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5',
+      }).save();
 
-    const res = await request(app.getHttpServer())
-      .query(query, {
+      const res = await request(app.getHttpServer())
+        .query(loginQuery, {
+          login: 'admin',
+          password: 'qwerty',
+        })
+        .expectNoErrors();
+
+      expect(res.data['auth']['authByLogin']['login']).toBe('admin');
+    });
+
+    test('Shouldn`t auth with wrong password', async () => {
+      await Object.assign(new UserEntity(), {
         login: 'admin',
-        password: 'qwerty',
-      })
-      .expectNoErrors();
+        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5',
+      }).save();
 
-    expect(res.data['auth']['authByPassword']['login']).toBe('admin');
+      const res = await request(app.getHttpServer())
+        .query(loginQuery, {
+          login: 'admin',
+          password: 'wrong',
+        })
+        .expectNoErrors();
+
+      expect(res.data['auth']['authByLogin']).toBe(null);
+    });
+
+    test('Shouldn`t auth without user', async () => {
+      const res = await request(app.getHttpServer())
+        .query(loginQuery, {
+          login: 'admin',
+          password: 'password',
+        })
+        .expectNoErrors();
+
+      expect(res.data['auth']['authByLogin']).toBe(null);
+    });
   });
 
-  test('Shouldn`t auth with wrong password', async () => {
-    await Object.assign(
-      new UserEntity(),
-      {
+  describe('Auth with contact and password', () => {
+    test('Should auth with contact', async () => {
+      const parent = await Object.assign(new UserEntity(), {
         login: 'admin',
-        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
-      }
-    ).save();
+        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5',
+      }).save();
 
-    const res = await request(app.getHttpServer())
-      .query(query, {
-        login: 'admin',
-        password: 'wrong',
-      })
-      .expectNoErrors();
+      const contact = await Object.assign(new UserContactEntity(), {
+        id: 'mail',
+        type: UserContactType.EMAIL,
+      }).save();
 
-    expect(res.data['auth']['authByPassword']).toBe(null);
+      await Object.assign(new User2userContactEntity(), {
+        parent,
+        contact,
+        value: 'user@mail.com',
+        verify: false,
+        verifyCode: '123',
+      }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(contactQuery, {
+          contact: 'mail',
+          value: 'user@mail.com',
+          password: 'qwerty',
+        })
+        .expectNoErrors();
+
+      expect(res.data['auth']['authByContact']['login']).toBe('admin');
+    });
   });
 });

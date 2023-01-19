@@ -3,7 +3,6 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { UserGroupInsertOperation } from "./user-group-insert.operation";
 import { FlagEntity } from "../../flag/model/flag.entity";
-import { UserEntity } from "../model/user.entity";
 import { UserGroupEntity } from "../model/user-group.entity";
 
 describe('UserGroup insert operation', () => {
@@ -28,7 +27,7 @@ describe('UserGroup insert operation', () => {
     expect(inst.parent).toBe(null);
     expect(inst.flag).toEqual([]);
     expect(inst.string).toEqual([]);
-    expect(inst.user).toEqual(1);
+    expect(inst.user).toEqual([]);
   });
 
   test('Should insert with flag', async () => {

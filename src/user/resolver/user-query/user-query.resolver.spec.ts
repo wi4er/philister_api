@@ -42,7 +42,7 @@ const myselfQuery = gql`
 const authQuery = gql`
   mutation Auth($login: String!, $password: String!) {
     auth {
-      authByPassword(login: $login, password: $password) {
+      authByLogin(login: $login, password: $password) {
         id
         login
         hash

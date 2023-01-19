@@ -35,7 +35,7 @@ export class AuthController {
     @Res()
       res: Response,
   ) {
-    const user = await this.userService.findByPassword(login, password);
+    const user = await this.userService.findByLogin(login, password);
 
     if (user) {
       req['session']['user'] = { id: user.id };

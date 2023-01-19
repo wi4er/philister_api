@@ -1,7 +1,7 @@
 import { UserEntity } from './user.entity';
-import { createConnection, Repository } from 'typeorm';
-import { DataSource } from "typeorm/data-source/DataSource";
-import { createConnectionOptions } from "../../createConnectionOptions";
+import { createConnection } from 'typeorm';
+import { DataSource } from 'typeorm/data-source/DataSource';
+import { createConnectionOptions } from '../../createConnectionOptions';
 
 describe('User entity', () => {
   let source: DataSource;
@@ -12,7 +12,7 @@ describe('User entity', () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe("User fields", () => {
+  describe('User fields', () => {
     test('Should find empty list', async () => {
       const repo = source.getRepository(UserEntity);
       const list = await repo.find();
@@ -21,13 +21,10 @@ describe('User entity', () => {
     });
 
     test('Should add item', async () => {
-      const user = await Object.assign(
-        new UserEntity(),
-        {
-          login: 'TEST',
-          hash: 'CRYPT'
-        }
-      ).save();
+      const user = await Object.assign(new UserEntity(), {
+        login: 'TEST',
+        hash: 'CRYPT',
+      }).save();
 
       expect(user.created_at).toBeDefined();
       expect(user.updated_at).toBeDefined();
@@ -62,7 +59,10 @@ describe('User entity', () => {
       await Object.assign(new UserEntity(), { login: 'TEST' }).save();
 
       const user = Object.assign(new UserEntity(), { login: 'TEST' });
-      await expect(user.save()).rejects.toThrow();
+
+      await expect(user.save()).rejects.toThrow(
+        'duplicate key value violates unique constraint',
+      );
     });
   });
 });
