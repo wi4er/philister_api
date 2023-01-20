@@ -1,10 +1,10 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { UserContactPropertySchema } from "./user-contact-property.schema";
-import { PropertySchema } from "../../../property/schema/property.schema";
-import { LangSchema } from "../../../lang/schema/lang.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { UserContactPropertySchema } from './user-contact-property.schema';
+import { PropertySchema } from '../../../property/schema/property.schema';
+import { LangSchema } from '../../../lang/schema/lang.schema';
 
 @ObjectType('UserContactString', {
-  implements: () => [ UserContactPropertySchema ]
+  implements: () => [ UserContactPropertySchema ],
 })
 export class UserContactStringSchema extends UserContactPropertySchema {
 

@@ -200,6 +200,7 @@ type AuthMutation {
   authByLogin(login: String!, password: String!): User
   registerByLogin(login: String!, password: String!): User
   authByContact(contact: String!, value: String!, password: String!): User
+  logout: Boolean!
 }
 
 type UserContactQuery {

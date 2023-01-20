@@ -1,10 +1,10 @@
-import { Field, InputType, Int } from "@nestjs/graphql";
-import { ApiProperty } from "@nestjs/swagger";
-import { WithFlagInputSchema } from "../../../common/schema/with-flag.input.schema";
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
+import { WithFlagInputSchema } from '../../../common/schema/with-flag.input.schema';
 import {
   WithPropertyInputSchema,
-  WithPropertyPropertyInputSchema
-} from "../../../common/schema/with-property-input.schema";
+  WithPropertyPropertyInputSchema,
+} from '../../../common/schema/with-property-input.schema';
 
 @InputType('UserGroupPropertyInput')
 class UserGroupPropertyInputSchema implements WithPropertyPropertyInputSchema {
@@ -15,7 +15,7 @@ class UserGroupPropertyInputSchema implements WithPropertyPropertyInputSchema {
 
   @Field()
   @ApiProperty()
-  string: string
+  string: string;
 
   @Field({ nullable: true })
   @ApiProperty()

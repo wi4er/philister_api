@@ -1,13 +1,13 @@
-import { Field, Int, InterfaceType } from "@nestjs/graphql";
-import { PropertySchema } from "../../../property/schema/property.schema";
+import { Field, Int, InterfaceType } from '@nestjs/graphql';
+import { PropertySchema } from '../../../property/schema/property.schema';
 
 @InterfaceType(
   'UserGroupProperty',
   {
     resolveType() {
       return 'UserGroupString';
-    }
-  }
+    },
+  },
 )
 export class UserGroupPropertySchema {
 

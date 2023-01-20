@@ -1,13 +1,13 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { UserPropertySchema } from "./user-property.schema";
-import { PropertySchema } from "../../../property/schema/property.schema";
-import { UserSchema } from "../user.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { UserPropertySchema } from './user-property.schema';
+import { PropertySchema } from '../../../property/schema/property.schema';
+import { UserSchema } from '../user.schema';
 
 @ObjectType(
   'UserUser',
   {
-    implements: () => [UserPropertySchema]
-  }
+    implements: () => [ UserPropertySchema ],
+  },
 )
 export class UserUserSchema {
 

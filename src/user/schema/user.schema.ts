@@ -1,12 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { UserPropertySchema } from './user-property/user-property.schema';
 import { FlagSchema } from '../../flag/schema/flag.schema';
-import { UserUserContactSchema } from "./user-user-contact.schema";
-import { UserGroupSchema } from "./user-group/user-group.schema";
-import { WithFlagSchema } from "../../common/schema/with-flag.schema";
+import { UserUserContactSchema } from './user-user-contact.schema';
+import { UserGroupSchema } from './user-group/user-group.schema';
+import { WithFlagSchema } from '../../common/schema/with-flag.schema';
 
 @ObjectType('User', {
-  implements: () => [ WithFlagSchema ]
+  implements: () => [ WithFlagSchema ],
 })
 export class UserSchema implements WithFlagSchema {
 
@@ -28,7 +28,7 @@ export class UserSchema implements WithFlagSchema {
   @Field({ nullable: true })
   hash?: string;
 
-  @Field(type => [ UserUserContactSchema])
+  @Field(type => [ UserUserContactSchema ])
   contact: UserUserContactSchema[];
 
   @Field(type => [ UserGroupSchema ], { nullable: true })

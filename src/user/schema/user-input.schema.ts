@@ -1,18 +1,14 @@
-import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
-import { ApiProperty } from "@nestjs/swagger";
-import { WithFlagInputSchema } from "../../common/schema/with-flag.input.schema";
-import { WithPropertySchema } from "../../common/schema/with-property.schema";
-import { UserSchema } from "./user.schema";
-import { UserPropertySchema } from "./user-property/user-property.schema";
-import { FlagSchema } from "../../flag/schema/flag.schema";
-import { WithPropertyInputSchema } from "../../common/schema/with-property-input.schema";
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
+import { WithFlagInputSchema } from '../../common/schema/with-flag.input.schema';
+import { WithPropertyInputSchema } from '../../common/schema/with-property-input.schema';
 
 @InputType('UserUserContactInput')
 class UserContactInputSchema {
 
   @Field()
   @ApiProperty()
-  contact: string
+  contact: string;
 
   @Field()
   @ApiProperty()
@@ -29,7 +25,7 @@ class UserPropertyInputSchema {
 
   @Field()
   @ApiProperty()
-  string: string
+  string: string;
 
   @Field({ nullable: true })
   @ApiProperty()

@@ -1,13 +1,13 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { UserPropertySchema } from "./user-property.schema";
-import { PropertySchema } from "../../../property/schema/property.schema";
-import { LangSchema } from "../../../lang/schema/lang.schema";
+import { UserPropertySchema } from './user-property.schema';
+import { PropertySchema } from '../../../property/schema/property.schema';
+import { LangSchema } from '../../../lang/schema/lang.schema';
 
 @ObjectType(
   'UserString',
   {
-    implements: () => [ UserPropertySchema ]
-  }
+    implements: () => [ UserPropertySchema ],
+  },
 )
 export class UserStringSchema extends UserPropertySchema {
 
@@ -15,10 +15,10 @@ export class UserStringSchema extends UserPropertySchema {
   id: number;
 
   @Field()
-  string: string
+  string: string;
 
   @Field(type => PropertySchema)
-  property: PropertySchema
+  property: PropertySchema;
 
   @Field(type => LangSchema, { nullable: true })
   lang: LangSchema;

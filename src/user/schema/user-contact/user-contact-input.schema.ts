@@ -1,6 +1,6 @@
-import { Field, InputType, Int } from "@nestjs/graphql";
-import { ApiProperty } from "@nestjs/swagger";
-import { UserContactType } from "../../model/user-contact.entity";
+import { Field, InputType } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
+import { UserContactType } from '../../model/user-contact.entity';
 
 @InputType('UserContactPropertyInput')
 class UserContactPropertyInputSchema {
@@ -11,7 +11,7 @@ class UserContactPropertyInputSchema {
 
   @Field()
   @ApiProperty()
-  string: string
+  string: string;
 
   @Field({ nullable: true })
   @ApiProperty()
@@ -30,7 +30,7 @@ export class UserContactInputSchema {
   @ApiProperty()
   type: UserContactType;
 
-  @Field(returns => [ UserContactPropertyInputSchema ])
+  @Field(type => [ UserContactPropertyInputSchema ])
   @ApiProperty({
     type: () => UserContactPropertyInputSchema,
     description: 'User property data list',

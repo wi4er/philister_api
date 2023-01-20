@@ -1,10 +1,10 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { PropertySchema } from "../../../property/schema/property.schema";
-import { LangSchema } from "../../../lang/schema/lang.schema";
-import { UserGroupPropertySchema } from "./user-group-property.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { PropertySchema } from '../../../property/schema/property.schema';
+import { LangSchema } from '../../../lang/schema/lang.schema';
+import { UserGroupPropertySchema } from './user-group-property.schema';
 
 @ObjectType('UserGroupString', {
-  implements: () => [ UserGroupPropertySchema ]
+  implements: () => [ UserGroupPropertySchema ],
 })
 export class UserGroupStringSchema extends UserGroupPropertySchema {
 

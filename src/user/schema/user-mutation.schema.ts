@@ -1,5 +1,5 @@
-import { Field, Int, ObjectType, } from "@nestjs/graphql";
-import { UserSchema } from "./user.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { UserSchema } from './user.schema';
 
 @ObjectType('UserMutation')
 export class UserMutationSchema {
@@ -15,7 +15,7 @@ export class UserMutationSchema {
 
   @Field(
     type => UserSchema,
-    { description: 'Updating flag of user' }
+    { description: 'Updating flag of user' },
   ) updateFlag: UserSchema;
 
 }

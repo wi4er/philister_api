@@ -33,6 +33,14 @@ const contactQuery = gql`
   }
 `;
 
+const logoutMutation = gql`
+  mutation Logout {
+    auth {
+      logout
+    }
+  }
+`;
+
 describe('AuthMutationResolver', () => {
   let source;
   let app;
@@ -123,6 +131,39 @@ describe('AuthMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['auth']['authByContact']['login']).toBe('admin');
+    });
+  });
+
+  describe('Logout', () => {
+    test('Should logout', async () => {
+      await Object.assign(new UserEntity(), {
+        login: 'admin',
+        hash: '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5',
+      }).save();
+
+      const user = await request(app.getHttpServer())
+        .query(loginQuery, {
+          login: 'admin',
+          password: 'qwerty',
+        })
+        .expectNoErrors();
+
+      const cookie = user.response.headers['set-cookie'];
+
+      const res = await request(app.getHttpServer())
+        .set('cookie', cookie)
+        .mutate(logoutMutation)
+        .expectNoErrors();
+
+      expect(res.data['auth']['logout']).toBeTruthy();
+    });
+
+    test('Shouldn`t logout without session', async () => {
+      const res = await request(app.getHttpServer())
+        .mutate(logoutMutation)
+        .expectNoErrors();
+
+      expect(res.data['auth']['logout']).toBeFalsy();
     });
   });
 });

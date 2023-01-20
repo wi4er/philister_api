@@ -1,9 +1,9 @@
-import { Field, Int, InterfaceType } from "@nestjs/graphql";
-import { User2stringEntity } from "../../model/user2string.entity";
-import { PropertySchema } from "../../../property/schema/property.schema";
-import { User2userEntity } from "../../model/user2user.entity";
-import { User2valueEntity } from "../../model/user2value.entity";
-import { User2descriptionEntity } from "../../model/user2description.entity";
+import { Field, Int, InterfaceType } from '@nestjs/graphql';
+import { User2stringEntity } from '../../model/user2string.entity';
+import { PropertySchema } from '../../../property/schema/property.schema';
+import { User2userEntity } from '../../model/user2user.entity';
+import { User2valueEntity } from '../../model/user2value.entity';
+import { User2descriptionEntity } from '../../model/user2description.entity';
 
 @InterfaceType('UserProperty', {
   resolveType(prop) {
@@ -24,7 +24,7 @@ import { User2descriptionEntity } from "../../model/user2description.entity";
     }
 
     return 'UserString';
-  }
+  },
 })
 export abstract class UserPropertySchema {
 

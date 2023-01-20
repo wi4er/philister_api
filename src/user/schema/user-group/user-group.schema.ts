@@ -1,12 +1,13 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { WithFlagSchema } from "../../../common/schema/with-flag.schema";
-import { FlagSchema } from "../../../flag/schema/flag.schema";
-import { UserGroupPropertySchema } from "./user-group-property.schema";
+import { WithFlagSchema } from '../../../common/schema/with-flag.schema';
+import { FlagSchema } from '../../../flag/schema/flag.schema';
+import { UserGroupPropertySchema } from './user-group-property.schema';
+import { WithPropertySchema } from '../../../common/schema/with-property.schema';
 
 @ObjectType('UserGroup', {
-  implements: () => [ WithFlagSchema ]
+  implements: () => [ WithFlagSchema ],
 })
-export class UserGroupSchema implements WithFlagSchema {
+export class UserGroupSchema implements WithFlagSchema, WithPropertySchema<UserGroupPropertySchema> {
 
   @Field(type => Int)
   id: number;
@@ -23,8 +24,8 @@ export class UserGroupSchema implements WithFlagSchema {
   @Field(type => UserGroupSchema, { nullable: true })
   parent: UserGroupSchema;
 
-  @Field(type => [UserGroupSchema])
-  children: UserGroupSchema[]
+  @Field(type => [ UserGroupSchema ])
+  children: UserGroupSchema[];
 
   @Field(type => [ UserGroupPropertySchema ])
   propertyList: UserGroupPropertySchema[];

@@ -1,5 +1,5 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { UserGroupSchema } from "./user-group.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { UserGroupSchema } from './user-group.schema';
 
 @ObjectType('UserGroupQuery')
 export class UserGroupQuerySchema {

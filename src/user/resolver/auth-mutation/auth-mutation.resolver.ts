@@ -79,4 +79,12 @@ export class AuthMutationResolver {
     return user;
   }
 
+  @ResolveField()
+  async logout(
+    @Context()
+      context: { req: Request },
+  ): Promise<boolean> {
+    return this.sessionService.close(context.req);
+  }
+
 }

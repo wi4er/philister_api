@@ -1,13 +1,14 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { UserContactPropertySchema } from "./user-contact-property.schema";
-import { FlagSchema } from "../../../flag/schema/flag.schema";
-import { UserContactType } from "../../model/user-contact.entity";
-import { WithFlagSchema } from "../../../common/schema/with-flag.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { UserContactPropertySchema } from './user-contact-property.schema';
+import { FlagSchema } from '../../../flag/schema/flag.schema';
+import { UserContactType } from '../../model/user-contact.entity';
+import { WithFlagSchema } from '../../../common/schema/with-flag.schema';
+import { WithPropertySchema } from '../../../common/schema/with-property.schema';
 
 @ObjectType('UserContact', {
-  implements: () => [ WithFlagSchema ]
+  implements: () => [ WithFlagSchema ],
 })
-export class UserContactSchema implements WithFlagSchema {
+export class UserContactSchema implements WithFlagSchema, WithPropertySchema<UserContactPropertySchema> {
 
   @Field()
   id: string;
