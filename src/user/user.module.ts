@@ -43,6 +43,7 @@ import { UserUserContactResolver } from './resolver/user-user-contact/user-user-
 import { ValueEntity } from "../directory/model/value.entity";
 import { UserDescriptionResolver } from './resolver/user-description/user-description.resolver';
 import { User2descriptionEntity } from "./model/user2description.entity";
+import { MyselfController } from './controller/myself/myself.controller';
 
 @Module({
   imports: [
@@ -79,7 +80,7 @@ import { User2descriptionEntity } from "./model/user2description.entity";
     UserUserContactResolver,
     UserDescriptionResolver,
   ],
-  controllers: [UserController, AuthController, ForgotController]
+  controllers: [UserController, AuthController, ForgotController, MyselfController]
 })
 export class UserModule {
 }

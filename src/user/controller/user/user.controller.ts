@@ -35,45 +35,7 @@ export class UserController {
     return this.userRepo.find()
   }
 
-  @Get('myself')
-  async getMyself(
-    @Req()
-      req: Request,
-    @Res()
-      res: Response,
-  ) {
-    const id = req['session']?.['user']?.['id'];
 
-    if (id) {
-      res.json(await this.userRepo.findOne({ where: { id }, loadRelationIds: true }));
-    } else {
-      res.status(HttpStatus.UNAUTHORIZED);
-      res.send(null);
-    }
-  }
-
-  @Put('myself')
-  @ApiOperation({ description: 'Update user by current session' })
-  @ApiCreatedResponse({ description: 'Current user updated successfully', type: UserSchema })
-  @ApiUnauthorizedResponse({ description: 'There is no current session' })
-  async updateMyself(
-    @Body()
-      user: UserInputSchema,
-    @Req()
-      req: Request,
-    @Res()
-      res: Response,
-  ) {
-    const id = req['session']?.['user']?.['id'];
-
-    if (!id) {
-      res.status(HttpStatus.UNAUTHORIZED);
-      res.send(null);
-    } else {
-      res.status(201);
-      res.send(await new UserUpdateOperation(this.entityManager).save(user));
-    }
-  }
 
   @Post()
   async addUser(

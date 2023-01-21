@@ -1,10 +1,10 @@
-import { Controller, Get, Headers, HttpStatus, Post, Req, Res } from '@nestjs/common';
-import { UserService } from "../../service/user/user.service";
-import { Request, Response } from "express";
-import { ApiHeader, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { SessionService } from "../../service/session/session.service";
+import { Controller, Delete, Get, Headers, HttpStatus, Req, Res } from '@nestjs/common';
+import { UserService } from '../../service/user/user.service';
+import { Request, Response } from 'express';
+import { ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SessionService } from '../../service/session/session.service';
 
-@ApiTags('User registration and authorization')
+@ApiTags('User authorization')
 @Controller('auth')
 export class AuthController {
 
@@ -25,7 +25,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 403, description: 'User login or password incorrect!' })
   @ApiResponse({ status: 200, description: 'Successfully authorized!' })
-  async authUser(
+  async createSession(
     @Headers('login')
       login: string,
     @Headers('password')
@@ -38,49 +38,29 @@ export class AuthController {
     const user = await this.userService.findByLogin(login, password);
 
     if (user) {
-      req['session']['user'] = { id: user.id };
-
+      this.sessionService.open(req, user);
       res.json(user);
     } else {
       res.status(HttpStatus.UNAUTHORIZED).json();
     }
   }
 
-  @Post()
-  async registerUser(
-    @Headers('login')
-      login: string,
-    @Headers('password')
-      password: string,
+  @Delete()
+  @ApiResponse({ status: 200, description: 'Session was successfully closed!' })
+  @ApiResponse({ status: 400, description: 'Session not found!' })
+  async closeSession(
     @Req()
       req: Request,
     @Res()
       res: Response,
   ) {
-    if (!login) {
+    if (this.sessionService.close(req)) {
+      res.status(200);
+      res.json(true);
+    } else {
       res.status(400);
-      return res.send({ message: 'login expected!' });
+      res.json(false);
     }
-
-    if (!password) {
-      res.status(400);
-      return res.send({ message: 'password expected!' });
-    }
-
-    return this.userService.createByPassword(login, password)
-      .then(user => {
-        this.sessionService.open(req, user);
-        res.json(user);
-      })
-      .catch(err => {
-        if (err.code === '23505') {
-          res.status(400);
-          return res.json({ message: 'Wrong login or password' });
-        }
-
-        res.status(500);
-        return res.json(err);
-      });
   }
 
 }
