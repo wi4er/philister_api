@@ -53,15 +53,21 @@ export class MyselfController {
   ) {
     if (!login) {
       res.status(400);
-      return res.send({ message: 'login expected!' });
+      return res.send({
+        message: 'login expected!',
+        field: 'login',
+      });
     }
 
     if (!password) {
       res.status(400);
-      return res.send({ message: 'password expected!' });
+      return res.send({
+        message: 'password expected!',
+        field: 'password',
+      });
     }
 
-    return this.userService.createByPassword(login, password)
+    return this.userService.createByLogin(login, password)
       .then(user => {
         this.sessionService.open(req, user);
         res.json(user);
@@ -69,7 +75,15 @@ export class MyselfController {
       .catch(err => {
         if (err.code === '23505') {
           res.status(400);
-          return res.json({ message: 'Wrong login or password' });
+          return res.json({
+            message: 'Login already exists!',
+            field: 'login',
+          });
+        }
+
+        if (err['field']) {
+          res.status(400);
+          return res.json(err);
         }
 
         res.status(500);

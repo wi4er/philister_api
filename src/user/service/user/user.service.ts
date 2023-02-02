@@ -49,7 +49,16 @@ export class UserService {
   /**
    *
    */
-  async createByPassword(login: string, password: string): Promise<UserEntity> {
+  async createByLogin(login: string, password: string): Promise<UserEntity> {
+
+    if (password.length < 8) {
+      const err = new Error();
+      err['message'] = 'Password length at least 8 characters required!';
+      err['field'] = 'password';
+
+      throw err;
+    }
+
     const user = new UserEntity();
 
     user.login = login;

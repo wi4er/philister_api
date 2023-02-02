@@ -45,10 +45,10 @@ export function createConnectionOptions(): DataSourceOptions {
   return {
     type: 'postgres',
     host: process.env.DB_HOST || 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: 'example',
-    database: 'postgres',
+    port: +process.env.DB_PORT || 5432,
+    username: process.env.DB_USER_NAME || 'postgres',
+    password: process.env.DB_USER_PASSWORD || 'example',
+    database: process.env.DB_DATABASE || 'postgres',
     synchronize: true,
     // logging: true,
     entities: [
