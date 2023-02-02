@@ -26,6 +26,7 @@ import { PropertyEntity } from "../property/model/property.entity";
 import { ContentResolver } from './resolver/content/content.resolver';
 import { LangEntity } from "../lang/model/lang.entity";
 import { BlockController } from './controller/block/block.controller';
+import { ElementController } from './controller/element/element.controller';
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { BlockController } from './controller/block/block.controller';
     ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
     BlockResolver, BlockStringResolver, ContentResolver,
   ],
-  controllers: [BlockController]
+  controllers: [BlockController, ElementController]
 })
 export class ContentModule {
 }
