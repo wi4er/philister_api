@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ElementEntity } from '../../model/element.entity';
@@ -32,8 +32,18 @@ export class ElementController {
   }
 
   @Get()
-  async getList() {
+  async getList(
+    @Query('filter')
+      filter: any,
+  ) {
+    const where = {};
+
+    if (filter['flag']) {
+      where['flag'] = { flag: { id: filter['flag']['eq'] } };
+    }
+
     return this.elementRepo.find({
+      where,
       relations: { string: { property: true }, flag: { flag: true } },
     }).then(list => list.map(this.toView));
   }

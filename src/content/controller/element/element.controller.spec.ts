@@ -103,4 +103,22 @@ describe('ElementController', () => {
       expect(list.body[0].flag).toEqual([ 'ACTIVE' ]);
     });
   });
+
+  describe('Content element flag filter', () => {
+    test('Should get element with flag', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new ElementEntity, { block }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new Element2flagEntity(), { parent, flag, string: 'VALUE' }).save();
+
+      const blank = await Object.assign(new ElementEntity, { block }).save();
+
+      const list = await request(app.getHttpServer())
+        .get('/element?filter[flag][eq]=ACTIVE')
+        .expect(200);
+
+      expect(list.body).toHaveLength(1);
+      expect(list.body[0]['flag']).toEqual([ 'ACTIVE' ]);
+    });
+  });
 });
