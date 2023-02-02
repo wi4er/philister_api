@@ -1,18 +1,16 @@
 import {
   BaseEntity,
-  CreateDateColumn, DeleteDateColumn,
-  Entity,
-  Index,
-  ManyToOne,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
 } from "typeorm";
 import { ElementEntity } from "./element.entity";
-import { SectionEntity } from "./section.entity";
+import { PropertyEntity } from "../../property/model/property.entity";
 
-@Entity('content-element-section')
-@Index([ 'parent', 'section' ], { unique: true })
-export class ElementSectionEntity extends BaseEntity {
+@Entity('content-element-element')
+export class Element2elementEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -30,23 +28,30 @@ export class ElementSectionEntity extends BaseEntity {
   version: number;
 
   @ManyToOne(
-    type => ElementEntity,
-    element => element.section,
+    () => ElementEntity,
     {
       onDelete: 'CASCADE',
       nullable: false,
-    }
+    },
+  )
+  element: ElementEntity;
+
+  @ManyToOne(
+    () => ElementEntity,
+    element => element.value,
+    {
+      onDelete: 'CASCADE',
+      nullable: false,
+    },
   )
   parent: ElementEntity;
 
   @ManyToOne(
-    type => SectionEntity,
-    section => section.element,
+    () => PropertyEntity,
     {
       onDelete: 'CASCADE',
       nullable: false,
-    }
+    },
   )
-  section: SectionEntity;
-
+  property: PropertyEntity;
 }

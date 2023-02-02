@@ -24,8 +24,7 @@ import { WithStringEntity } from '../../common/model/with-string.entity';
 @Check('not_empty_login', '"login" > \'\'')
 export class UserEntity
   extends BaseEntity
-  implements WithFlagEntity<UserEntity>, WithStringEntity<UserEntity>
-{
+  implements WithFlagEntity<UserEntity>, WithStringEntity<UserEntity> {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -49,24 +48,46 @@ export class UserEntity
   @Column({ nullable: true })
   hash: string;
 
-  @OneToMany((type) => User2userContactEntity, (contact) => contact.parent)
+  @OneToMany(
+    type => User2userContactEntity,
+    contact => contact.parent,
+  )
   contact: User2userContactEntity[];
 
-  @OneToMany((type) => User2userGroupEntity, (contact) => contact.parent)
+  @OneToMany(
+    type => User2userGroupEntity,
+    contact => contact.parent,
+  )
   group: User2userGroupEntity[];
 
-  @OneToMany((type) => User2stringEntity, (property) => property.parent)
+  @OneToMany(
+    type => User2stringEntity,
+    property => property.parent,
+  )
   string: User2stringEntity[];
 
-  @OneToMany((type) => User2descriptionEntity, (property) => property.parent)
+  @OneToMany(
+    type => User2descriptionEntity,
+    property => property.parent,
+  )
   description: User2descriptionEntity[];
 
-  @OneToMany((type) => User2valueEntity, (value) => value.parent)
+  @OneToMany(
+    type => User2valueEntity,
+    value => value.parent,
+  )
   value: User2valueEntity[];
 
-  @OneToMany((type) => User2flagEntity, (flag) => flag.parent)
+  @OneToMany(
+    type => User2flagEntity,
+    flag => flag.parent,
+  )
   flag: User2flagEntity[];
 
-  @OneToMany((type) => User2userEntity, (user) => user.parent)
+  @OneToMany(
+    type => User2userEntity,
+    user => user.parent,
+  )
   child: User2userEntity[];
+
 }

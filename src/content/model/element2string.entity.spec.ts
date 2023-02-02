@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm/data-source/DataSource';
 import { createConnection } from 'typeorm';
 import { createConnectionOptions } from '../../createConnectionOptions';
 import { ElementEntity } from './element.entity';
-import { ElementStringEntity } from './element-string.entity';
+import { Element2stringEntity } from './element2string.entity';
 import { PropertyEntity } from '../../property/model/property.entity';
 import { BlockEntity } from './block.entity';
 
@@ -17,7 +17,7 @@ describe('ElementString entity', () => {
 
   describe('ElementString fields', () => {
     test('Should get empty list', async () => {
-      const repo = source.getRepository(ElementStringEntity);
+      const repo = source.getRepository(Element2stringEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(0);
@@ -27,7 +27,7 @@ describe('ElementString entity', () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
 
       await expect(
-        Object.assign(new ElementStringEntity(), { string: 'VALUE', property }).save()
+        Object.assign(new Element2stringEntity(), { string: 'VALUE', property }).save()
       ).rejects.toThrow();
     });
 
@@ -36,7 +36,7 @@ describe('ElementString entity', () => {
       const parent = await Object.assign(new ElementEntity(), { block }).save();
 
       await expect(
-        Object.assign(new ElementStringEntity(), { string: 'VALUE', parent }).save()
+        Object.assign(new Element2stringEntity(), { string: 'VALUE', parent }).save()
       ).rejects.toThrow();
     });
   });
@@ -49,7 +49,7 @@ describe('ElementString entity', () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new ElementEntity(), { block }).save();
 
-      await Object.assign(new ElementStringEntity(), { string: 'VALUE', parent, property }).save();
+      await Object.assign(new Element2stringEntity(), { string: 'VALUE', parent, property }).save();
 
       const inst = await repo.findOne({
         where: { id: parent.id },

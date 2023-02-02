@@ -6,11 +6,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
 } from "typeorm";
-import { ElementEntity } from "./element.entity";
+import { ValueEntity } from "../../directory/model/value.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
+import { ElementEntity } from "./element.entity";
 
-@Entity('content-element-element')
-export class ElementElementEntity extends BaseEntity {
+@Entity('content-element-value')
+export class Element2valueEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,13 +29,13 @@ export class ElementElementEntity extends BaseEntity {
   version: number;
 
   @ManyToOne(
-    () => ElementEntity,
+    () => ValueEntity,
     {
       onDelete: 'CASCADE',
       nullable: false,
     },
   )
-  element: ElementEntity;
+  value: ValueEntity;
 
   @ManyToOne(
     () => ElementEntity,
@@ -54,4 +55,5 @@ export class ElementElementEntity extends BaseEntity {
     },
   )
   property: PropertyEntity;
+
 }

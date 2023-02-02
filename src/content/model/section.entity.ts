@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
 } from "typeorm";
-import { ElementSectionEntity } from "./element-section.entity";
+import { Element2sectionEntity } from "./element2section.entity";
 import { BlockEntity } from "./block.entity";
-import { ElementValueEntity } from "./element-value.entity";
+import { Element2valueEntity } from "./element2value.entity";
 import { SectionStringEntity } from "./section-string.entity";
 
 @Entity('content-section')
@@ -47,15 +47,15 @@ export class SectionEntity extends BaseEntity {
   string: SectionStringEntity[];
 
   @OneToMany(
-    type => ElementSectionEntity,
+    type => Element2sectionEntity,
     section => section.section,
   )
-  element: ElementSectionEntity[];
+  element: Element2sectionEntity[];
 
   @OneToMany(
-    type => ElementValueEntity,
+    type => Element2valueEntity,
     value => value.parent,
   )
-  value: ElementValueEntity[];
+  value: Element2valueEntity[];
 
 }

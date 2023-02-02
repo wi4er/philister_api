@@ -27,13 +27,14 @@ export class ElementController {
           lang: str.lang,
         })),
       ],
+      flag: item.flag.map(fl => fl.flag.id),
     };
   }
 
   @Get()
   async getList() {
     return this.elementRepo.find({
-      relations: { string: { property: true } },
+      relations: { string: { property: true }, flag: { flag: true } },
     }).then(list => list.map(this.toView));
   }
 

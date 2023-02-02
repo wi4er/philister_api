@@ -20,15 +20,15 @@ import { LangEntity } from "./lang/model/lang.entity";
 import { LangStringEntity } from "./lang/model/lang-string.entity";
 import { LangFlagEntity } from "./lang/model/lang-flag.entity";
 import { ElementEntity } from "./content/model/element.entity";
-import { ElementSectionEntity } from "./content/model/element-section.entity";
+import { Element2sectionEntity } from "./content/model/element2section.entity";
 import { SectionEntity } from "./content/model/section.entity";
-import { ElementStringEntity } from "./content/model/element-string.entity";
+import { Element2stringEntity } from "./content/model/element2string.entity";
 import { BlockEntity } from "./content/model/block.entity";
 import { BlockStringEntity } from "./content/model/block-string.entity";
-import { ElementValueEntity } from "./content/model/element-value.entity";
+import { Element2valueEntity } from "./content/model/element2value.entity";
 import { SectionValueEntity } from "./content/model/section-value.entity";
 import { SectionStringEntity } from "./content/model/section-string.entity";
-import { ElementElementEntity } from "./content/model/element-element.entity";
+import { Element2elementEntity } from "./content/model/element2element.entity";
 import { ChangeLogEntity } from "./log/model/change-log.entity";
 import { FetchLogEntity } from "./log/model/fetch-log.entity";
 import { DirectoryFlagEntity } from "./directory/model/directory-flag.entity";
@@ -40,6 +40,7 @@ import { UserContact2stringEntity } from "./user/model/user-contact2string.entit
 import { UserGroup2stringEntity } from "./user/model/user-group2string.entity";
 import { UserGroup2flagEntity } from "./user/model/user-group2flag.entity";
 import { User2userGroupEntity } from "./user/model/user2user-group.entity";
+import { Element2flagEntity } from './content/model/element2flag.entity';
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -61,7 +62,7 @@ export function createConnectionOptions(): DataSourceOptions {
       ValueEntity, ValueStringEntity, ValueFlagEntity,
       FlagEntity, FlagStringEntity, FlagFlagEntity,
       LangEntity, LangStringEntity, LangFlagEntity,
-      ElementEntity, ElementSectionEntity, ElementStringEntity, ElementValueEntity, ElementElementEntity,
+      ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity, Element2flagEntity,
       SectionEntity, SectionValueEntity, SectionStringEntity,
       BlockEntity, BlockStringEntity,
       ChangeLogEntity, FetchLogEntity,

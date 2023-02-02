@@ -7,7 +7,9 @@ import * as request from 'supertest';
 import { BlockEntity } from '../../model/block.entity';
 import { ElementEntity } from '../../model/element.entity';
 import { PropertyEntity } from '../../../property/model/property.entity';
-import { ElementStringEntity } from '../../model/element-string.entity';
+import { Element2stringEntity } from '../../model/element2string.entity';
+import { Element2flagEntity } from '../../model/element2flag.entity';
+import { FlagEntity } from '../../../flag/model/flag.entity';
 
 describe('ElementController', () => {
   let source;
@@ -45,12 +47,12 @@ describe('ElementController', () => {
     });
   });
 
-  describe('Content element getting', () => {
+  describe('Content element with strings', () => {
     test('Should get elements with properties', async () => {
       const block = await new BlockEntity().save();
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new ElementEntity, { block }).save();
-      await Object.assign(new ElementStringEntity(), { parent, property, string: 'VALUE' }).save();
+      await Object.assign(new Element2stringEntity(), { parent, property, string: 'VALUE' }).save();
 
       const list = await request(app.getHttpServer())
         .get('/element')
@@ -70,7 +72,7 @@ describe('ElementController', () => {
       for (let i = 0; i < 10; i++) {
         const parent = await Object.assign(new ElementEntity, { block }).save();
         for (let j = 0; j < 10; j++) {
-          await Object.assign(new ElementStringEntity(), { parent, property, string: 'VALUE' }).save();
+          await Object.assign(new Element2stringEntity(), { parent, property, string: 'VALUE' }).save();
         }
       }
 
@@ -83,6 +85,22 @@ describe('ElementController', () => {
       expect(list.body[0].property).toHaveLength(10);
       expect(list.body[0].property[0].string).toBe('VALUE');
       expect(list.body[0].property[0].property).toBe('NAME');
+    });
+  });
+
+  describe('Content element with flags', () => {
+    test('Should get element with flag', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new ElementEntity, { block }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new Element2flagEntity(), { parent, flag, string: 'VALUE' }).save();
+
+      const list = await request(app.getHttpServer())
+        .get('/element')
+        .expect(200);
+
+      expect(list.body).toHaveLength(1);
+      expect(list.body[0].flag).toEqual([ 'ACTIVE' ]);
     });
   });
 });

@@ -7,11 +7,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn
 } from "typeorm";
-import { ElementSectionEntity } from "./element-section.entity";
-import { ElementStringEntity } from "./element-string.entity";
+import { Element2sectionEntity } from "./element2section.entity";
+import { Element2stringEntity } from "./element2string.entity";
 import { BlockEntity } from "./block.entity";
-import { ElementValueEntity } from "./element-value.entity";
+import { Element2valueEntity } from "./element2value.entity";
 import { WithStringEntity } from '../../common/model/with-string.entity';
+import { Element2flagEntity } from './element2flag.entity';
 
 @Entity('content-element')
 export class ElementEntity extends BaseEntity implements WithStringEntity<ElementEntity> {
@@ -42,21 +43,27 @@ export class ElementEntity extends BaseEntity implements WithStringEntity<Elemen
   block: BlockEntity;
 
   @OneToMany(
-    type => ElementSectionEntity,
+    type => Element2sectionEntity,
     section => section.parent,
   )
-  section: ElementSectionEntity[];
+  section: Element2sectionEntity[];
 
   @OneToMany(
-    type => ElementStringEntity,
+    type => Element2stringEntity,
     property => property.parent,
   )
-  string: ElementStringEntity[];
+  string: Element2stringEntity[];
 
   @OneToMany(
-    type => ElementValueEntity,
+    type => Element2flagEntity,
+    flag => flag.parent,
+  )
+  flag: Element2flagEntity[];
+
+  @OneToMany(
+    type => Element2valueEntity,
     value => value.parent,
   )
-  value: ElementValueEntity[];
+  value: Element2valueEntity[];
 
 }

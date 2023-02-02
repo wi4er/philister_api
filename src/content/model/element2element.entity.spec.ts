@@ -2,13 +2,11 @@ import { DataSource } from "typeorm/data-source/DataSource";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { BlockEntity } from "./block.entity";
-import { ElementValueEntity } from "./element-value.entity";
 import { ElementEntity } from "./element.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { DirectoryEntity } from "../../directory/model/directory.entity";
-import { ValueEntity } from "../../directory/model/value.entity";
+import { Element2elementEntity } from "./element2element.entity";
 
-describe("ElementValue entity", () => {
+describe("ElementElement entity", () => {
   let source: DataSource;
 
   beforeAll(async () => {
@@ -17,21 +15,20 @@ describe("ElementValue entity", () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('ElementValue fields', () => {
+  describe('ElementElement fields', () => {
     test("Should create element value", async () => {
       const block = await new BlockEntity().save();
       const parent = await Object.assign(new ElementEntity(), { block }).save();
       const property = await Object.assign(new PropertyEntity(), { id: 'CURRENT' }).save();
-      const directory = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
-      const value = await Object.assign(new ValueEntity(), { id: 'LONDON', directory }).save();
+      const element = await Object.assign(new ElementEntity(), { block }).save();
 
-      const inst = await Object.assign(new ElementValueEntity(), { parent, property, value }).save();
+      const inst = await Object.assign(new Element2elementEntity(), { parent, property, element }).save();
 
       expect(inst.id).toBe(1);
     });
 
     test('Should get empty list', async () => {
-      const repo = source.getRepository(ElementValueEntity);
+      const repo = source.getRepository(Element2elementEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(0);

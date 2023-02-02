@@ -2,11 +2,13 @@ import { DataSource } from "typeorm/data-source/DataSource";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { BlockEntity } from "./block.entity";
+import { Element2valueEntity } from "./element2value.entity";
 import { ElementEntity } from "./element.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { ElementElementEntity } from "./element-element.entity";
+import { DirectoryEntity } from "../../directory/model/directory.entity";
+import { ValueEntity } from "../../directory/model/value.entity";
 
-describe("ElementElement entity", () => {
+describe("ElementValue entity", () => {
   let source: DataSource;
 
   beforeAll(async () => {
@@ -15,20 +17,21 @@ describe("ElementElement entity", () => {
 
   beforeEach(() => source.synchronize(true));
 
-  describe('ElementElement fields', () => {
+  describe('ElementValue fields', () => {
     test("Should create element value", async () => {
       const block = await new BlockEntity().save();
       const parent = await Object.assign(new ElementEntity(), { block }).save();
       const property = await Object.assign(new PropertyEntity(), { id: 'CURRENT' }).save();
-      const element = await Object.assign(new ElementEntity(), { block }).save();
+      const directory = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      const value = await Object.assign(new ValueEntity(), { id: 'LONDON', directory }).save();
 
-      const inst = await Object.assign(new ElementElementEntity(), { parent, property, element }).save();
+      const inst = await Object.assign(new Element2valueEntity(), { parent, property, value }).save();
 
       expect(inst.id).toBe(1);
     });
 
     test('Should get empty list', async () => {
-      const repo = source.getRepository(ElementElementEntity);
+      const repo = source.getRepository(Element2valueEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(0);

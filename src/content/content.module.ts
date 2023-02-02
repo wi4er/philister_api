@@ -4,15 +4,15 @@ import { SectionResolver } from './resolver/section/section.resolver';
 import { ElementPropertyResolver } from './resolver/element-property/element-property.resolver';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ElementEntity } from "./model/element.entity";
-import { ElementSectionEntity } from "./model/element-section.entity";
+import { Element2sectionEntity } from "./model/element2section.entity";
 import { SectionEntity } from "./model/section.entity";
-import { ElementStringEntity } from "./model/element-string.entity";
+import { Element2stringEntity } from "./model/element2string.entity";
 import { BlockEntity } from "./model/block.entity";
 import { BlockStringEntity } from "./model/block-string.entity";
-import { ElementValueEntity } from "./model/element-value.entity";
+import { Element2valueEntity } from "./model/element2value.entity";
 import { SectionValueEntity } from "./model/section-value.entity";
 import { SectionStringEntity } from "./model/section-string.entity";
-import { ElementElementEntity } from "./model/element-element.entity";
+import { Element2elementEntity } from "./model/element2element.entity";
 import { ContentRootResolver } from './resolver/content-root/content-root.resolver';
 import { ElementQueryResolver } from './resolver/element-query/element-query.resolver';
 import { SectionQueryResolver } from './resolver/section-query/section-query.resolver';
@@ -27,11 +27,13 @@ import { ContentResolver } from './resolver/content/content.resolver';
 import { LangEntity } from "../lang/model/lang.entity";
 import { BlockController } from './controller/block/block.controller';
 import { ElementController } from './controller/element/element.controller';
+import { Element2flagEntity } from './model/element2flag.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      ElementEntity, ElementSectionEntity, ElementStringEntity, ElementValueEntity, ElementElementEntity,
+      ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity,
+      Element2flagEntity,
       SectionEntity, SectionValueEntity, SectionStringEntity,
       BlockEntity, BlockStringEntity,
       PropertyEntity,
