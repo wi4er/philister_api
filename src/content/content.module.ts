@@ -25,6 +25,7 @@ import { BlockStringResolver } from './resolver/block-string/block-string.resolv
 import { PropertyEntity } from "../property/model/property.entity";
 import { ContentResolver } from './resolver/content/content.resolver';
 import { LangEntity } from "../lang/model/lang.entity";
+import { BlockController } from './controller/block/block.controller';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { LangEntity } from "../lang/model/lang.entity";
     SectionQueryResolver, SectionMutationResolver,
     ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
     BlockResolver, BlockStringResolver, ContentResolver,
-  ]
+  ],
+  controllers: [BlockController]
 })
 export class ContentModule {
 }
