@@ -28,6 +28,7 @@ import { LangEntity } from "../lang/model/lang.entity";
 import { BlockController } from './controller/block/block.controller';
 import { ElementController } from './controller/element/element.controller';
 import { Element2flagEntity } from './model/element2flag.entity';
+import { SectionController } from './controller/section/section.controller';
 
 @Module({
   imports: [
@@ -46,7 +47,7 @@ import { Element2flagEntity } from './model/element2flag.entity';
     ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
     BlockResolver, BlockStringResolver, ContentResolver,
   ],
-  controllers: [BlockController, ElementController]
+  controllers: [BlockController, ElementController, SectionController]
 })
 export class ContentModule {
 }
