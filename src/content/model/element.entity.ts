@@ -11,9 +11,10 @@ import { ElementSectionEntity } from "./element-section.entity";
 import { ElementStringEntity } from "./element-string.entity";
 import { BlockEntity } from "./block.entity";
 import { ElementValueEntity } from "./element-value.entity";
+import { WithStringEntity } from '../../common/model/with-string.entity';
 
 @Entity('content-element')
-export class ElementEntity extends BaseEntity {
+export class ElementEntity extends BaseEntity implements WithStringEntity<ElementEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;
