@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { BlockInputSchema } from "../../schema/block-input.schema";
 import { BlockEntity } from "../../model/block.entity";
-import { BlockStringEntity } from "../../model/block-string.entity";
+import { Block2stringEntity } from "../../model/block2string.entity";
 
 @Resolver(of => BlockMutationSchema)
 export class BlockMutationResolver {
@@ -26,7 +26,7 @@ export class BlockMutationResolver {
     if (item.property) {
       for (const value of item.property) {
         await Object.assign(
-          new BlockStringEntity(),
+          new Block2stringEntity(),
           {
             string: value.string,
             property: value.property,

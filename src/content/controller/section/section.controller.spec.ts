@@ -84,7 +84,7 @@ describe('SectionController', () => {
   });
 
   describe('Content section flag filter', () => {
-    test('Should get section with flag', async () => {
+    test('Should get section with flag filter', async () => {
       const block = await new BlockEntity().save();
       const parent = await Object.assign(new SectionEntity(), { block }).save();
       const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
@@ -98,6 +98,24 @@ describe('SectionController', () => {
 
       expect(list.body).toHaveLength(1);
       expect(list.body[0]['flag']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should get empty list with flag filter', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new SectionEntity(), { block }).save();
+
+      for (let i = 0; i < 10; i++) {
+        const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+        await Object.assign(new Section2flagEntity(), { parent, flag, string: 'VALUE' }).save();
+      }
+
+      await Object.assign(new SectionEntity, { block }).save();
+
+      const list = await request(app.getHttpServer())
+        .get('/section?filter[flag][eq]=WRONG')
+        .expect(200);
+
+      expect(list.body).toHaveLength(0);
     });
   });
 });

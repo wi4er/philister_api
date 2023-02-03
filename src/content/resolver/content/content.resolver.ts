@@ -2,14 +2,14 @@ import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { BlockEntity } from "../../model/block.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { BlockStringEntity } from "../../model/block-string.entity";
+import { Block2stringEntity } from "../../model/block2string.entity";
 import { ContentSchema } from "../../schema/content.schema";
 
 @Resolver(of => ContentSchema)
 export class ContentResolver {
   constructor(
-    @InjectRepository(BlockStringEntity)
-    private stringRepo: Repository<BlockStringEntity>,
+    @InjectRepository(Block2stringEntity)
+    private stringRepo: Repository<Block2stringEntity>,
   ) {
   }
 

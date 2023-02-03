@@ -8,7 +8,7 @@ import { Element2sectionEntity } from './model/element2section.entity';
 import { SectionEntity } from './model/section.entity';
 import { Element2stringEntity } from './model/element2string.entity';
 import { BlockEntity } from './model/block.entity';
-import { BlockStringEntity } from './model/block-string.entity';
+import { Block2stringEntity } from './model/block2string.entity';
 import { Element2valueEntity } from './model/element2value.entity';
 import { Section2valueEntity } from './model/section2value.entity';
 import { Section2stringEntity } from './model/section2string.entity';
@@ -37,7 +37,7 @@ import { Section2flagEntity } from './model/section2flag.entity';
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity,
       Element2flagEntity,
       SectionEntity, Section2valueEntity, Section2stringEntity, Section2flagEntity,
-      BlockEntity, BlockStringEntity,
+      BlockEntity, Block2stringEntity,
       PropertyEntity,
       LangEntity,
     ]),

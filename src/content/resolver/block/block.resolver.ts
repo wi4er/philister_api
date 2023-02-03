@@ -5,7 +5,7 @@ import { ElementEntity } from "../../model/element.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { SectionEntity } from "../../model/section.entity";
-import { BlockStringEntity } from "../../model/block-string.entity";
+import { Block2stringEntity } from "../../model/block2string.entity";
 
 @Resolver(of => BlockSchema)
 export class BlockResolver {
@@ -17,8 +17,8 @@ export class BlockResolver {
     @InjectRepository(SectionEntity)
     private sectionRepo: Repository<SectionEntity>,
 
-    @InjectRepository(BlockStringEntity)
-    private stringRepo: Repository<BlockStringEntity>,
+    @InjectRepository(Block2stringEntity)
+    private stringRepo: Repository<Block2stringEntity>,
   ) {
   }
 

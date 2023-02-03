@@ -9,7 +9,7 @@ import { BlockEntity } from "../../model/block.entity";
 import { ElementEntity } from "../../model/element.entity";
 import { SectionEntity } from "../../model/section.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { BlockStringEntity } from "../../model/block-string.entity";
+import { Block2stringEntity } from "../../model/block2string.entity";
 
 const blockItemQuery = gql`
   query getBlockItem($id: Int!) {
@@ -89,7 +89,7 @@ describe('BlockResolver', () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
 
       await Object.assign(
-        new BlockStringEntity(),
+        new Block2stringEntity(),
         { string: 'VALUE', property, parent }
       ).save();
 
@@ -103,7 +103,7 @@ describe('BlockResolver', () => {
     test('Shouldn`t get block with wrong property', async () => {
       const parent = await new BlockEntity().save();
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
-      await Object.assign(new BlockStringEntity(), { string: 'VALUE', property, parent }).save();
+      await Object.assign(new Block2stringEntity(), { string: 'VALUE', property, parent }).save();
 
       const res = await request(app.getHttpServer())
         .query(blockStringPropertyQuery, { id: 1, property: 'WRONG' })

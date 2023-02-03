@@ -6,7 +6,7 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../../createConnectionOptions";
 import request from "supertest-graphql";
 import { BlockEntity } from "../../model/block.entity";
-import { BlockStringEntity } from "../../model/block-string.entity";
+import { Block2stringEntity } from "../../model/block2string.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 
 const propertyListQuery = gql`
@@ -68,7 +68,7 @@ describe('BlockStringResolver', () => {
       const parent = await new BlockEntity().save();
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
 
-      await Object.assign(new BlockStringEntity(), { parent, property, string: 'VALUE' }).save();
+      await Object.assign(new Block2stringEntity(), { parent, property, string: 'VALUE' }).save();
 
       const res = await request(app.getHttpServer())
         .query(propertyListQuery, { id: 1 })
@@ -84,9 +84,9 @@ describe('BlockStringResolver', () => {
       const property2 = await Object.assign(new PropertyEntity(), { id: 'SECOND' }).save();
       const property3 = await Object.assign(new PropertyEntity(), { id: 'ANOTHER' }).save();
 
-      await Object.assign(new BlockStringEntity(), { parent, property: property1, string: 'VALUE_1' }).save();
-      await Object.assign(new BlockStringEntity(), { parent, property: property2, string: 'VALUE_2' }).save();
-      await Object.assign(new BlockStringEntity(), { parent, property: property3, string: 'VALUE_3' }).save();
+      await Object.assign(new Block2stringEntity(), { parent, property: property1, string: 'VALUE_1' }).save();
+      await Object.assign(new Block2stringEntity(), { parent, property: property2, string: 'VALUE_2' }).save();
+      await Object.assign(new Block2stringEntity(), { parent, property: property3, string: 'VALUE_3' }).save();
 
       const res = await request(app.getHttpServer())
         .query(propertyListQuery, { id: 1 })
@@ -104,7 +104,7 @@ describe('BlockStringResolver', () => {
       const parent = await new BlockEntity().save();
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
 
-      await Object.assign(new BlockStringEntity(), { parent, property, string: 'VALUE' }).save();
+      await Object.assign(new Block2stringEntity(), { parent, property, string: 'VALUE' }).save();
 
       const res = await request(app.getHttpServer())
         .query(propertyItemQuery, { id: 1, property: 'NAME' })

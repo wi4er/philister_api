@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { ElementEntity } from "./element.entity";
 import { SectionEntity } from "./section.entity";
-import { BlockStringEntity } from "./block-string.entity";
+import { Block2stringEntity } from "./block2string.entity";
 
 @Entity('content-block')
 export class BlockEntity extends BaseEntity {
@@ -42,9 +42,9 @@ export class BlockEntity extends BaseEntity {
   section: SectionEntity;
 
   @OneToMany(
-    type => BlockStringEntity,
+    type => Block2stringEntity,
     property => property.parent,
   )
-  string: BlockStringEntity[];
+  string: Block2stringEntity[];
 
 }

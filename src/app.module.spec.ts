@@ -16,7 +16,7 @@ import { FlagStringEntity } from "./flag/model/flag-string.entity";
 import { LangEntity } from "./lang/model/lang.entity";
 import { LangStringEntity } from "./lang/model/lang-string.entity";
 import { BlockEntity } from "./content/model/block.entity";
-import { BlockStringEntity } from "./content/model/block-string.entity";
+import { Block2stringEntity } from "./content/model/block2string.entity";
 
 let source;
 let app;
@@ -41,9 +41,9 @@ describe('App mocks', () => {
     for (let i = 0; i < 10; i++) {
       const parent = await new BlockEntity().save();
 
-      await Object.assign(new BlockStringEntity(), { parent, property: name, string: `Content #${i}` }).save();
-      await Object.assign(new BlockStringEntity(), { parent, property: second, string: 'VALUE' }).save();
-      await Object.assign(new BlockStringEntity(), { parent, property: descr, string: 'VALUE' }).save();
+      await Object.assign(new Block2stringEntity(), { parent, property: name, string: `Content #${i}` }).save();
+      await Object.assign(new Block2stringEntity(), { parent, property: second, string: 'VALUE' }).save();
+      await Object.assign(new Block2stringEntity(), { parent, property: descr, string: 'VALUE' }).save();
     }
 
     const active = await Object.assign(new FlagEntity(), {

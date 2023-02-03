@@ -13,7 +13,7 @@ import { LangEntity } from "../../lang/model/lang.entity";
 import { CommonStringEntity } from "../../common/model/common-string.entity";
 
 @Entity('content-block2string')
-export class BlockStringEntity extends BaseEntity implements CommonStringEntity<BlockEntity> {
+export class Block2stringEntity extends BaseEntity implements CommonStringEntity<BlockEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;

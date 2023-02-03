@@ -24,7 +24,7 @@ import { Element2sectionEntity } from "./content/model/element2section.entity";
 import { SectionEntity } from "./content/model/section.entity";
 import { Element2stringEntity } from "./content/model/element2string.entity";
 import { BlockEntity } from "./content/model/block.entity";
-import { BlockStringEntity } from "./content/model/block-string.entity";
+import { Block2stringEntity } from "./content/model/block2string.entity";
 import { Element2valueEntity } from "./content/model/element2value.entity";
 import { Section2valueEntity } from "./content/model/section2value.entity";
 import { Section2stringEntity } from "./content/model/section2string.entity";
@@ -65,7 +65,7 @@ export function createConnectionOptions(): DataSourceOptions {
       LangEntity, LangStringEntity, LangFlagEntity,
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity, Element2flagEntity,
       SectionEntity, Section2valueEntity, Section2stringEntity, Section2flagEntity,
-      BlockEntity, BlockStringEntity,
+      BlockEntity, Block2stringEntity,
       ChangeLogEntity, FetchLogEntity,
     ],
     subscribers: [],
