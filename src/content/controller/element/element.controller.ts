@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ElementEntity } from '../../model/element.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { ElementFilterSchema } from '../../schema/element-filter.schema';
 
 @ApiTags('Content')
 @Controller('element')
@@ -34,12 +35,12 @@ export class ElementController {
   @Get()
   async getList(
     @Query('filter')
-      filter: any,
+      filter?: ElementFilterSchema,
   ) {
     const where = {};
 
-    if (filter['flag']) {
-      where['flag'] = { flag: { id: filter['flag']['eq'] } };
+    if (filter?.flag) {
+      where['flag'] = { flag: { id: filter.flag.eq } };
     }
 
     return this.elementRepo.find({

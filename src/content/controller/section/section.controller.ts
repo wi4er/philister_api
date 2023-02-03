@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SectionEntity } from '../../model/section.entity';
+import { SectionFilterSchema } from '../../schema/section-filter.schema';
 
 @Controller('section')
 export class SectionController {
@@ -31,8 +32,15 @@ export class SectionController {
   }
 
   @Get()
-  async getList() {
+  async getList(
+    @Query('filter')
+      filter?: SectionFilterSchema,
+  ) {
     const where = {};
+
+    if (filter?.flag) {
+      where['flag'] = { flag: { id: filter.flag.eq } };
+    }
 
     return this.sectionRepo.find({
       where,

@@ -7,11 +7,8 @@ import * as request from 'supertest';
 import { BlockEntity } from '../../model/block.entity';
 import { SectionEntity } from '../../model/section.entity';
 import { PropertyEntity } from '../../../property/model/property.entity';
-import { ElementEntity } from '../../model/element.entity';
-import { Element2stringEntity } from '../../model/element2string.entity';
 import { Section2stringEntity } from '../../model/section2string.entity';
 import { FlagEntity } from '../../../flag/model/flag.entity';
-import { Element2flagEntity } from '../../model/element2flag.entity';
 import { Section2flagEntity } from '../../model/section2flag.entity';
 
 describe('SectionController', () => {
@@ -83,6 +80,24 @@ describe('SectionController', () => {
 
       expect(list.body).toHaveLength(1);
       expect(list.body[0].flag).toEqual([ 'ACTIVE' ]);
+    });
+  });
+
+  describe('Content section flag filter', () => {
+    test('Should get section with flag', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new SectionEntity(), { block }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new Section2flagEntity(), { parent, flag, string: 'VALUE' }).save();
+
+      await Object.assign(new SectionEntity, { block }).save();
+
+      const list = await request(app.getHttpServer())
+        .get('/section?filter[flag][eq]=ACTIVE')
+        .expect(200);
+
+      expect(list.body).toHaveLength(1);
+      expect(list.body[0]['flag']).toEqual([ 'ACTIVE' ]);
     });
   });
 });
