@@ -10,7 +10,7 @@ import {
 import { Element2sectionEntity } from "./element2section.entity";
 import { BlockEntity } from "./block.entity";
 import { Element2valueEntity } from "./element2value.entity";
-import { SectionStringEntity } from "./section-string.entity";
+import { Section2stringEntity } from "./section2string.entity";
 
 @Entity('content-section')
 export class SectionEntity extends BaseEntity {
@@ -41,10 +41,10 @@ export class SectionEntity extends BaseEntity {
   block: BlockEntity;
 
   @OneToMany(
-    type => SectionStringEntity,
+    type => Section2stringEntity,
     property => property.parent,
   )
-  string: SectionStringEntity[];
+  string: Section2stringEntity[];
 
   @OneToMany(
     type => Element2sectionEntity,

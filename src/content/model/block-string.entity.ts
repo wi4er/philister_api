@@ -12,7 +12,7 @@ import { BlockEntity } from "./block.entity";
 import { LangEntity } from "../../lang/model/lang.entity";
 import { CommonStringEntity } from "../../common/model/common-string.entity";
 
-@Entity('content-block-string')
+@Entity('content-block2string')
 export class BlockStringEntity extends BaseEntity implements CommonStringEntity<BlockEntity> {
 
   @PrimaryGeneratedColumn()

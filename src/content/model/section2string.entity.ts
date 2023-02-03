@@ -1,17 +1,18 @@
 import {
-  BaseEntity,
+  BaseEntity, Column,
   CreateDateColumn,
-  DeleteDateColumn,
-  Entity, ManyToOne,
+  DeleteDateColumn, Entity, ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
+  UpdateDateColumn,
+  VersionColumn
 } from "typeorm";
-import { ValueEntity } from "../../directory/model/value.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { SectionEntity } from "./section.entity";
+import { CommonStringEntity } from "../../common/model/common-string.entity";
+import { LangEntity } from "../../lang/model/lang.entity";
 
-@Entity('content-section-value')
-export class SectionValueEntity extends BaseEntity {
+@Entity('content-section2string')
+export class Section2stringEntity extends BaseEntity implements CommonStringEntity<SectionEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,21 +29,24 @@ export class SectionValueEntity extends BaseEntity {
   @VersionColumn()
   version: number;
 
+  @Column()
+  string: string;
+
   @ManyToOne(
-    () => ValueEntity,
+    () => LangEntity,
     {
       onDelete: 'CASCADE',
-      nullable: false,
+      nullable: true,
     },
   )
-  value: ValueEntity;
+  lang?: LangEntity;
 
   @ManyToOne(
     () => SectionEntity,
-    element => element.value,
+    section => section.string,
     {
-      onDelete: 'CASCADE',
       nullable: false,
+      onDelete: 'CASCADE'
     },
   )
   parent: SectionEntity;

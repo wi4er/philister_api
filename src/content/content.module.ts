@@ -10,8 +10,8 @@ import { Element2stringEntity } from "./model/element2string.entity";
 import { BlockEntity } from "./model/block.entity";
 import { BlockStringEntity } from "./model/block-string.entity";
 import { Element2valueEntity } from "./model/element2value.entity";
-import { SectionValueEntity } from "./model/section-value.entity";
-import { SectionStringEntity } from "./model/section-string.entity";
+import { Section2valueEntity } from "./model/section2value.entity";
+import { Section2stringEntity } from "./model/section2string.entity";
 import { Element2elementEntity } from "./model/element2element.entity";
 import { ContentRootResolver } from './resolver/content-root/content-root.resolver';
 import { ElementQueryResolver } from './resolver/element-query/element-query.resolver';
@@ -35,7 +35,7 @@ import { SectionController } from './controller/section/section.controller';
     TypeOrmModule.forFeature([
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity,
       Element2flagEntity,
-      SectionEntity, SectionValueEntity, SectionStringEntity,
+      SectionEntity, Section2valueEntity, Section2stringEntity,
       BlockEntity, BlockStringEntity,
       PropertyEntity,
       LangEntity,

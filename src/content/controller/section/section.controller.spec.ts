@@ -6,6 +6,10 @@ import { createConnectionOptions } from '../../../createConnectionOptions';
 import * as request from 'supertest';
 import { BlockEntity } from '../../model/block.entity';
 import { SectionEntity } from '../../model/section.entity';
+import { PropertyEntity } from '../../../property/model/property.entity';
+import { ElementEntity } from '../../model/element.entity';
+import { Element2stringEntity } from '../../model/element2string.entity';
+import { Section2stringEntity } from '../../model/section2string.entity';
 
 describe('SectionController', () => {
   let source;
@@ -41,6 +45,25 @@ describe('SectionController', () => {
       expect(list.body).toHaveLength(1);
       expect(list.body[0].id).toBe(1);
       expect(list.body[0].block).toBe(1);
+    });
+  });
+
+  describe('Content section with strings', () => {
+    test('Should get section with properties', async () => {
+      const block = await new BlockEntity().save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const parent = await Object.assign(new SectionEntity(), { block }).save();
+      await Object.assign(new Section2stringEntity(), { parent, property, string: 'VALUE' }).save();
+
+      const list = await request(app.getHttpServer())
+        .get('/section')
+        .expect(200);
+
+      expect(list.body).toHaveLength(1);
+      expect(list.body[0].id).toBe(1);
+      expect(list.body[0].property).toHaveLength(1);
+      expect(list.body[0].property[0].string).toBe('VALUE');
+      expect(list.body[0].property[0].property).toBe('NAME');
     });
   });
 });

@@ -8,7 +8,7 @@ import { ElementEntity } from "./element.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { DirectoryEntity } from "../../directory/model/directory.entity";
 import { ValueEntity } from "../../directory/model/value.entity";
-import { SectionValueEntity } from "./section-value.entity";
+import { Section2valueEntity } from "./section2value.entity";
 
 describe("SectionValue entity", () => {
   let source: DataSource;
@@ -27,7 +27,7 @@ describe("SectionValue entity", () => {
       const directory = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
       const value = await Object.assign(new ValueEntity(), { id: 'LONDON', directory }).save();
 
-      const inst = await Object.assign(new SectionValueEntity(), { parent, property, value }).save();
+      const inst = await Object.assign(new Section2valueEntity(), { parent, property, value }).save();
 
       expect(inst.id).toBe(1);
     });

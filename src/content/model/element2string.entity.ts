@@ -12,7 +12,7 @@ import { ElementEntity } from './element.entity';
 import { LangEntity } from "../../lang/model/lang.entity";
 import { CommonStringEntity } from "../../common/model/common-string.entity";
 
-@Entity('content-element-string')
+@Entity('content-element2string')
 export class Element2stringEntity extends BaseEntity implements CommonStringEntity<ElementEntity> {
 
   @PrimaryGeneratedColumn()

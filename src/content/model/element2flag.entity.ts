@@ -9,7 +9,7 @@ import {
 import { FlagEntity } from '../../flag/model/flag.entity';
 import { ElementEntity } from './element.entity';
 
-@Entity()
+@Entity('content-element2flag')
 export class Element2flagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
