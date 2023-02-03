@@ -5,12 +5,13 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { Element2sectionEntity } from "./element2section.entity";
-import { BlockEntity } from "./block.entity";
-import { Element2valueEntity } from "./element2value.entity";
-import { Section2stringEntity } from "./section2string.entity";
+  UpdateDateColumn, VersionColumn,
+} from 'typeorm';
+import { Element2sectionEntity } from './element2section.entity';
+import { BlockEntity } from './block.entity';
+import { Element2valueEntity } from './element2value.entity';
+import { Section2stringEntity } from './section2string.entity';
+import { Section2flagEntity } from './section2flag.entity';
 
 @Entity('content-section')
 export class SectionEntity extends BaseEntity {
@@ -36,7 +37,7 @@ export class SectionEntity extends BaseEntity {
     {
       onDelete: 'CASCADE',
       nullable: false,
-    }
+    },
   )
   block: BlockEntity;
 
@@ -45,6 +46,12 @@ export class SectionEntity extends BaseEntity {
     property => property.parent,
   )
   string: Section2stringEntity[];
+
+  @OneToMany(
+    type => Section2flagEntity,
+    flag => flag.parent,
+  )
+  flag: Section2flagEntity[];
 
   @OneToMany(
     type => Element2sectionEntity,

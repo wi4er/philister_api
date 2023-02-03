@@ -1,8 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SectionEntity } from '../../model/section.entity';
-import { ElementEntity } from '../../model/element.entity';
 
 @Controller('section')
 export class SectionController {
@@ -27,6 +26,7 @@ export class SectionController {
           lang: str.lang,
         })),
       ],
+      flag: item.flag.map(fl => fl.flag.id),
     };
   }
 
@@ -36,7 +36,7 @@ export class SectionController {
 
     return this.sectionRepo.find({
       where,
-      relations: { string: { property: true }, block: true },
+      relations: { string: { property: true }, block: true, flag: { flag: true } },
     }).then(list => list.map(this.toView));
   }
 

@@ -10,6 +10,9 @@ import { PropertyEntity } from '../../../property/model/property.entity';
 import { ElementEntity } from '../../model/element.entity';
 import { Element2stringEntity } from '../../model/element2string.entity';
 import { Section2stringEntity } from '../../model/section2string.entity';
+import { FlagEntity } from '../../../flag/model/flag.entity';
+import { Element2flagEntity } from '../../model/element2flag.entity';
+import { Section2flagEntity } from '../../model/section2flag.entity';
 
 describe('SectionController', () => {
   let source;
@@ -64,6 +67,22 @@ describe('SectionController', () => {
       expect(list.body[0].property).toHaveLength(1);
       expect(list.body[0].property[0].string).toBe('VALUE');
       expect(list.body[0].property[0].property).toBe('NAME');
+    });
+  });
+
+  describe('Content section with flags', () => {
+    test('Should get section with flag', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new SectionEntity(), { block }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new Section2flagEntity(), { parent, flag, string: 'VALUE' }).save();
+
+      const list = await request(app.getHttpServer())
+        .get('/section')
+        .expect(200);
+
+      expect(list.body).toHaveLength(1);
+      expect(list.body[0].flag).toEqual([ 'ACTIVE' ]);
     });
   });
 });
