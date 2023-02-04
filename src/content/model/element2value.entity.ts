@@ -2,7 +2,7 @@ import {
   BaseEntity,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity, ManyToOne,
+  Entity, Index, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn,
 } from 'typeorm';
@@ -11,6 +11,7 @@ import { PropertyEntity } from '../../property/model/property.entity';
 import { ElementEntity } from './element.entity';
 
 @Entity('content-element2value')
+@Index([ 'value', 'property', 'parent' ], { unique: true })
 export class Element2valueEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

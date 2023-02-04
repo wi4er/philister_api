@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { ElementEntity } from '../../model/element.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { ElementFilterSchema } from '../../schema/element-filter.schema';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 @ApiTags('Content')
 @Controller('element')
@@ -37,19 +38,29 @@ export class ElementController {
     };
   }
 
-  @Get()
-  async getList(
-    @Query('filter')
-      filter?: ElementFilterSchema,
-  ) {
+  toWhere(filter: ElementFilterSchema): FindOptionsWhere<ElementEntity> {
     const where = {};
 
     if (filter?.flag) {
       where['flag'] = { flag: { id: filter.flag.eq } };
     }
 
+    for (const key in filter?.value) {
+      where['value'] = {
+        value: { directory: { id: key}, id: filter.value[key].eq },
+      };
+    }
+
+    return where;
+  }
+
+  @Get()
+  async getList(
+    @Query('filter')
+      filter?: ElementFilterSchema,
+  ) {
     return this.elementRepo.find({
-      where,
+      where: filter ? this.toWhere(filter) : null,
       relations: {
         string: { property: true },
         flag: { flag: true },

@@ -143,5 +143,29 @@ describe('ElementController', () => {
       expect(list.body[0].property[0].value).toBe('LONDON');
       expect(list.body[0].property[0].directory).toBe('CITY');
     });
+
+    test('Should get element with value filter', async () => {
+      const block = await new BlockEntity().save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'CURRENT' }).save();
+      const directory = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      const value = await Object.assign(new ValueEntity(), { id: 'LONDON', directory }).save();
+
+      for (let i = 0; i < 10; i++) {
+        const parent = await Object.assign(new ElementEntity(), { block }).save();
+
+        if (i % 2) {
+          await Object.assign(new Element2valueEntity(), { parent, property, value }).save();
+        }
+      }
+
+      const list = await request(app.getHttpServer())
+        .get('/element?filter[value][CITY][eq]=LONDON')
+        .expect(200);
+
+      expect(list.body).toHaveLength(5);
+      expect(list.body[0].property).toHaveLength(1);
+      expect(list.body[0].property[0].value).toBe('LONDON');
+      expect(list.body[0].property[0].directory).toBe('CITY');
+    });
   });
 });
