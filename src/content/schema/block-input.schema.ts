@@ -17,10 +17,11 @@ export class BlockInputSchema {
   @Field({ nullable: true })
   id: number;
 
-  @Field(
-    of => [ BlockPropertyInputSchema ],
-    { nullable: true },
-  )
+  @Field(of => [ BlockPropertyInputSchema ])
   property: BlockPropertyInputSchema[];
+
+
+  @Field(of => [ String ])
+  flag: string[];
 
 }

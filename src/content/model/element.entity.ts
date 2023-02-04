@@ -5,12 +5,12 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { Element2sectionEntity } from "./element2section.entity";
-import { Element2stringEntity } from "./element2string.entity";
-import { BlockEntity } from "./block.entity";
-import { Element2valueEntity } from "./element2value.entity";
+  UpdateDateColumn, VersionColumn,
+} from 'typeorm';
+import { Element2sectionEntity } from './element2section.entity';
+import { Element2stringEntity } from './element2string.entity';
+import { BlockEntity } from './block.entity';
+import { Element2valueEntity } from './element2value.entity';
 import { WithStringEntity } from '../../common/model/with-string.entity';
 import { Element2flagEntity } from './element2flag.entity';
 
@@ -38,7 +38,7 @@ export class ElementEntity extends BaseEntity implements WithStringEntity<Elemen
     {
       onDelete: 'CASCADE',
       nullable: false,
-    }
+    },
   )
   block: BlockEntity;
 

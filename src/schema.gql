@@ -434,15 +434,16 @@ type BlockMutation {
   add(item: BlockInput!): Block!
 
   """Deletion existent content block"""
-  delete: [String!]!
+  delete(id: [Int!]!): [Int!]!
 
   """Updating existent content block"""
-  update: Block!
+  update(item: BlockInput!): Block!
 }
 
 input BlockInput {
   id: Float
-  property: [BlockPropertyInput!]
+  property: [BlockPropertyInput!]!
+  flag: [String!]!
 }
 
 input BlockPropertyInput {

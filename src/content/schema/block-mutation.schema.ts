@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BlockSchema } from "./block.schema";
 
 @ObjectType('BlockMutation')
@@ -10,9 +10,9 @@ export class BlockMutationSchema {
   ) add: BlockSchema;
 
   @Field(
-    type => [ String ],
+    type => [ Int ],
     { description: 'Deletion existent content block' }
-  ) delete: String[];
+  ) delete: number[];
 
   @Field(
     type => BlockSchema,

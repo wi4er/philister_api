@@ -27,6 +27,11 @@ export class ElementController {
           property: str.property.id,
           lang: str.lang,
         })),
+        ...item.value.map(val => ({
+          property: val.property.id,
+          value: val.value.id,
+          directory: val.value.directory.id,
+        })),
       ],
       flag: item.flag.map(fl => fl.flag.id),
     };
@@ -45,7 +50,11 @@ export class ElementController {
 
     return this.elementRepo.find({
       where,
-      relations: { string: { property: true }, flag: { flag: true } },
+      relations: {
+        string: { property: true },
+        flag: { flag: true },
+        value: { value: { directory: true }, property: true },
+      },
     }).then(list => list.map(this.toView));
   }
 

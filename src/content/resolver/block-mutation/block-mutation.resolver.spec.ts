@@ -38,12 +38,13 @@ describe('BlockMutationResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Block addition', () => {
     test("Should add blank item ", async () => {
       const res = await request(app.getHttpServer())
         .mutate(addBlockItemMutation, {
-          item: {}
+          item: { flag: [], property: [] }
         })
         .expectNoErrors();
 

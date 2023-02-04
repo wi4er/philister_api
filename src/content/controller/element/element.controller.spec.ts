@@ -10,6 +10,9 @@ import { PropertyEntity } from '../../../property/model/property.entity';
 import { Element2stringEntity } from '../../model/element2string.entity';
 import { Element2flagEntity } from '../../model/element2flag.entity';
 import { FlagEntity } from '../../../flag/model/flag.entity';
+import { DirectoryEntity } from '../../../directory/model/directory.entity';
+import { ValueEntity } from '../../../directory/model/value.entity';
+import { Element2valueEntity } from '../../model/element2value.entity';
 
 describe('ElementController', () => {
   let source;
@@ -24,6 +27,7 @@ describe('ElementController', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Content element getting', () => {
     test('Should get empty element list', async () => {
@@ -102,10 +106,8 @@ describe('ElementController', () => {
       expect(list.body).toHaveLength(1);
       expect(list.body[0].flag).toEqual([ 'ACTIVE' ]);
     });
-  });
 
-  describe('Content element flag filter', () => {
-    test('Should get element with flag', async () => {
+    test('Should get element with flag filter', async () => {
       const block = await new BlockEntity().save();
       const parent = await Object.assign(new ElementEntity, { block }).save();
       const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
@@ -119,6 +121,27 @@ describe('ElementController', () => {
 
       expect(list.body).toHaveLength(1);
       expect(list.body[0]['flag']).toEqual([ 'ACTIVE' ]);
+    });
+  });
+
+  describe('Content element with values', () => {
+    test('Should get element with value', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new ElementEntity(), { block }).save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'CURRENT' }).save();
+      const directory = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      const value = await Object.assign(new ValueEntity(), { id: 'LONDON', directory }).save();
+
+      const inst = await Object.assign(new Element2valueEntity(), { parent, property, value }).save();
+
+      const list = await request(app.getHttpServer())
+        .get('/element')
+        .expect(200);
+
+      expect(list.body).toHaveLength(1);
+      expect(list.body[0].property).toHaveLength(1);
+      expect(list.body[0].property[0].value).toBe('LONDON');
+      expect(list.body[0].property[0].directory).toBe('CITY');
     });
   });
 });
