@@ -90,6 +90,27 @@ describe('ElementController', () => {
       expect(list.body[0].property[0].string).toBe('VALUE');
       expect(list.body[0].property[0].property).toBe('NAME');
     });
+
+    test('Should get elements with string filter', async () => {
+      const block = await new BlockEntity().save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+
+      const blank = await Object.assign(new ElementEntity, { block }).save();
+      const parent = await Object.assign(new ElementEntity, { block }).save();
+      await Object.assign(new Element2stringEntity(), { parent, property, string: 'VALUE' }).save();
+
+      const list = await request(app.getHttpServer())
+        .get('/element?filter[string][eq]=VALUE')
+        .expect(200);
+
+      console.dir(list.body, { depth: 6 });
+
+      expect(list.body).toHaveLength(1);
+      expect(list.body[0].id).toBe(2);
+      expect(list.body[0].property).toHaveLength(1);
+      expect(list.body[0].property[0].string).toBe('VALUE');
+      expect(list.body[0].property[0].property).toBe('NAME');
+    });
   });
 
   describe('Content element with flags', () => {
@@ -185,8 +206,6 @@ describe('ElementController', () => {
       const list = await request(app.getHttpServer())
         .get('/element?sort[value][CITY]=asc')
         .expect(200);
-
-      console.log(list.body);
 
       // expect(list.body).toHaveLength(5);
       // expect(list.body[0].property).toHaveLength(1);

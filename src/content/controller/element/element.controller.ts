@@ -53,6 +53,10 @@ export class ElementController {
       };
     }
 
+    if (filter?.string) {
+      where['string'] = { string: filter.string.eq };
+    }
+
     return where;
   }
 
@@ -85,7 +89,6 @@ export class ElementController {
   ) {
     return this.elementRepo.find({
       where: filter ? this.toWhere(filter) : null,
-      // order: { value: { value: { id: 'asc' } } },
       order: sort ? this.toOrder(sort) : null,
       relations: {
         string: { property: true },
