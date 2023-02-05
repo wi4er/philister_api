@@ -5,6 +5,8 @@ import { ElementEntity } from '../../model/element.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { ElementFilterSchema } from '../../schema/element-filter.schema';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
+import { ElementOrderSchema } from '../../schema/element-order.schema';
+import { FindOptionsOrder } from 'typeorm/find-options/FindOptionsOrder';
 
 @ApiTags('Content')
 @Controller('element')
@@ -47,20 +49,44 @@ export class ElementController {
 
     for (const key in filter?.value) {
       where['value'] = {
-        value: { directory: { id: key}, id: filter.value[key].eq },
+        value: { directory: { id: key }, id: filter.value[key].eq },
       };
     }
 
     return where;
   }
 
+  toOrder(sort: ElementOrderSchema[]): FindOptionsOrder<ElementEntity> {
+    const order = {};
+
+    if (!Array.isArray(sort)) {
+      sort = [ sort ];
+    }
+
+    for (const item of sort) {
+      for (const key in item) {
+        if (key === 'value') {
+          if (!order['value']) {
+            order['value'] = {};
+          }
+        }
+      }
+    }
+
+    return order;
+  }
+
   @Get()
   async getList(
     @Query('filter')
       filter?: ElementFilterSchema,
+    @Query('sort')
+      sort?: ElementOrderSchema[],
   ) {
     return this.elementRepo.find({
       where: filter ? this.toWhere(filter) : null,
+      // order: { value: { value: { id: 'asc' } } },
+      order: sort ? this.toOrder(sort) : null,
       relations: {
         string: { property: true },
         flag: { flag: true },
