@@ -14,6 +14,7 @@ describe('Element2Flag entity', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Element flag fields', () => {
     test('Should get empty list', async () => {

@@ -14,6 +14,7 @@ describe('Section2Flag entity', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Section flag fields', () => {
     test('Should get empty list', async () => {

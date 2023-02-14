@@ -74,6 +74,10 @@ export class ElementController {
             order['value'] = {};
           }
         }
+
+        if (key === 'string') {
+          order['string'] = { string: 'asc' };
+        }
       }
     }
 
@@ -86,6 +90,10 @@ export class ElementController {
       filter?: ElementFilterSchema,
     @Query('sort')
       sort?: ElementOrderSchema[],
+    @Query('offset')
+      offset?: number,
+    @Query('limit')
+      limit?: number,
   ) {
     return this.elementRepo.find({
       where: filter ? this.toWhere(filter) : null,
@@ -95,6 +103,8 @@ export class ElementController {
         flag: { flag: true },
         value: { value: { directory: true }, property: true },
       },
+      take: limit,
+      skip: offset,
     }).then(list => list.map(this.toView));
   }
 

@@ -3,8 +3,6 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { SectionEntity } from "./section.entity";
 import { BlockEntity } from "./block.entity";
-import { Element2valueEntity } from "./element2value.entity";
-import { ElementEntity } from "./element.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { DirectoryEntity } from "../../directory/model/directory.entity";
 import { ValueEntity } from "../../directory/model/value.entity";
@@ -18,6 +16,7 @@ describe("SectionValue entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('SectionValue fields', () => {
     test("Should create section value", async () => {

@@ -14,6 +14,7 @@ describe('ElementString entity', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('ElementString fields', () => {
     test('Should get empty list', async () => {
@@ -27,7 +28,7 @@ describe('ElementString entity', () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
 
       await expect(
-        Object.assign(new Element2stringEntity(), { string: 'VALUE', property }).save()
+        Object.assign(new Element2stringEntity(), { string: 'VALUE', property }).save(),
       ).rejects.toThrow();
     });
 
@@ -36,7 +37,7 @@ describe('ElementString entity', () => {
       const parent = await Object.assign(new ElementEntity(), { block }).save();
 
       await expect(
-        Object.assign(new Element2stringEntity(), { string: 'VALUE', parent }).save()
+        Object.assign(new Element2stringEntity(), { string: 'VALUE', parent }).save(),
       ).rejects.toThrow();
     });
   });
@@ -58,6 +59,37 @@ describe('ElementString entity', () => {
 
       expect(inst.string).toHaveLength(1);
       expect(inst.string[0].string).toBe('VALUE');
+    });
+
+    test('Should find with string sort', async () => {
+      const block = await new BlockEntity().save();
+      const name = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const gender = await Object.assign(new PropertyEntity(), { id: 'GENDER' }).save();
+
+      for (let i = 0; i < 10; i++) {
+        const parent = await Object.assign(new ElementEntity, { block }).save();
+        await Object.assign(
+          new Element2stringEntity(),
+          { parent, property: name, string: `VALUE_${(Math.random()*10>>0).toString().padStart(2, '0')}` }
+        ).save();
+        await Object.assign(
+          new Element2stringEntity(),
+          { parent, property: gender, string: `GENDER_${i.toString().padStart(2, '0')}` }
+        ).save();
+      }
+
+      const query = source.createQueryBuilder();
+
+
+      query.select('*');
+      query.from(ElementEntity, 'ce');
+      query.orderBy()
+
+      const res = await query.getRawMany();
+
+      console.log(res);
+
+
     });
   });
 });

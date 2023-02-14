@@ -16,6 +16,7 @@ describe('ElementValue entity', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('ElementValue fields', () => {
     test('Should create element value', async () => {

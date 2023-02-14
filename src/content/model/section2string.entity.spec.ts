@@ -14,6 +14,7 @@ describe('SectionString entity', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('SectionString fields', () => {
     test('Should get empty list', async () => {

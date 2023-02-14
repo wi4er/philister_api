@@ -11,6 +11,7 @@ describe("ElementSection entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('ElementSection fields', () => {
     test('Should get empty list', async () => {

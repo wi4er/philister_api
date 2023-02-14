@@ -38,7 +38,7 @@ describe('ElementController', () => {
       expect(list.body).toEqual([]);
     });
 
-    test('Should get element list', async () => {
+    test('Should get element item', async () => {
       await new BlockEntity().save();
       await Object.assign(new ElementEntity, { block: 1 }).save();
 
@@ -48,6 +48,54 @@ describe('ElementController', () => {
 
       expect(list.body).toHaveLength(1);
       expect(list.body[0].id).toBe(1);
+    });
+
+    test('Should get element list', async () => {
+      await new BlockEntity().save();
+
+      for (let i = 0; i < 10; i++) {
+        await Object.assign(new ElementEntity, { block: 1 }).save();
+      }
+
+      const list = await request(app.getHttpServer())
+        .get('/element')
+        .expect(200);
+
+      expect(list.body).toHaveLength(10);
+      expect(list.body[0].id).toBe(1);
+      expect(list.body[9].id).toBe(10);
+    });
+
+    test('Should get list with offset', async () => {
+      await new BlockEntity().save();
+
+      for (let i = 0; i < 10; i++) {
+        await Object.assign(new ElementEntity, { block: 1 }).save();
+      }
+
+      const list = await request(app.getHttpServer())
+        .get('/element?offset=5')
+        .expect(200);
+
+      expect(list.body).toHaveLength(5);
+      expect(list.body[0].id).toBe(6);
+      expect(list.body[4].id).toBe(10);
+    });
+
+    test('Should get list with limit', async () => {
+      await new BlockEntity().save();
+
+      for (let i = 0; i < 10; i++) {
+        await Object.assign(new ElementEntity, { block: 1 }).save();
+      }
+
+      const list = await request(app.getHttpServer())
+        .get('/element?limit=5')
+        .expect(200);
+
+      expect(list.body).toHaveLength(5);
+      expect(list.body[0].id).toBe(1);
+      expect(list.body[4].id).toBe(5);
     });
   });
 
@@ -103,13 +151,40 @@ describe('ElementController', () => {
         .get('/element?filter[string][eq]=VALUE')
         .expect(200);
 
-      console.dir(list.body, { depth: 6 });
-
       expect(list.body).toHaveLength(1);
       expect(list.body[0].id).toBe(2);
       expect(list.body[0].property).toHaveLength(1);
       expect(list.body[0].property[0].string).toBe('VALUE');
       expect(list.body[0].property[0].property).toBe('NAME');
+    });
+
+    test('Should get elements with string sort', async () => {
+      const block = await new BlockEntity().save();
+      const name = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      const gender = await Object.assign(new PropertyEntity(), { id: 'GENDER' }).save();
+
+      for (let i = 0; i < 10; i++) {
+        const parent = await Object.assign(new ElementEntity, { block }).save();
+        await Object.assign(
+          new Element2stringEntity(),
+          { parent, property: name, string: `VALUE_${(Math.random()*10>>0).toString().padStart(2, '0')}` }
+        ).save();
+        await Object.assign(
+          new Element2stringEntity(),
+          { parent, property: gender, string: `GENDER_${i.toString().padStart(2, '0')}` }
+        ).save();
+      }
+
+      const list = await request(app.getHttpServer())
+        .get('/element?sort[string][NAME][eq]=asc')
+        .expect(200);
+
+      // console.dir(list.body, { depth: 5 });
+      // expect(list.body).toHaveLength(1);
+      // expect(list.body[0].id).toBe(2);
+      // expect(list.body[0].property).toHaveLength(1);
+      // expect(list.body[0].property[0].string).toBe('VALUE');
+      // expect(list.body[0].property[0].property).toBe('NAME');
     });
   });
 

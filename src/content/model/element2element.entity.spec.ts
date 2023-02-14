@@ -14,7 +14,8 @@ describe("ElementElement entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
-
+  afterAll(() => source.destroy());
+  
   describe('ElementElement fields', () => {
     test("Should create element value", async () => {
       const block = await new BlockEntity().save();

@@ -13,9 +13,11 @@ import { BlockEntity } from './block.entity';
 import { Element2valueEntity } from './element2value.entity';
 import { WithStringEntity } from '../../common/model/with-string.entity';
 import { Element2flagEntity } from './element2flag.entity';
+import { WithFlagEntity } from '../../common/model/with-flag.entity';
 
 @Entity('content-element')
-export class ElementEntity extends BaseEntity implements WithStringEntity<ElementEntity> {
+export class ElementEntity extends BaseEntity
+  implements WithStringEntity<ElementEntity>, WithFlagEntity<ElementEntity> {
 
   @PrimaryGeneratedColumn()
   id: number;

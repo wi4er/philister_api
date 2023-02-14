@@ -11,6 +11,7 @@ describe("BlockString entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('BlockString fields', () => {
     test('Should get empty list', async () => {

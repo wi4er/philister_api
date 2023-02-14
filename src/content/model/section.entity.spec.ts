@@ -12,6 +12,7 @@ describe("Section entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Section fields', () => {
     test("Should create section", async () => {
