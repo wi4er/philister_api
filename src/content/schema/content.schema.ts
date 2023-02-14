@@ -1,6 +1,7 @@
 import { Field, Int, InterfaceType } from "@nestjs/graphql";
 import { ContentPropertySchema } from "./content-property.schema";
 import { LangFlagSchema } from "../../lang/schema/lang-flag.schema";
+import { FlagSchema } from '../../flag/schema/flag.schema';
 
 @InterfaceType(
   'Content',
@@ -35,8 +36,8 @@ export class ContentSchema {
   )
   propertyString: string;
 
-  @Field(type => [ LangFlagSchema ])
-  flagList: LangFlagSchema[];
+  @Field(type => [ FlagSchema ])
+  flagList: FlagSchema[];
 
   @Field(type => [ String ])
   flagString: string[];

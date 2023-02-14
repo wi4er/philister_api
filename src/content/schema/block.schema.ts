@@ -3,6 +3,7 @@ import { ElementSchema } from "./element.schema";
 import { SectionSchema } from "./section.schema";
 import { ContentSchema } from "./content.schema";
 import { ContentPropertySchema } from "./content-property.schema";
+import { FlagSchema } from '../../flag/schema/flag.schema';
 
 @ObjectType(
   'Block',
@@ -41,5 +42,11 @@ export class BlockSchema {
 
   @Field({ nullable: true })
   propertyString: string;
+
+  @Field(type => [ FlagSchema ])
+  flagList: FlagSchema[];
+
+  @Field(type => [ String ])
+  flagString: string[];
 
 }

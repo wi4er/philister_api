@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { SectionEntity } from "../../model/section.entity";
 import { Block2stringEntity } from "../../model/block2string.entity";
+import { Block2flagEntity } from '../../model/block2flag.entity';
 
 @Resolver(of => BlockSchema)
 export class BlockResolver {
@@ -19,6 +20,9 @@ export class BlockResolver {
 
     @InjectRepository(Block2stringEntity)
     private stringRepo: Repository<Block2stringEntity>,
+
+    @InjectRepository(Block2flagEntity)
+    private flagRepo: Repository<Block2flagEntity>,
   ) {
   }
 
@@ -100,6 +104,32 @@ export class BlockResolver {
         parent: { id: current.id },
       }
     }).then(item => item?.string);
+  }
+
+  @ResolveField()
+  async flagList(
+    @Parent()
+      current: { id: number }
+  ) {
+    return this.flagRepo.find({
+      where: {
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    });
+  }
+
+  @ResolveField()
+  async flagString(
+    @Parent()
+      current: { id: number }
+  ) {
+    return this.flagRepo.find({
+      where: {
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    }).then(list => list.map(item => item?.flag ?? ''));
   }
 
 }

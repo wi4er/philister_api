@@ -393,7 +393,7 @@ type Block implements Content {
   propertyList: [ContentProperty!]!
   propertyItem(id: String!): ContentProperty
   propertyString(id: String!): String
-  flagList: [LangFlag!]!
+  flagList: [Flag!]!
   flagString: [String!]!
   element: [Element!]!
   section: [Section!]!
@@ -407,7 +407,7 @@ interface Content {
   propertyList: [ContentProperty!]!
   propertyItem(id: String!): ContentProperty
   propertyString(id: String!): String
-  flagList: [LangFlag!]!
+  flagList: [Flag!]!
   flagString: [String!]!
 }
 
@@ -449,6 +449,7 @@ input BlockInput {
 input BlockPropertyInput {
   property: String!
   string: String!
+  lang: String
 }
 
 type BlockString implements ContentProperty {

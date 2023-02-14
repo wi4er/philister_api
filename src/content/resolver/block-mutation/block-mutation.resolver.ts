@@ -1,10 +1,11 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { BlockMutationSchema } from "../../schema/block-mutation.schema";
-import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { BlockInputSchema } from "../../schema/block-input.schema";
 import { BlockEntity } from "../../model/block.entity";
 import { Block2stringEntity } from "../../model/block2string.entity";
+import { BlockInsertOperation } from '../../operation/block-insert.operation';
 
 @Resolver(of => BlockMutationSchema)
 export class BlockMutationResolver {
@@ -12,6 +13,8 @@ export class BlockMutationResolver {
   constructor(
     @InjectRepository(BlockEntity)
     private blockRepo: Repository<BlockEntity>,
+    @InjectEntityManager()
+    private entityManager: EntityManager,
   ) {
   }
 
@@ -20,25 +23,7 @@ export class BlockMutationResolver {
     @Args('item')
       item: BlockInputSchema
   ) {
-    const inst = new BlockEntity();
-    const parent = await inst.save();
-
-    if (item.property) {
-      for (const value of item.property) {
-        await Object.assign(
-          new Block2stringEntity(),
-          {
-            string: value.string,
-            property: value.property,
-            parent,
-          }
-        ).save();
-      }
-    }
-
-    await inst.reload();
-
-    return inst;
+   return new BlockInsertOperation(this.entityManager).save(item);
   }
 
   @ResolveField()

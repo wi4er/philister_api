@@ -30,6 +30,7 @@ import { ElementController } from './controller/element/element.controller';
 import { Element2flagEntity } from './model/element2flag.entity';
 import { SectionController } from './controller/section/section.controller';
 import { Section2flagEntity } from './model/section2flag.entity';
+import { Block2flagEntity } from './model/block2flag.entity';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { Section2flagEntity } from './model/section2flag.entity';
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity,
       Element2flagEntity,
       SectionEntity, Section2valueEntity, Section2stringEntity, Section2flagEntity,
-      BlockEntity, Block2stringEntity,
+      BlockEntity, Block2stringEntity, Block2flagEntity,
       PropertyEntity,
       LangEntity,
     ]),

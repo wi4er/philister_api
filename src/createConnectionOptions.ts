@@ -42,6 +42,7 @@ import { UserGroup2flagEntity } from "./user/model/user-group2flag.entity";
 import { User2userGroupEntity } from "./user/model/user2user-group.entity";
 import { Element2flagEntity } from './content/model/element2flag.entity';
 import { Section2flagEntity } from './content/model/section2flag.entity';
+import { Block2flagEntity } from './content/model/block2flag.entity';
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -65,7 +66,7 @@ export function createConnectionOptions(): DataSourceOptions {
       LangEntity, LangStringEntity, LangFlagEntity,
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity, Element2flagEntity,
       SectionEntity, Section2valueEntity, Section2stringEntity, Section2flagEntity,
-      BlockEntity, Block2stringEntity,
+      BlockEntity, Block2stringEntity, Block2flagEntity,
       ChangeLogEntity, FetchLogEntity,
     ],
     subscribers: [],
