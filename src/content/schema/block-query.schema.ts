@@ -1,5 +1,5 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { BlockSchema } from "./block.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { BlockSchema } from './block.schema';
 
 @ObjectType('BlockQuery')
 export class BlockQuerySchema {
@@ -8,7 +8,7 @@ export class BlockQuerySchema {
   list: BlockSchema[];
 
   @Field(type => Int)
-  count: number
+  count: number;
 
   @Field(type => BlockSchema, { nullable: true })
   item: BlockSchema;

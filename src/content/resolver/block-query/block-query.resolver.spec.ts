@@ -54,6 +54,7 @@ describe('BlockQueryResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Block list', () => {
     test("Should get empty list", async () => {

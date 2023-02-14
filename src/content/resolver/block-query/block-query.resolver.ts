@@ -1,8 +1,8 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { BlockQuerySchema } from "../../schema/block-query.schema";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { BlockEntity } from "../../model/block.entity";
+import { BlockQuerySchema } from '../../schema/block-query.schema';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { BlockEntity } from '../../model/block.entity';
 
 @Resolver(of => BlockQuerySchema)
 export class BlockQueryResolver {
@@ -43,11 +43,12 @@ export class BlockQueryResolver {
   @ResolveField('item')
   item(
     @Args('id', { type: () => Int })
-      id: number
+      id: number,
   ) {
     return this.blockRepo.findOne({
       where: { id },
       loadRelationIds: true,
     });
   }
+
 }
