@@ -50,6 +50,14 @@ const updateBlockItemMutation = gql`
   }
 `;
 
+const deleteBlockMutation = gql`
+  mutation deleteBlock($id: [Int!]!) {
+    block {
+      delete(id: $id)
+    }
+  }
+`;
+
 describe('BlockMutationResolver', () => {
   let source;
   let app;
@@ -151,6 +159,18 @@ describe('BlockMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['block']['update']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+  });
+
+  describe('Block deletion', () => {
+    test('Should delete block', async () => {
+      const block = await new BlockEntity().save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(deleteBlockMutation, { id: block.id })
+        .expectNoErrors();
+
+      expect(res.data['block']['delete']).toEqual([ 1 ]);
     });
   });
 });
