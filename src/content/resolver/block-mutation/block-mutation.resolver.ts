@@ -4,8 +4,8 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, In, Repository } from 'typeorm';
 import { BlockInputSchema } from "../../schema/block-input.schema";
 import { BlockEntity } from "../../model/block.entity";
-import { Block2stringEntity } from "../../model/block2string.entity";
 import { BlockInsertOperation } from '../../operation/block-insert.operation';
+import { BlockUpdateOperation } from '../../operation/block-update.operation';
 
 @Resolver(of => BlockMutationSchema)
 export class BlockMutationResolver {
@@ -31,7 +31,7 @@ export class BlockMutationResolver {
     @Args('item')
       item: BlockInputSchema
   ) {
-    return null;
+    return new BlockUpdateOperation(this.entityManager).save(item);
   }
 
   @ResolveField()
