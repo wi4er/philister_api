@@ -1,10 +1,10 @@
-import { DataSource } from "typeorm/data-source/DataSource";
-import { createConnection } from "typeorm";
-import { createConnectionOptions } from "../../createConnectionOptions";
-import { ElementEntity } from "./element.entity";
+import { DataSource } from 'typeorm/data-source/DataSource';
+import { createConnection } from 'typeorm';
+import { createConnectionOptions } from '../../createConnectionOptions';
+import { ElementEntity } from './element.entity';
 import { BlockEntity } from './block.entity';
 
-describe("Element entity", () => {
+describe('Element entity', () => {
   let source: DataSource;
 
   beforeAll(async () => {

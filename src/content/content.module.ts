@@ -31,6 +31,7 @@ import { Element2flagEntity } from './model/element2flag.entity';
 import { SectionController } from './controller/section/section.controller';
 import { Section2flagEntity } from './model/section2flag.entity';
 import { Block2flagEntity } from './model/block2flag.entity';
+import { ElementStringResolver } from './resolver/element-string/element-string.resolver';
 
 @Module({
   imports: [
@@ -47,7 +48,7 @@ import { Block2flagEntity } from './model/block2flag.entity';
     ElementResolver, ElementPropertyResolver, ContentRootResolver, ElementQueryResolver,
     SectionQueryResolver, SectionMutationResolver,
     ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
-    BlockResolver, BlockStringResolver, ContentResolver,
+    BlockResolver, BlockStringResolver, ContentResolver, ElementStringResolver,
   ],
   controllers: [ BlockController, ElementController, SectionController ],
 })

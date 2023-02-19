@@ -376,6 +376,11 @@ type Element {
   updated_at: String!
   version: Int!
   block: Block!
+  propertyList: [ContentProperty!]!
+  propertyItem(id: String!): ContentProperty
+  propertyString(id: String!): String
+  flagList: [Flag!]!
+  flagString: [String!]!
 }
 
 type Section {
@@ -412,9 +417,15 @@ interface Content {
 }
 
 type ElementQuery {
-  list: [Element!]!
-  count: Int!
-  item: Element
+  list(limit: Int, offset: Int, filter: [ElementFilter!]): [Element!]!
+  count(limit: Int, offset: Int, filter: [ElementFilter!]): Int!
+  item(id: Int!): Element
+}
+
+input ElementFilter {
+  field: String!
+  operation: String
+  value: String!
 }
 
 type SectionQuery {
@@ -452,7 +463,40 @@ input BlockPropertyInput {
   lang: String
 }
 
+type ElementMutation {
+  """Adding new content element"""
+  add(item: ElementInput!): ElementMutation!
+
+  """Deletion existent content element"""
+  delete(id: [Int!]!): [Int!]!
+
+  """Updating existent content element"""
+  update(item: ElementInput!): ElementMutation!
+}
+
+input ElementInput {
+  id: Float
+  property: [ElementInputProperty!]!
+  flag: [String!]!
+}
+
+input ElementInputProperty {
+  property: String!
+  string: String!
+  lang: String
+}
+
 type BlockString implements ContentProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+  lang: Lang
+}
+
+type ElementString implements ContentProperty {
   id: Int!
   created_at: String!
   updated_at: String!
@@ -694,6 +738,7 @@ type Mutation {
   auth: AuthMutation
   userGroup: UserGroupMutation!
   userContact: UserContactMutation!
+  element: ElementMutation!
   block: BlockMutation!
   property: PropertyMutation!
   directory: DirectoryMutation!
