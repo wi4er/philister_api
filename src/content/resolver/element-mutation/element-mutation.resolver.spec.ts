@@ -11,7 +11,7 @@ import { PropertyEntity } from '../../../property/model/property.entity';
 import { ElementEntity } from '../../model/element.entity';
 
 const addElementMutation = gql`
-  mutation AddElementMutation($item: ElementInput!) {
+  mutation AddElement($item: ElementInput!) {
     element {
       add(item: $item) {
         id
@@ -31,7 +31,7 @@ const addElementMutation = gql`
 `;
 
 const updateElementMutation = gql`
-  mutation UpdateElementMutation($item: ElementInput!) {
+  mutation UpdateElement($item: ElementInput!) {
     element {
       update(item: $item) {
         id
@@ -46,6 +46,14 @@ const updateElementMutation = gql`
         }
         flagString
       }
+    }
+  }
+`;
+
+const deleteElementMutation = gql`
+  mutation DeleteElement($id: [Int!]!) {
+    element {
+      delete(id: $id)
     }
   }
 `;
@@ -167,6 +175,19 @@ describe('ElementMutationResolver', () => {
 
       expect(res.data['element']['update']['flagString']).toHaveLength(1);
       expect(res.data['element']['update']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+  });
+
+  describe('Element deletion', () => {
+    test('Should delete element', async () => {
+      const block = await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(deleteElementMutation, { id: 1 })
+        .expectNoErrors();
+
+      expect(res.data['element']['delete']).toEqual([ 1 ]);
     });
   });
 });
