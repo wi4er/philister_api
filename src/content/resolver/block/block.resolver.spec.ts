@@ -54,6 +54,7 @@ describe('BlockResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Block elements', () => {
     test('Should get block with element', async () => {

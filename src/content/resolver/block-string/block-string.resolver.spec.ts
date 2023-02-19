@@ -62,6 +62,7 @@ describe('BlockStringResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Block with property list', () => {
     test("Should get property list", async () => {

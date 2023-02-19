@@ -8,11 +8,32 @@ import { gql } from 'apollo-server-express';
 import { BlockEntity } from '../../model/block.entity';
 import { FlagEntity } from '../../../flag/model/flag.entity';
 import { PropertyEntity } from '../../../property/model/property.entity';
+import { ElementEntity } from '../../model/element.entity';
 
 const addElementMutation = gql`
   mutation AddElementMutation($item: ElementInput!) {
     element {
       add(item: $item) {
+        id
+        block {
+          id
+        }
+        propertyList {
+          string
+          property {
+            id
+          }
+        }
+        flagString
+      }
+    }
+  }
+`;
+
+const updateElementMutation = gql`
+  mutation UpdateElementMutation($item: ElementInput!) {
+    element {
+      update(item: $item) {
         id
         block {
           id
@@ -84,6 +105,68 @@ describe('ElementMutationResolver', () => {
       expect(res.data['element']['add']['propertyList']).toHaveLength(1);
       expect(res.data['element']['add']['propertyList'][0]['property']['id']).toBe('NAME');
       expect(res.data['element']['add']['propertyList'][0]['string']).toBe('VALUE');
+    });
+  });
+
+  describe('Element update', () => {
+    test('Should update element', async () => {
+      await new BlockEntity().save();
+      await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block: 1 }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(updateElementMutation, {
+          item: {
+            block: 2,
+            property: [],
+            flag: [],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['element']['update']['block']['id']).toBe(2);
+    });
+
+    test('Should update with properties', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block: 1 }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(updateElementMutation, {
+          item: {
+            block: 1,
+            property: [ {
+              property: 'NAME',
+              string: 'VALUE',
+            } ],
+            flag: [],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['element']['update']['propertyList']).toHaveLength(1);
+      expect(res.data['element']['update']['propertyList'][0]['property']['id']).toBe('NAME');
+      expect(res.data['element']['update']['propertyList'][0]['string']).toBe('VALUE');
+    });
+
+    test('Should update with properties', async () => {
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block: 1 }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(updateElementMutation, {
+          item: {
+            block: 1,
+            property: [],
+            flag: [ 'ACTIVE' ],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['element']['update']['flagString']).toHaveLength(1);
+      expect(res.data['element']['update']['flagString']).toEqual([ 'ACTIVE' ]);
     });
   });
 });
