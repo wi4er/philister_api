@@ -24,6 +24,9 @@ export class ElementInputSchema implements WithFlagInputSchema, WithPropertyInpu
   @Field({ nullable: true })
   id: number;
 
+  @Field()
+  block: number;
+
   @Field(of => [ ElementInputPropertySchema ])
   property: ElementInputPropertySchema[];
 

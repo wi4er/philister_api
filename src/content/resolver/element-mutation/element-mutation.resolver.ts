@@ -4,6 +4,7 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, In, Repository } from 'typeorm';
 import { ElementInputSchema } from '../../schema/element-input.schema';
 import { ElementEntity } from '../../model/element.entity';
+import { ElementInsertOperation } from '../../operation/element-insert.operation';
 
 @Resolver(of => ElementMutationSchema)
 export class ElementMutationResolver {
@@ -21,7 +22,7 @@ export class ElementMutationResolver {
     @Args('item')
       item: ElementInputSchema
   ) {
-    return;
+    return new ElementInsertOperation(this.entityManager).save(item);
   }
 
   @ResolveField()

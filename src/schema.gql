@@ -465,17 +465,18 @@ input BlockPropertyInput {
 
 type ElementMutation {
   """Adding new content element"""
-  add(item: ElementInput!): ElementMutation!
+  add(item: ElementInput!): Element!
 
   """Deletion existent content element"""
   delete(id: [Int!]!): [Int!]!
 
   """Updating existent content element"""
-  update(item: ElementInput!): ElementMutation!
+  update(item: ElementInput!): Element!
 }
 
 input ElementInput {
   id: Float
+  block: Float!
   property: [ElementInputProperty!]!
   flag: [String!]!
 }

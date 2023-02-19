@@ -1,12 +1,13 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ElementSchema } from './element.schema';
 
 @ObjectType('ElementMutation')
 export class ElementMutationSchema {
 
   @Field(
-    type => ElementMutationSchema,
+    type => ElementSchema,
     { description: 'Adding new content element' }
-  ) add: ElementMutationSchema;
+  ) add: ElementSchema;
 
   @Field(
     type => [ Int ],
@@ -14,8 +15,8 @@ export class ElementMutationSchema {
   ) delete: number[];
 
   @Field(
-    type => ElementMutationSchema,
+    type => ElementSchema,
     { description: 'Updating existent content element' }
-  ) update: ElementMutationSchema;
+  ) update: ElementSchema;
 
 }
