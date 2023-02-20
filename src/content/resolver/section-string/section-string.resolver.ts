@@ -1,12 +1,12 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { ElementStringSchema } from '../../schema/element-string.schema';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PropertyEntity } from '../../../property/model/property.entity';
 import { Repository } from 'typeorm';
 import { LangEntity } from '../../../lang/model/lang.entity';
+import { SectionStringSchema } from '../../schema/section-string.schema';
 
-@Resolver(of => ElementStringSchema)
-export class ElementStringResolver {
+@Resolver(of => SectionStringSchema)
+export class SectionStringResolver {
 
   constructor(
     @InjectRepository(PropertyEntity)

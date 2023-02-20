@@ -39,5 +39,15 @@ describe('Element2Flag entity', () => {
       expect(inst.flag).toHaveLength(1);
       expect(inst.flag[0].flag.id).toBe('ACTIVE');
     });
+
+    test('Shouldn`t have duplicate flag', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new ElementEntity(), { block }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new Element2flagEntity(), { flag, parent }).save();
+      await expect(
+        Object.assign(new Element2flagEntity(), { flag, parent }).save()
+      ).rejects.toThrow();
+    });
   });
 });

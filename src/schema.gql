@@ -62,6 +62,33 @@ interface ContentProperty {
   property: Property!
 }
 
+interface SectionProperty implements ContentProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
+interface BlockProperty implements ContentProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
+interface ElementProperty implements ContentProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
 type PropertyProperty {
   id: String!
   value: String!
@@ -388,6 +415,12 @@ type Section {
   created_at: String!
   updated_at: String!
   version: Int!
+  block: Block!
+  propertyList: [SectionProperty!]!
+  propertyItem(id: String!): SectionProperty
+  propertyString(id: String!): String
+  flagList: [Flag!]!
+  flagString: [String!]!
 }
 
 type Block implements Content {
@@ -429,9 +462,9 @@ input ElementFilter {
 }
 
 type SectionQuery {
-  list: [Section!]!
-  count: Int!
-  item: Section
+  list(limit: Int, offset: Int): [Section!]!
+  count(limit: Int, offset: Int): Int!
+  item(id: Int!): Section
 }
 
 type BlockQuery {
@@ -487,7 +520,31 @@ input ElementInputProperty {
   lang: String
 }
 
-type BlockString implements ContentProperty {
+type SectionMutation {
+  """Adding new content section"""
+  add(item: SectionInput!): Section!
+
+  """Deletion existent content section"""
+  delete(id: [Int!]!): [Int!]!
+
+  """Updating existent content section"""
+  update(item: SectionInput!): Section!
+}
+
+input SectionInput {
+  id: Float
+  block: Float!
+  property: [SectionInputProperty!]!
+  flag: [String!]!
+}
+
+input SectionInputProperty {
+  property: String!
+  string: String!
+  lang: String
+}
+
+type BlockString implements BlockProperty & ContentProperty {
   id: Int!
   created_at: String!
   updated_at: String!
@@ -497,7 +554,17 @@ type BlockString implements ContentProperty {
   lang: Lang
 }
 
-type ElementString implements ContentProperty {
+type ElementString implements ElementProperty & ContentProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+  lang: Lang
+}
+
+type SectionString implements SectionProperty & ContentProperty {
   id: Int!
   created_at: String!
   updated_at: String!
@@ -740,6 +807,7 @@ type Mutation {
   userGroup: UserGroupMutation!
   userContact: UserContactMutation!
   element: ElementMutation!
+  section: SectionMutation!
   block: BlockMutation!
   property: PropertyMutation!
   directory: DirectoryMutation!

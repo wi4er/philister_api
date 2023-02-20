@@ -1,30 +1,32 @@
 import { Test } from '@nestjs/testing';
-import { SectionResolver } from './section.resolver';
+import { SectionStringResolver } from './section-string.resolver';
 import { AppModule } from '../../../app.module';
 import { createConnection } from 'typeorm';
 import { createConnectionOptions } from '../../../createConnectionOptions';
 import { BlockEntity } from '../../model/block.entity';
+import { PropertyEntity } from '../../../property/model/property.entity';
 import request from 'supertest-graphql';
 import { gql } from 'apollo-server-express';
 import { SectionEntity } from '../../model/section.entity';
-import { Section2flagEntity } from '../../model/section2flag.entity';
-import { FlagEntity } from '../../../flag/model/flag.entity';
-
+import { Section2stringEntity } from '../../model/section2string.entity';
 
 const sectionItemQuery = gql`
   query GetSectionItem($id: Int!) {
     section {
       item(id: $id) {
         id
-        created_at
-        updated_at
-        flagString
+        propertyList {
+          string
+          property {
+            id
+          }
+        }
       }
     }
   }
-`
+`;
 
-describe('SectionResolver', () => {
+describe('SectionStringResolver', () => {
   let source;
   let app;
 
@@ -39,19 +41,21 @@ describe('SectionResolver', () => {
   beforeEach(() => source.synchronize(true));
   afterAll(() => source.destroy());
 
-  describe('Section with flag', () => {
-    test('Should get section with flag', async () => {
+  describe('Section with strings', () => {
+    test('Should get section with strings', async () => {
       const block = await new BlockEntity().save();
-      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new SectionEntity(), { block }).save();
 
-      await Object.assign(new Section2flagEntity(), { parent, flag }).save();
+      await Object.assign(new Section2stringEntity(), { parent, property, string: 'VALUE' }).save();
 
       const res = await request(app.getHttpServer())
         .query(sectionItemQuery, { id: 1 })
         .expectNoErrors();
 
-      expect(res.data['section']['item']['flagString']).toEqual([ 'ACTIVE' ]);
+      expect(res.data['section']['item']['propertyList']).toHaveLength(1);
+      expect(res.data['section']['item']['propertyList'][0]['string']).toBe('VALUE');
+      expect(res.data['section']['item']['propertyList'][0]['property']['id']).toBe('NAME');
     });
   });
 });

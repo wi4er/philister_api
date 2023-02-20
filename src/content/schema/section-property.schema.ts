@@ -1,25 +1,17 @@
 import { Field, Int, InterfaceType } from '@nestjs/graphql';
 import { PropertySchema } from '../../property/schema/property.schema';
-import { Block2stringEntity } from '../model/block2string.entity';
-import { Element2stringEntity } from '../model/element2string.entity';
+import { ContentPropertySchema } from './content-property.schema';
 
 @InterfaceType(
-  'ContentProperty',
+  'SectionProperty',
   {
     resolveType: inst => {
-      if (inst instanceof Block2stringEntity) {
-        return 'BlockString';
-      }
-
-      if (inst instanceof Element2stringEntity) {
-        return 'ElementString';
-      }
-
-      return 'BlockString';
+      return 'SectionString';
     },
+    implements: () => [ ContentPropertySchema ],
   },
 )
-export abstract class ContentPropertySchema {
+export abstract class SectionPropertySchema implements ContentPropertySchema {
 
   @Field(type => Int)
   id: number;

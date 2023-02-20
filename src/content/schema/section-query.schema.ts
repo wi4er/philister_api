@@ -1,9 +1,8 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { ElementSchema } from "./element.schema";
-import { SectionSchema } from "./section.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { SectionSchema } from './section.schema';
 
 @ObjectType(
-  'SectionQuery'
+  'SectionQuery',
 )
 export class SectionQuerySchema {
 
@@ -11,9 +10,9 @@ export class SectionQuerySchema {
   list: SectionSchema[];
 
   @Field(type => Int)
-  count: number
+  count: number;
 
   @Field(type => SectionSchema, { nullable: true })
-  item: SectionSchema;
+  item: SectionSchema | null;
 
 }

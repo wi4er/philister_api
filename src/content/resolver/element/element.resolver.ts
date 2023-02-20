@@ -13,10 +13,8 @@ export class ElementResolver {
   constructor(
     @InjectRepository(BlockEntity)
     private blockRepo: Repository<BlockEntity>,
-
     @InjectRepository(Element2stringEntity)
     private stringRepo: Repository<Element2stringEntity>,
-
     @InjectRepository(Element2flagEntity)
     private flagRepo: Repository<Element2flagEntity>,
   ) {

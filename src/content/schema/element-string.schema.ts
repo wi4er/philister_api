@@ -1,12 +1,13 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { PropertySchema } from '../../property/schema/property.schema';
 import { LangSchema } from '../../lang/schema/lang.schema';
+import { ElementPropertySchema } from './element-property.schema';
 import { ContentPropertySchema } from './content-property.schema';
 
 @ObjectType(
   'ElementString',
   {
-    implements: () => [ ContentPropertySchema ],
+    implements: () => [ ElementPropertySchema, ContentPropertySchema ],
   },
 )
 export class ElementStringSchema {

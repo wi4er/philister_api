@@ -5,10 +5,10 @@ import {
   Entity, Index,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { FlagEntity } from "../../flag/model/flag.entity";
-import { UserEntity } from "./user.entity";
+  UpdateDateColumn, VersionColumn,
+} from 'typeorm';
+import { FlagEntity } from '../../flag/model/flag.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('user2flag')
 @Index([ 'parent', 'flag' ], { unique: true })

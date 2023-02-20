@@ -4,6 +4,7 @@ import { SectionQuerySchema } from '../../schema/section-query.schema';
 import { BlockQuerySchema } from '../../schema/block-query.schema';
 import { BlockMutationSchema } from '../../schema/block-mutation.schema';
 import { ElementMutationSchema } from '../../schema/element-mutation.schema';
+import { SectionMutationSchema } from '../../schema/section-mutation.schema';
 
 @Resolver()
 export class ContentRootResolver {
@@ -20,6 +21,11 @@ export class ContentRootResolver {
 
   @Query(of => SectionQuerySchema, { name: 'section' })
   getSection() {
+    return {};
+  }
+
+  @Mutation(of => SectionMutationSchema, { name: 'section' })
+  setSection() {
     return {};
   }
 

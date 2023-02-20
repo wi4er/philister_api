@@ -2,15 +2,15 @@ import {
   BaseEntity,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity, ManyToOne,
+  Entity, Index, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn, VersionColumn,
 } from 'typeorm';
-import { ElementEntity } from './element.entity';
 import { FlagEntity } from '../../flag/model/flag.entity';
 import { SectionEntity } from './section.entity';
 
 @Entity('content-section2flag')
+@Index([ 'parent', 'flag' ], { unique: true })
 export class Section2flagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

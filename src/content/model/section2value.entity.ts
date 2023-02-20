@@ -2,15 +2,16 @@ import {
   BaseEntity,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity, ManyToOne,
+  Entity, Index, ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { ValueEntity } from "../../directory/model/value.entity";
-import { PropertyEntity } from "../../property/model/property.entity";
-import { SectionEntity } from "./section.entity";
+  UpdateDateColumn, VersionColumn,
+} from 'typeorm';
+import { ValueEntity } from '../../directory/model/value.entity';
+import { PropertyEntity } from '../../property/model/property.entity';
+import { SectionEntity } from './section.entity';
 
 @Entity('content-section2value')
+@Index([ 'value', 'property', 'parent' ], { unique: true })
 export class Section2valueEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()

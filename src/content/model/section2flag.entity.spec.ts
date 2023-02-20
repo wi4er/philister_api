@@ -37,4 +37,17 @@ describe('Section2Flag entity', () => {
       expect(list[0].id).toBe(1);
     });
   });
+
+  describe('Section with flags', () => {
+    test('Shouldn`t have duplicate flag', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new SectionEntity(), { block }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      await Object.assign(new Section2flagEntity(), { parent, flag }).save();
+      await expect(
+        Object.assign(new Section2flagEntity(), { parent, flag }).save()
+      ).rejects.toThrow();
+    });
+  });
 });

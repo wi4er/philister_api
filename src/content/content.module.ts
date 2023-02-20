@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BlockResolver } from './resolver/block/block.resolver';
 import { SectionResolver } from './resolver/section/section.resolver';
-import { ElementPropertyResolver } from './resolver/element-property/element-property.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ElementEntity } from './model/element.entity';
 import { Element2sectionEntity } from './model/element2section.entity';
@@ -32,6 +31,7 @@ import { SectionController } from './controller/section/section.controller';
 import { Section2flagEntity } from './model/section2flag.entity';
 import { Block2flagEntity } from './model/block2flag.entity';
 import { ElementStringResolver } from './resolver/element-string/element-string.resolver';
+import { SectionStringResolver } from './resolver/section-string/section-string.resolver';
 
 @Module({
   imports: [
@@ -45,10 +45,10 @@ import { ElementStringResolver } from './resolver/element-string/element-string.
     ]),
   ],
   providers: [
-    ElementResolver, ElementPropertyResolver, ContentRootResolver, ElementQueryResolver,
+    ElementResolver, ContentRootResolver, ElementQueryResolver,
     SectionQueryResolver, SectionMutationResolver,
     ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
-    BlockResolver, BlockStringResolver, ContentResolver, ElementStringResolver,
+    BlockResolver, BlockStringResolver, ContentResolver, ElementStringResolver, SectionStringResolver,
   ],
   controllers: [ BlockController, ElementController, SectionController ],
 })

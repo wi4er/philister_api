@@ -1,16 +1,16 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { PropertySchema } from '../../property/schema/property.schema';
-import { ContentPropertySchema } from './content-property.schema';
 import { LangSchema } from '../../lang/schema/lang.schema';
-import { BlockPropertySchema } from './block-property.schema';
+import { SectionPropertySchema } from './section-property.schema';
+import { ContentPropertySchema } from './content-property.schema';
 
 @ObjectType(
-  'BlockString',
+  'SectionString',
   {
-    implements: () => [ BlockPropertySchema, ContentPropertySchema ],
+    implements: () => [ SectionPropertySchema, ContentPropertySchema ],
   },
 )
-export class BlockStringSchema implements BlockPropertySchema {
+export class SectionStringSchema implements SectionPropertySchema {
 
   @Field(type => Int)
   id: number;
