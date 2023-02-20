@@ -21,6 +21,9 @@ export class SectionSchema {
   @Field(type => BlockSchema)
   block: BlockSchema;
 
+  @Field(type => SectionSchema)
+  parent: SectionSchema;
+
   @Field(type => [ SectionPropertySchema ])
   propertyList: SectionPropertySchema[];
 

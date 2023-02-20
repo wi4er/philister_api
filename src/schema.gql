@@ -416,6 +416,7 @@ type Section {
   updated_at: String!
   version: Int!
   block: Block!
+  parent: Section!
   propertyList: [SectionProperty!]!
   propertyItem(id: String!): SectionProperty
   propertyString(id: String!): String
@@ -534,6 +535,7 @@ type SectionMutation {
 input SectionInput {
   id: Float
   block: Float!
+  parent: Float
   property: [SectionInputProperty!]!
   flag: [String!]!
 }

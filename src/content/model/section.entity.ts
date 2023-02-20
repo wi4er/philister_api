@@ -32,6 +32,22 @@ export class SectionEntity extends BaseEntity {
   version: number;
 
   @ManyToOne(
+    type => SectionEntity,
+    section => section.children,
+    {
+      onDelete: 'SET NULL',
+      nullable: true,
+    },
+  )
+  parent: SectionEntity;
+
+  @OneToMany(
+    type => SectionEntity,
+    section => section.parent,
+  )
+  children: SectionEntity[];
+
+  @ManyToOne(
     type => BlockEntity,
     block => block.section,
     {

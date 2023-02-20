@@ -27,6 +27,9 @@ export class SectionInputSchema implements WithFlagInputSchema, WithPropertyInpu
   @Field()
   block: number;
 
+  @Field({ nullable: true })
+  parent: number;
+
   @Field(of => [ SectionInputPropertySchema ])
   property: SectionInputPropertySchema[];
 

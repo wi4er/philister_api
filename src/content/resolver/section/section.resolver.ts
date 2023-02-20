@@ -1,6 +1,6 @@
 import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { SectionEntity } from "../../model/section.entity";
-import { SectionSchema } from "../../schema/section.schema";
+import { SectionEntity } from '../../model/section.entity';
+import { SectionSchema } from '../../schema/section.schema';
 import { BlockEntity } from '../../model/block.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,6 +13,8 @@ export class SectionResolver {
   constructor(
     @InjectRepository(BlockEntity)
     private blockRepo: Repository<BlockEntity>,
+    @InjectRepository(SectionEntity)
+    private sectionRepo: Repository<SectionEntity>,
     @InjectRepository(Section2stringEntity)
     private stringRepo: Repository<Section2stringEntity>,
     @InjectRepository(Section2flagEntity)
@@ -23,7 +25,7 @@ export class SectionResolver {
   @ResolveField()
   created_at(
     @Parent()
-      current: SectionEntity
+      current: SectionEntity,
   ) {
     return new Date(current.created_at).toISOString();
   }
@@ -31,11 +33,10 @@ export class SectionResolver {
   @ResolveField()
   updated_at(
     @Parent()
-      current: SectionEntity
+      current: SectionEntity,
   ) {
     return new Date(current.updated_at).toISOString();
   }
-
 
   @ResolveField()
   async block(
@@ -44,6 +45,17 @@ export class SectionResolver {
   ): Promise<BlockEntity> {
     return this.blockRepo.findOne({
       where: { id: current.block },
+      loadRelationIds: true,
+    });
+  }
+
+  @ResolveField()
+  async parent(
+    @Parent()
+      current: { parent: number },
+  ): Promise<SectionEntity> {
+    return this.sectionRepo.findOne({
+      where: { id: current.parent },
       loadRelationIds: true,
     });
   }
