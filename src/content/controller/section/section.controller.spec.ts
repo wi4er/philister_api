@@ -24,6 +24,7 @@ describe('SectionController', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Content section getting', () => {
     test('Should get empty section list', async () => {
@@ -105,7 +106,7 @@ describe('SectionController', () => {
       const parent = await Object.assign(new SectionEntity(), { block }).save();
 
       for (let i = 0; i < 10; i++) {
-        const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+        const flag = await Object.assign(new FlagEntity(), { id: `ACTIVE_${i}` }).save();
         await Object.assign(new Section2flagEntity(), { parent, flag, string: 'VALUE' }).save();
       }
 

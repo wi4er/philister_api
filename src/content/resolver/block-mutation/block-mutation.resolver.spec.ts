@@ -172,5 +172,16 @@ describe('BlockMutationResolver', () => {
 
       expect(res.data['block']['delete']).toEqual([ 1 ]);
     });
+
+    test('Should delete with wrong id', async () => {
+      await new BlockEntity().save();
+      await new BlockEntity().save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(deleteBlockMutation, { id: [ 1, 2, 3 ] })
+        .expectNoErrors();
+
+      expect(res.data['block']['delete']).toEqual([ 1, 2 ]);
+    });
   });
 });

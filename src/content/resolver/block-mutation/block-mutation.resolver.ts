@@ -1,18 +1,16 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { BlockMutationSchema } from "../../schema/block-mutation.schema";
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, In, Repository } from 'typeorm';
-import { BlockInputSchema } from "../../schema/block-input.schema";
-import { BlockEntity } from "../../model/block.entity";
+import { BlockMutationSchema } from '../../schema/block-mutation.schema';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
+import { BlockInputSchema } from '../../schema/block-input.schema';
 import { BlockInsertOperation } from '../../operation/block-insert.operation';
 import { BlockUpdateOperation } from '../../operation/block-update.operation';
+import { BlockDeleteOperation } from '../../operation/block-delete.operation';
 
 @Resolver(of => BlockMutationSchema)
 export class BlockMutationResolver {
 
   constructor(
-    @InjectRepository(BlockEntity)
-    private blockRepo: Repository<BlockEntity>,
     @InjectEntityManager()
     private entityManager: EntityManager,
   ) {
@@ -21,15 +19,15 @@ export class BlockMutationResolver {
   @ResolveField()
   async add(
     @Args('item')
-      item: BlockInputSchema
+      item: BlockInputSchema,
   ) {
-   return new BlockInsertOperation(this.entityManager).save(item);
+    return new BlockInsertOperation(this.entityManager).save(item);
   }
 
   @ResolveField()
   async update(
     @Args('item')
-      item: BlockInputSchema
+      item: BlockInputSchema,
   ) {
     return new BlockUpdateOperation(this.entityManager).save(item);
   }
@@ -37,17 +35,9 @@ export class BlockMutationResolver {
   @ResolveField()
   async delete(
     @Args('id', { type: () => [ Int ] })
-      id: number[]
+      id: number[],
   ): Promise<number[]> {
-    const result = [];
-    const list = await this.blockRepo.find({ where: { id: In(id) } });
-
-    for (const item of list) {
-      await this.blockRepo.delete(item.id);
-      result.push(item.id);
-    }
-
-    return result;
+    return new BlockDeleteOperation(this.entityManager).save(id);
   }
 
 }

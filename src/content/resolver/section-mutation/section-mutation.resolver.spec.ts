@@ -54,6 +54,14 @@ const updateSectionItemMutation = gql`
   }
 `;
 
+const deleteSectionMutation = gql`
+  mutation DeleteSection($id: [Int!]!) {
+    section {
+      delete(id: $id)
+    }
+  }
+`;
+
 describe('SectionMutationResolver', () => {
   let source;
   let app;
@@ -140,6 +148,19 @@ describe('SectionMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['section']['update']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+  });
+
+  describe('Section deletion', () => {
+    test('Should delete section', async () => {
+      await new BlockEntity().save();
+      await Object.assign(new SectionEntity(), { block: 1 }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(deleteSectionMutation, { id: [ 1 ] })
+        .expectNoErrors();
+
+      expect(res.data['section']['delete']).toEqual([ 1 ]);
     });
   });
 });

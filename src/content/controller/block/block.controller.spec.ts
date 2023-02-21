@@ -19,6 +19,7 @@ describe('BlockController', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Content block getting', () => {
     test('Should get empty block list', async () => {
