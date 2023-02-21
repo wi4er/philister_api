@@ -23,7 +23,10 @@ export class SectionInsertOperation {
 
     await this.manager.transaction(async (trans: EntityManager) => {
       this.created.block = await blockRepo.findOne({ where: { id: input.block } });
-      this.created.parent = await sectionRepo.findOne({ where: { id: input.parent } });
+
+      console.log(input.parent);
+
+      if (input.parent) this.created.parent = await sectionRepo.findOne({ where: { id: input.parent } });
       await trans.save(this.created);
 
       await new PropertyInsertOperation(trans, Section2stringEntity).save(this.created, input);

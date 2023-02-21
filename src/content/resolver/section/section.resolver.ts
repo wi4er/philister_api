@@ -54,6 +54,8 @@ export class SectionResolver {
     @Parent()
       current: { parent: number },
   ): Promise<SectionEntity> {
+    if (!current.parent) return null;
+
     return this.sectionRepo.findOne({
       where: { id: current.parent },
       loadRelationIds: true,

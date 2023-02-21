@@ -56,6 +56,7 @@ describe('AuthMutationResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Auth with login and password', () => {
     test('Should auth', async () => {

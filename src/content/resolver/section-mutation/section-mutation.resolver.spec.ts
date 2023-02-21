@@ -7,6 +7,7 @@ import { gql } from 'apollo-server-express';
 import { BlockEntity } from '../../model/block.entity';
 import request from 'supertest-graphql';
 import { SectionEntity } from '../../model/section.entity';
+import { FlagEntity } from '../../../flag/model/flag.entity';
 
 const addSectionItemMutation = gql`
   mutation AddSection($item: SectionInput!) {
@@ -25,6 +26,29 @@ const addSectionItemMutation = gql`
             id
           }
         }
+      }
+    }
+  }
+`;
+
+const updateSectionItemMutation = gql`
+  mutation UpdateSection($item: SectionInput!) {
+    section {
+      update(item: $item) {
+        id
+        block {
+          id
+        }
+        parent {
+          id
+        }
+        propertyList {
+          string
+          property {
+            id
+          }
+        }
+        flagString
       }
     }
   }
@@ -55,6 +79,7 @@ describe('SectionMutationResolver', () => {
 
       expect(res.data['section']['add']['id']).toBe(1);
       expect(res.data['section']['add']['block']['id']).toBe(1);
+      expect(res.data['section']['add']['parent']).toBeNull();
     });
 
     test('Should add with parent', async () => {
@@ -74,6 +99,47 @@ describe('SectionMutationResolver', () => {
 
       expect(res.data['section']['add']['id']).toBe(2);
       expect(res.data['section']['add']['parent']['id']).toBe(1);
+    });
+  });
+
+  describe('Section update', () => {
+    test('Should update section item', async () => {
+      await new BlockEntity().save();
+      await new BlockEntity().save();
+      await Object.assign(new SectionEntity(), { block: 1 }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(updateSectionItemMutation, {
+          item: {
+            id: 1,
+            block: 2,
+            property: [],
+            flag: [],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['section']['update']['block']['id']).toBe(2);
+      expect(res.data['section']['update']['parent']).toBeNull();
+    });
+
+    test('Should update with flag', async () => {
+      await new BlockEntity().save();
+      await Object.assign(new SectionEntity(), { block: 1 }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(updateSectionItemMutation, {
+          item: {
+            id: 1,
+            block: 1,
+            property: [],
+            flag: [ 'ACTIVE' ],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['section']['update']['flagString']).toEqual([ 'ACTIVE' ]);
     });
   });
 });

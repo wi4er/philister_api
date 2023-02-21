@@ -5,6 +5,7 @@ import { SectionInputSchema } from '../../schema/section-input.schema';
 import { SectionEntity } from '../../model/section.entity';
 import { SectionMutationSchema } from '../../schema/section-mutation.schema';
 import { SectionInsertOperation } from '../../operation/section-insert.operation';
+import { SectionUpdateOperation } from '../../operation/section-update.operation';
 
 @Resolver(of => SectionMutationSchema)
 export class SectionMutationResolver {
@@ -30,7 +31,7 @@ export class SectionMutationResolver {
     @Args('item')
       item: SectionInputSchema
   ) {
-    return null;
+    return new SectionUpdateOperation(this.entityManager).save(item);
   }
 
   @ResolveField()

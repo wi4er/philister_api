@@ -416,7 +416,7 @@ type Section {
   updated_at: String!
   version: Int!
   block: Block!
-  parent: Section!
+  parent: Section
   propertyList: [SectionProperty!]!
   propertyItem(id: String!): SectionProperty
   propertyString(id: String!): String

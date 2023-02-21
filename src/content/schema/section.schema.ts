@@ -21,8 +21,8 @@ export class SectionSchema {
   @Field(type => BlockSchema)
   block: BlockSchema;
 
-  @Field(type => SectionSchema)
-  parent: SectionSchema;
+  @Field(type => SectionSchema, { nullable: true })
+  parent: SectionSchema | null;
 
   @Field(type => [ SectionPropertySchema ])
   propertyList: SectionPropertySchema[];
