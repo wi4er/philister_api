@@ -32,6 +32,9 @@ import { Section2flagEntity } from './model/section2flag.entity';
 import { Block2flagEntity } from './model/block2flag.entity';
 import { ElementStringResolver } from './resolver/element-string/element-string.resolver';
 import { SectionStringResolver } from './resolver/section-string/section-string.resolver';
+import { ElementService } from './service/element/element.service';
+import { SectionService } from './service/section/section.service';
+import { BlockService } from './service/block/block.service';
 
 @Module({
   imports: [
@@ -48,7 +51,7 @@ import { SectionStringResolver } from './resolver/section-string/section-string.
     ElementResolver, ContentRootResolver, ElementQueryResolver,
     SectionQueryResolver, SectionMutationResolver,
     ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
-    BlockResolver, BlockStringResolver, ContentResolver, ElementStringResolver, SectionStringResolver,
+    BlockResolver, BlockStringResolver, ContentResolver, ElementStringResolver, SectionStringResolver, ElementService, SectionService, BlockService,
   ],
   controllers: [ BlockController, ElementController, SectionController ],
 })

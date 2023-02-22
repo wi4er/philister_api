@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ElementEntity } from '../../model/element.entity';
@@ -7,6 +7,8 @@ import { ElementFilterSchema } from '../../schema/element-filter.schema';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { ElementOrderSchema } from '../../schema/element-order.schema';
 import { FindOptionsOrder } from 'typeorm/find-options/FindOptionsOrder';
+import { ElementService } from '../../service/element/element.service';
+import { ElementInputSchema } from '../../schema/element-input.schema';
 
 @ApiTags('Content')
 @Controller('element')
@@ -15,6 +17,7 @@ export class ElementController {
   constructor(
     @InjectRepository(ElementEntity)
     private elementRepo: Repository<ElementEntity>,
+    private elementService: ElementService,
   ) {
   }
 
@@ -24,6 +27,7 @@ export class ElementController {
       created_at: item.created_at,
       updated_at: item.updated_at,
       version: item.version,
+      block: item.block,
       property: [
         ...item.string.map(str => ({
           string: str.string,
@@ -102,10 +106,20 @@ export class ElementController {
         string: { property: true },
         flag: { flag: true },
         value: { value: { directory: true }, property: true },
+        block: true,
       },
       take: limit,
       skip: offset,
     }).then(list => list.map(this.toView));
+  }
+
+  @Post()
+  async addItem(
+    @Body()
+      input: ElementInputSchema,
+  ) {
+    return this.elementService.insert(input)
+      .then(res => this.toView(res));
   }
 
 }

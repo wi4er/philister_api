@@ -1,18 +1,13 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { BlockMutationSchema } from '../../schema/block-mutation.schema';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
 import { BlockInputSchema } from '../../schema/block-input.schema';
-import { BlockInsertOperation } from '../../operation/block-insert.operation';
-import { BlockUpdateOperation } from '../../operation/block-update.operation';
-import { BlockDeleteOperation } from '../../operation/block-delete.operation';
+import { BlockService } from '../../service/block/block.service';
 
 @Resolver(of => BlockMutationSchema)
 export class BlockMutationResolver {
 
   constructor(
-    @InjectEntityManager()
-    private entityManager: EntityManager,
+    private blockService: BlockService,
   ) {
   }
 
@@ -21,7 +16,7 @@ export class BlockMutationResolver {
     @Args('item')
       item: BlockInputSchema,
   ) {
-    return new BlockInsertOperation(this.entityManager).save(item);
+    return this.blockService.insert(item);
   }
 
   @ResolveField()
@@ -29,7 +24,7 @@ export class BlockMutationResolver {
     @Args('item')
       item: BlockInputSchema,
   ) {
-    return new BlockUpdateOperation(this.entityManager).save(item);
+    return this.blockService.update(item);
   }
 
   @ResolveField()
@@ -37,7 +32,7 @@ export class BlockMutationResolver {
     @Args('id', { type: () => [ Int ] })
       id: number[],
   ): Promise<number[]> {
-    return new BlockDeleteOperation(this.entityManager).save(id);
+    return this.blockService.delete(id);
   }
 
 }

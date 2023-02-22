@@ -1,18 +1,13 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
 import { SectionInputSchema } from '../../schema/section-input.schema';
 import { SectionMutationSchema } from '../../schema/section-mutation.schema';
-import { SectionInsertOperation } from '../../operation/section-insert.operation';
-import { SectionUpdateOperation } from '../../operation/section-update.operation';
-import { SectionDeleteOperation } from '../../operation/section-delete.operation';
+import { SectionService } from '../../service/section/section.service';
 
 @Resolver(of => SectionMutationSchema)
 export class SectionMutationResolver {
 
   constructor(
-    @InjectEntityManager()
-    private entityManager: EntityManager,
+    private sectionService: SectionService
   ) {
   }
 
@@ -21,7 +16,7 @@ export class SectionMutationResolver {
     @Args('item')
       item: SectionInputSchema,
   ) {
-    return new SectionInsertOperation(this.entityManager).save(item);
+    return this.sectionService.insert(item);
   }
 
   @ResolveField()
@@ -29,7 +24,7 @@ export class SectionMutationResolver {
     @Args('item')
       item: SectionInputSchema,
   ) {
-    return new SectionUpdateOperation(this.entityManager).save(item);
+    return this.sectionService.update(item);
   }
 
   @ResolveField()
@@ -37,7 +32,7 @@ export class SectionMutationResolver {
     @Args('id', { type: () => [ Int ] })
       id: number[],
   ): Promise<number[]> {
-    return new SectionDeleteOperation(this.entityManager).save(id);
+    return this.sectionService.delete(id);
   }
 
 }

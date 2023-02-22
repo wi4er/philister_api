@@ -288,4 +288,25 @@ describe('ElementController', () => {
       // expect(list.body[0].property[0].directory).toBe('CITY');
     });
   });
+
+  describe('Content element addition', () => {
+    test('Should add element', async () => {
+      await new BlockEntity().save();
+      const inst = await request(app.getHttpServer())
+        .post('/element')
+        .send({ block: 1 })
+        .expect(201);
+
+      expect(inst.body['id']).toBe(1);
+      expect(inst.body['block']).toBe(1);
+    });
+
+    test('Shouldn`t add with wrong block', async () => {
+      await new BlockEntity().save();
+      const inst = await request(app.getHttpServer())
+        .post('/element')
+        .send({ block: 2 })
+        .expect(500);
+    });
+  });
 });
