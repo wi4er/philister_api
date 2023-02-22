@@ -52,7 +52,7 @@ export function createConnectionOptions(): DataSourceOptions {
     username: process.env.DB_USER_NAME || 'postgres',
     password: process.env.DB_USER_PASSWORD || 'example',
     database: process.env.DB_DATABASE || 'postgres',
-    // synchronize: true,
+    synchronize: true,
     // logging: true,
     entities: [
       UserEntity, User2stringEntity, User2flagEntity, User2valueEntity, User2userEntity, User2descriptionEntity,
