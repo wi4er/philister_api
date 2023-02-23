@@ -3,7 +3,7 @@ import { DirectoryEntity } from "../../model/directory.entity";
 import { ValueSchema } from "../../schema/value.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ValueStringEntity } from "../../model/value.string.entity";
+import { Value2stringEntity } from "../../model/value2string.entity";
 
 @Resolver(of => ValueSchema)
 export class ValueResolver {
@@ -11,8 +11,8 @@ export class ValueResolver {
   constructor(
     @InjectRepository(DirectoryEntity)
     private directoryRepo: Repository<DirectoryEntity>,
-    @InjectRepository(ValueStringEntity)
-    private stingRepo: Repository<ValueStringEntity>,
+    @InjectRepository(Value2stringEntity)
+    private stingRepo: Repository<Value2stringEntity>,
   ) {
   }
 

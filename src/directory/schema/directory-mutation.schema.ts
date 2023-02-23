@@ -1,24 +1,24 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import { DirectorySchema } from "./directory.schema";
+import { Field, ObjectType } from '@nestjs/graphql';
+import { DirectorySchema } from './directory.schema';
 
 @ObjectType('DirectoryMutation', {
-  description: ''
+  description: '',
 })
 export class DirectoryMutationSchema {
 
   @Field(
     type => DirectorySchema,
-    { description: 'Adding new directory' }
+    { description: 'Adding new directory' },
   ) add: DirectorySchema;
 
   @Field(
-    type => [String],
-    { description: 'Deletion existent directory' }
-  ) delete: String[];
+    type => [ String ],
+    { description: 'Deletion existent directory' },
+  ) delete: string[];
 
   @Field(
     type => DirectorySchema,
-    { description: 'Updating existent directory' }
+    { description: 'Updating existent directory' },
   ) update: DirectorySchema;
 
 }

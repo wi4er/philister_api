@@ -7,7 +7,7 @@ import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
-import { DirectoryStringEntity } from "../../model/directory-string.entity";
+import { Directory2stringEntity } from "../../model/directory2string.entity";
 import { LangEntity } from "../../../lang/model/lang.entity";
 
 const directoryItemQuery = gql`
@@ -51,7 +51,7 @@ describe('DirectoryStringResolver', () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new DirectoryEntity(), { id: 'NAME' }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property, parent, lang }).save()
+      await Object.assign(new Directory2stringEntity(), { string: 'VALUE', property, parent, lang }).save()
 
       const res = await request(app.getHttpServer())
         .mutate(directoryItemQuery, { id: 'NAME' })
@@ -70,9 +70,9 @@ describe('DirectoryStringResolver', () => {
       await Object.assign(new LangEntity(), { id: 'EN' }).save();
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
 
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'NAME', parent: 'CITY', lang: 'EN' }).save();
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'SECOND', parent: 'CITY', lang: 'EN' }).save();
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property: 'FAMILY', parent: 'CITY', lang: 'EN' }).save();
+      await Object.assign(new Directory2stringEntity(), { string: 'VALUE', property: 'NAME', parent: 'CITY', lang: 'EN' }).save();
+      await Object.assign(new Directory2stringEntity(), { string: 'VALUE', property: 'SECOND', parent: 'CITY', lang: 'EN' }).save();
+      await Object.assign(new Directory2stringEntity(), { string: 'VALUE', property: 'FAMILY', parent: 'CITY', lang: 'EN' }).save();
 
       const res = await request(app.getHttpServer())
         .mutate(directoryItemQuery, { id: 'CITY' })

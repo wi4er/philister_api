@@ -6,9 +6,9 @@ import {
   PrimaryColumn,
   UpdateDateColumn, VersionColumn
 } from 'typeorm';
-import { DirectoryStringEntity } from './directory-string.entity';
+import { Directory2stringEntity } from './directory2string.entity';
 import { ValueEntity } from './value.entity';
-import { DirectoryFlagEntity } from "./directory-flag.entity";
+import { Directory2flagEntity } from "./directory2flag.entity";
 
 @Entity('directory')
 @Check('not_empty_id', '"id" > \'\'')
@@ -35,10 +35,10 @@ export class DirectoryEntity extends BaseEntity {
   version: number;
 
   @OneToMany(
-    type => DirectoryStringEntity,
+    type => Directory2stringEntity,
     propertyProperty => propertyProperty.parent,
   )
-  string: DirectoryStringEntity[];
+  string: Directory2stringEntity[];
 
   @OneToMany(
     type => ValueEntity,
@@ -47,9 +47,9 @@ export class DirectoryEntity extends BaseEntity {
   value: ValueEntity[];
 
   @OneToMany(
-    type => DirectoryFlagEntity,
+    type => Directory2flagEntity,
     string => string.parent,
   )
-  flag: DirectoryFlagEntity[];
+  flag: Directory2flagEntity[];
 
 }

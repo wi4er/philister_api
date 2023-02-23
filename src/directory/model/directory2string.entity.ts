@@ -8,15 +8,14 @@ import {
   UpdateDateColumn, VersionColumn
 } from "typeorm";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { ValueEntity } from "./value.entity";
+import { DirectoryEntity } from "./directory.entity";
 import { LangEntity } from "../../lang/model/lang.entity";
 import { CommonStringEntity } from "../../common/model/common-string.entity";
 
 @Entity({
-  name: 'value-string'
+  name: 'directory-string'
 })
-export class ValueStringEntity extends BaseEntity implements CommonStringEntity<ValueEntity> {
-
+export class Directory2stringEntity extends BaseEntity implements CommonStringEntity<DirectoryEntity>{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -36,14 +35,14 @@ export class ValueStringEntity extends BaseEntity implements CommonStringEntity<
   string: string;
 
   @ManyToOne(
-    () => ValueEntity,
+    () => DirectoryEntity,
     directory => directory.string,
     {
       onDelete: "CASCADE",
       nullable: false,
     },
   )
-  parent: ValueEntity;
+  parent: DirectoryEntity;
 
   @ManyToOne(
     () => PropertyEntity,

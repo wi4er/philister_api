@@ -11,7 +11,7 @@ import { DirectoryEntity } from "./directory.entity";
 
 @Entity('directory-flag')
 @Index([ 'parent', 'flag' ], { unique: true })
-export class DirectoryFlagEntity extends BaseEntity {
+export class Directory2flagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;

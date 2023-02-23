@@ -2,7 +2,7 @@ import { DataSource } from "typeorm/data-source/DataSource";
 import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { DirectoryEntity } from "./directory.entity";
-import { DirectoryStringEntity } from "./directory-string.entity";
+import { Directory2stringEntity } from "./directory2string.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
 import { LangEntity } from "../../lang/model/lang.entity";
 
@@ -17,7 +17,7 @@ describe("DirectoryString entity", () => {
 
   describe('DirectoryString fields', () => {
     test('Should get empty list', async () => {
-      const repo = source.getRepository(DirectoryStringEntity);
+      const repo = source.getRepository(Directory2stringEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(0);
@@ -28,7 +28,7 @@ describe("DirectoryString entity", () => {
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
       const parent = await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
 
-      await Object.assign(new DirectoryStringEntity(), {
+      await Object.assign(new Directory2stringEntity(), {
         string: 'VALUE', property, parent, lang
       }).save();
     });
@@ -37,7 +37,7 @@ describe("DirectoryString entity", () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
 
-      const inst = await Object.assign(new DirectoryStringEntity(), {
+      const inst = await Object.assign(new Directory2stringEntity(), {
         string: 'VALUE', property, parent
       }).save()
 
@@ -48,7 +48,7 @@ describe("DirectoryString entity", () => {
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
       const parent = await Object.assign(new DirectoryEntity(), { id: 'LIST' }).save();
 
-      await expect(Object.assign(new DirectoryStringEntity(), {
+      await expect(Object.assign(new Directory2stringEntity(), {
         string: 'VALUE', parent, lang
       }).save()).rejects.toThrow('propertyId');
     });
@@ -57,7 +57,7 @@ describe("DirectoryString entity", () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
-      await expect(Object.assign(new DirectoryStringEntity(), {
+      await expect(Object.assign(new Directory2stringEntity(), {
         string: 'VALUE', property, lang
       }).save()).rejects.toThrow('parentId');
     });
@@ -70,7 +70,7 @@ describe("DirectoryString entity", () => {
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
       const parent = await Object.assign(new DirectoryEntity(), { id: 'ENUM' }).save();
 
-      await Object.assign(new DirectoryStringEntity(), {
+      await Object.assign(new Directory2stringEntity(), {
         string: 'VALUE', property, parent, lang
       }).save();
 
@@ -88,7 +88,7 @@ describe("DirectoryString entity", () => {
       await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       for (let i = 0; i < 10; i++) {
-        await Object.assign(new DirectoryStringEntity(), {
+        await Object.assign(new Directory2stringEntity(), {
           string: 'VALUE',
           property: 'NAME',
           parent: 'LIST',
@@ -104,13 +104,13 @@ describe("DirectoryString entity", () => {
 
     test('Should clear string after directory deletion', async () => {
       const repo = source.getRepository(DirectoryEntity);
-      const stingRepo = source.getRepository(DirectoryStringEntity);
+      const stingRepo = source.getRepository(Directory2stringEntity);
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const parent = await Object.assign(new DirectoryEntity(), { id: 'ENUM' }).save();
 
-      await Object.assign(new DirectoryStringEntity(), { string: 'VALUE', property, parent, lang }).save();
+      await Object.assign(new Directory2stringEntity(), { string: 'VALUE', property, parent, lang }).save();
       await repo.delete({ id: 'ENUM' });
 
       expect(await stingRepo.find()).toEqual([]);

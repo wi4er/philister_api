@@ -3,7 +3,7 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { DirectoryEntity } from "./directory.entity";
 import { FlagEntity } from "../../flag/model/flag.entity";
-import { DirectoryFlagEntity } from "./directory-flag.entity";
+import { Directory2flagEntity } from "./directory2flag.entity";
 
 describe("DirectoryFlag entity", () => {
   let source: DataSource;
@@ -19,7 +19,7 @@ describe("DirectoryFlag entity", () => {
       const parent = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
       const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
 
-      const inst = new DirectoryFlagEntity();
+      const inst = new Directory2flagEntity();
       inst.parent = parent;
       inst.flag = flag;
 

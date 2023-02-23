@@ -3,7 +3,7 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { DirectoryEntity } from "./directory.entity";
 import { PropertyEntity } from "../../property/model/property.entity";
-import { ValueStringEntity } from "./value.string.entity";
+import { Value2stringEntity } from "./value2string.entity";
 import { ValueEntity } from "./value.entity";
 import { LangEntity } from "../../lang/model/lang.entity";
 
@@ -18,21 +18,21 @@ describe("ValueString entity", () => {
 
   describe('ValueString fields', () => {
     test('Should get empty list', async () => {
-      const repo = source.getRepository(ValueStringEntity);
+      const repo = source.getRepository(Value2stringEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(0);
     });
 
     test('Should create item', async () => {
-      const repo = source.getRepository(ValueStringEntity);
+      const repo = source.getRepository(Value2stringEntity);
 
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const directory = await Object.assign(new DirectoryEntity(), { id: 'ENUM' }).save();
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
-      await Object.assign(new ValueStringEntity(), {
+      await Object.assign(new Value2stringEntity(), {
         string: 'VALUE', property, parent, lang
       }).save();
 
@@ -54,7 +54,7 @@ describe("ValueString entity", () => {
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
-      await Object.assign(new ValueStringEntity(), {
+      await Object.assign(new Value2stringEntity(), {
         string: 'VALUE', property, parent, lang
       }).save();
 
@@ -69,14 +69,14 @@ describe("ValueString entity", () => {
 
     test('Should clear string after directory deletion', async () => {
       const repo = source.getRepository(ValueEntity);
-      const stingRepo = source.getRepository(ValueStringEntity);
+      const stingRepo = source.getRepository(Value2stringEntity);
 
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       const directory = await Object.assign(new DirectoryEntity(), { id: 'ENUM' }).save();
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
-      await Object.assign(new ValueStringEntity(), { string: 'VALUE', property, parent, lang }).save();
+      await Object.assign(new Value2stringEntity(), { string: 'VALUE', property, parent, lang }).save();
       await repo.delete({ id: 'ITEM' });
 
       expect(await stingRepo.find()).toEqual([]);

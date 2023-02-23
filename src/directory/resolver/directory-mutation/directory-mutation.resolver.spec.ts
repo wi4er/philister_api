@@ -1,15 +1,15 @@
 import { Test } from '@nestjs/testing';
-import { AppModule } from "../../../app.module";
-import { createConnection } from "typeorm";
-import { createConnectionOptions } from "../../../createConnectionOptions";
-import request from "supertest-graphql";
-import { gql } from "apollo-server-express";
-import { PropertyEntity } from "../../../property/model/property.entity";
-import { DirectoryEntity } from "../../model/directory.entity";
-import { ValueEntity } from "../../model/value.entity";
-import { LangEntity } from "../../../lang/model/lang.entity";
-import { FlagEntity } from "../../../flag/model/flag.entity";
-import { DirectoryFlagEntity } from "../../model/directory-flag.entity";
+import { AppModule } from '../../../app.module';
+import { createConnection } from 'typeorm';
+import { createConnectionOptions } from '../../../createConnectionOptions';
+import request from 'supertest-graphql';
+import { gql } from 'apollo-server-express';
+import { PropertyEntity } from '../../../property/model/property.entity';
+import { DirectoryEntity } from '../../model/directory.entity';
+import { ValueEntity } from '../../model/value.entity';
+import { LangEntity } from '../../../lang/model/lang.entity';
+import { FlagEntity } from '../../../flag/model/flag.entity';
+import { Directory2flagEntity } from '../../model/directory2flag.entity';
 
 const addDirectoryMutation = gql`
   mutation addDirectory($item: DirectoryInput!) {
@@ -20,6 +20,11 @@ const addDirectoryMutation = gql`
           string
           property {
             id
+          }
+          ... on DirectoryString {
+            lang {
+              id
+            }
           }
         }
         value {
@@ -56,7 +61,7 @@ const deleteDirectoryMutation = gql`
       delete(id: $id)
     }
   }
-`
+`;
 
 describe('DirectoryMutationResolver', () => {
   let source;
@@ -65,30 +70,45 @@ describe('DirectoryMutationResolver', () => {
   beforeAll(async () => {
     const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
     app = moduleBuilder.createNestApplication();
-    app.init()
+    app.init();
 
     source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Directory addition', () => {
-    test("Should add directory", async () => {
+    test('Should add directory', async () => {
       const res = await request(app.getHttpServer())
-        .mutate(addDirectoryMutation, { item: { id: 'CITY' } })
+        .mutate(addDirectoryMutation, {
+          item: {
+            id: 'CITY',
+            value: [],
+            property: [],
+            flag: [],
+          },
+        })
         .expectNoErrors();
 
       expect(res.data['directory']['add']['id']).toBe('CITY');
     });
 
-    test("Shouldn't add directory with blank id", async () => {
+    test('Shouldn\'t add directory with blank id', async () => {
       const res = await request(app.getHttpServer())
-        .mutate(addDirectoryMutation, { item: { id: '' } });
+        .mutate(addDirectoryMutation, {
+          item: {
+            id: '',
+            value: [],
+            property: [],
+            flag: [],
+          },
+        });
 
       expect(res.errors).toHaveLength(1);
     });
 
-    test("Should add directory with property", async () => {
+    test('Should add directory with property', async () => {
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       await Object.assign(new LangEntity(), { id: 'GR' }).save();
 
@@ -96,23 +116,29 @@ describe('DirectoryMutationResolver', () => {
         .mutate(addDirectoryMutation, {
           item: {
             id: 'CITY',
-            property: [ { string: 'VALUE', property: 'NAME', lang: 'GR' } ]
-          }
+            property: [ { string: 'VALUE', property: 'NAME', lang: 'GR' } ],
+            value: [],
+            flag: [],
+          },
         })
         .expectNoErrors();
 
       expect(res.data['directory']['add']['id']).toBe('CITY');
       expect(res.data['directory']['add']['property']).toHaveLength(1);
       expect(res.data['directory']['add']['property'][0]['string']).toBe('VALUE');
+      expect(res.data['directory']['add']['property'][0]['property']['id']).toBe('NAME');
+      expect(res.data['directory']['add']['property'][0]['lang']['id']).toBe('GR');
     });
 
-    test("Should add directory with values", async () => {
+    test('Should add directory with values', async () => {
       const res = await request(app.getHttpServer())
         .mutate(addDirectoryMutation, {
           item: {
             id: 'CITY',
-            value: [ 'LONDON' ]
-          }
+            property: [],
+            flag: [],
+            value: [ 'LONDON' ],
+          },
         })
         .expectNoErrors();
 
@@ -139,7 +165,7 @@ describe('DirectoryMutationResolver', () => {
             } ],
             value: [],
             flag: [],
-          }
+          },
         })
         .expectNoErrors();
 
@@ -155,8 +181,9 @@ describe('DirectoryMutationResolver', () => {
           item: {
             id: 'CITY',
             property: [],
-            value: [ 'LONDON' ]
-          }
+            value: [ 'LONDON' ],
+            flag: [],
+          },
         })
         .expectNoErrors();
 
@@ -172,8 +199,9 @@ describe('DirectoryMutationResolver', () => {
           item: {
             id: 'CITY',
             property: [],
-            value: [ 'LONDON' ]
-          }
+            value: [ 'LONDON' ],
+            flag: [],
+          },
         })
         .expectNoErrors();
 
@@ -190,8 +218,9 @@ describe('DirectoryMutationResolver', () => {
           item: {
             id: 'CITY',
             property: [],
-            value: []
-          }
+            value: [],
+            flag: [],
+          },
         })
         .expectNoErrors();
 
@@ -211,7 +240,7 @@ describe('DirectoryMutationResolver', () => {
             property: [],
             value: [],
             flag: [ 'ACTIVE' ],
-          }
+          },
         })
         .expectNoErrors();
 
@@ -221,7 +250,7 @@ describe('DirectoryMutationResolver', () => {
     test('Should delete flags in update', async () => {
       await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
-      await Object.assign(new DirectoryFlagEntity(), { parent: 'CITY', flag: 'ACTIVE' }).save();
+      await Object.assign(new Directory2flagEntity(), { parent: 'CITY', flag: 'ACTIVE' }).save();
 
       const res = await request(app.getHttpServer())
         .mutate(updateDirectoryMutation, {
@@ -230,7 +259,7 @@ describe('DirectoryMutationResolver', () => {
             property: [],
             value: [],
             flag: [],
-          }
+          },
         })
         .expectNoErrors();
 
@@ -243,8 +272,8 @@ describe('DirectoryMutationResolver', () => {
       await Object.assign(new FlagEntity(), { id: 'THIRD' }).save();
 
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
-      await Object.assign(new DirectoryFlagEntity(), { parent: 'CITY', flag: 'FIRST' }).save();
-      await Object.assign(new DirectoryFlagEntity(), { parent: 'CITY', flag: 'SECOND' }).save();
+      await Object.assign(new Directory2flagEntity(), { parent: 'CITY', flag: 'FIRST' }).save();
+      await Object.assign(new Directory2flagEntity(), { parent: 'CITY', flag: 'SECOND' }).save();
 
       const res = await request(app.getHttpServer())
         .mutate(updateDirectoryMutation, {
@@ -253,7 +282,7 @@ describe('DirectoryMutationResolver', () => {
             property: [],
             value: [],
             flag: [ 'FIRST', 'THIRD' ],
-          }
+          },
         })
         .expectNoErrors();
 

@@ -2,21 +2,21 @@ import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { DirectorySchema } from "../../schema/directory.schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { DirectoryStringEntity } from "../../model/directory-string.entity";
+import { Directory2stringEntity } from "../../model/directory2string.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { ValueEntity } from "../../model/value.entity";
-import { DirectoryFlagEntity } from "../../model/directory-flag.entity";
+import { Directory2flagEntity } from "../../model/directory2flag.entity";
 
 @Resolver(of => DirectorySchema)
 export class DirectoryResolver {
 
   constructor(
-    @InjectRepository(DirectoryStringEntity)
-    private propertyRepo: Repository<DirectoryStringEntity>,
+    @InjectRepository(Directory2stringEntity)
+    private propertyRepo: Repository<Directory2stringEntity>,
     @InjectRepository(ValueEntity)
     private valueRepo: Repository<ValueEntity>,
-    @InjectRepository(DirectoryFlagEntity)
-    private flagRepo: Repository<DirectoryFlagEntity>,
+    @InjectRepository(Directory2flagEntity)
+    private flagRepo: Repository<Directory2flagEntity>,
   ) {
   }
 

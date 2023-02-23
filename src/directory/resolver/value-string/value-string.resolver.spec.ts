@@ -8,7 +8,7 @@ import { gql } from "apollo-server-express";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { ValueEntity } from "../../model/value.entity";
-import { ValueStringEntity } from "../../model/value.string.entity";
+import { Value2stringEntity } from "../../model/value2string.entity";
 import { LangEntity } from "../../../lang/model/lang.entity";
 
 const valuePropertyListQuery = gql`
@@ -77,7 +77,7 @@ describe('ValueStringResolver', () => {
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
-      await Object.assign(new ValueStringEntity(), {
+      await Object.assign(new Value2stringEntity(), {
         string: 'VALUE', property, parent, lang
       }).save();
 
@@ -96,7 +96,7 @@ describe('ValueStringResolver', () => {
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
-      await Object.assign(new ValueStringEntity(), {
+      await Object.assign(new Value2stringEntity(), {
         string: 'VALUE', property, parent, lang
       }).save();
 
@@ -114,7 +114,7 @@ describe('ValueStringResolver', () => {
       const parent = await Object.assign(new ValueEntity(), { id: 'ITEM', directory, property }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
-      await Object.assign(new ValueStringEntity(), {
+      await Object.assign(new Value2stringEntity(), {
         string: 'VALUE', property, parent, lang
       }).save();
 

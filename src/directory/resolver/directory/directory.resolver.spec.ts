@@ -7,7 +7,7 @@ import request from "supertest-graphql";
 import { gql } from "apollo-server-express";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { DirectoryStringEntity } from "../../model/directory-string.entity";
+import { Directory2stringEntity } from "../../model/directory2string.entity";
 import { ValueEntity } from "../../model/value.entity";
 import { LangEntity } from "../../../lang/model/lang.entity";
 
@@ -76,7 +76,7 @@ describe('DirectoryResolver', () => {
       const parent = await Object.assign(new DirectoryEntity(), {id: 'CITY'}).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
-      await Object.assign(new DirectoryStringEntity(), { string: 'City name', property, parent, lang }).save();
+      await Object.assign(new Directory2stringEntity(), { string: 'City name', property, parent, lang }).save();
 
       const res = await request(app.getHttpServer())
         .query(directoryItemQuery, { id: 'CITY' })

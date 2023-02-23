@@ -20,13 +20,13 @@ export class DirectoryInputSchema {
   @Field()
   id: string;
 
-  @Field(type => [ DirectoryPropertyInputSchema ], { nullable: true })
+  @Field(type => [ DirectoryPropertyInputSchema ], { nullable: false })
   property: DirectoryPropertyInputSchema[];
 
-  @Field(type => [ String ], { nullable: true })
+  @Field(type => [ String ], { nullable: false })
   value: string[];
 
-  @Field(type => [ String ], { nullable: true })
+  @Field(type => [ String ], { nullable: false })
   flag: string[];
 
 }

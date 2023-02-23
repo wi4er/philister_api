@@ -3,7 +3,7 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { DirectoryEntity } from "./directory.entity";
 import { FlagEntity } from "../../flag/model/flag.entity";
-import { DirectoryFlagEntity } from "./directory-flag.entity";
+import { Directory2flagEntity } from "./directory2flag.entity";
 import { ValueEntity } from "./value.entity";
 import { ValueFlagEntity } from "./value-flag.entity";
 

@@ -6,7 +6,7 @@ import { createConnectionOptions } from "../../../createConnectionOptions";
 import * as request from "supertest";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
-import { DirectoryStringEntity } from "../../model/directory-string.entity";
+import { Directory2stringEntity } from "../../model/directory2string.entity";
 import { LangEntity } from "../../../lang/model/lang.entity";
 
 describe('DirectoryController', () => {
@@ -22,6 +22,7 @@ describe('DirectoryController', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Directory get list', () => {
     test('Should get empty list', async () => {
@@ -46,7 +47,7 @@ describe('DirectoryController', () => {
       await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
       await Object.assign(new LangEntity(), { id: 'EN' }).save();
       await Object.assign(
-        new DirectoryStringEntity(),
+        new Directory2stringEntity(),
         { parent: 'CITY', property: 'NAME', lang: 'EN', string: 'VALUE' }
       ).save();
 

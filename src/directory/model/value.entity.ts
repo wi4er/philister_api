@@ -9,8 +9,8 @@ import {
   UpdateDateColumn, VersionColumn
 } from 'typeorm';
 import { DirectoryEntity } from "./directory.entity";
-import { ValueStringEntity } from "./value.string.entity";
-import { DirectoryFlagEntity } from "./directory-flag.entity";
+import { Value2stringEntity } from "./value2string.entity";
+import { Directory2flagEntity } from "./directory2flag.entity";
 import { ValueFlagEntity } from "./value-flag.entity";
 
 @Entity({
@@ -37,10 +37,10 @@ export class ValueEntity extends BaseEntity {
   version: number;
 
   @OneToMany(
-    type => ValueStringEntity,
+    type => Value2stringEntity,
     string => string.parent,
   )
-  string: ValueStringEntity;
+  string: Value2stringEntity;
 
   @ManyToOne(
     type => DirectoryEntity,

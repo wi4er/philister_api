@@ -4,7 +4,7 @@ import { PropertyEntity } from "./property/model/property.entity";
 import { PropertyPropertyEntity } from "./property/model/property-property.entity";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
-import { DirectoryStringEntity } from "./directory/model/directory-string.entity";
+import { Directory2stringEntity } from "./directory/model/directory2string.entity";
 import { UserGroupEntity } from "./user/model/user-group.entity";
 import { ValueEntity } from "./directory/model/value.entity";
 import { FlagEntity } from "./flag/model/flag.entity";
@@ -15,7 +15,7 @@ import { User2valueEntity } from "./user/model/user2value.entity";
 import { User2userEntity } from "./user/model/user2user.entity";
 import { PropertyUserEntity } from "./property/model/property-user.entity";
 import { User2descriptionEntity } from "./user/model/user2description.entity";
-import { ValueStringEntity } from "./directory/model/value.string.entity";
+import { Value2stringEntity } from "./directory/model/value2string.entity";
 import { LangEntity } from "./lang/model/lang.entity";
 import { LangStringEntity } from "./lang/model/lang-string.entity";
 import { LangFlagEntity } from "./lang/model/lang-flag.entity";
@@ -31,7 +31,7 @@ import { Section2stringEntity } from "./content/model/section2string.entity";
 import { Element2elementEntity } from "./content/model/element2element.entity";
 import { ChangeLogEntity } from "./log/model/change-log.entity";
 import { FetchLogEntity } from "./log/model/fetch-log.entity";
-import { DirectoryFlagEntity } from "./directory/model/directory-flag.entity";
+import { Directory2flagEntity } from "./directory/model/directory2flag.entity";
 import { ValueFlagEntity } from "./directory/model/value-flag.entity";
 import { UserContactEntity } from "./user/model/user-contact.entity";
 import { User2userContactEntity } from "./user/model/user2user-contact.entity";
@@ -60,8 +60,8 @@ export function createConnectionOptions(): DataSourceOptions {
       UserContactEntity, UserContact2stringEntity, UserContact2flagEntity,
       UserGroupEntity, UserGroup2stringEntity, UserGroup2flagEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
-      DirectoryEntity, DirectoryStringEntity, DirectoryFlagEntity,
-      ValueEntity, ValueStringEntity, ValueFlagEntity,
+      DirectoryEntity, Directory2stringEntity, Directory2flagEntity,
+      ValueEntity, Value2stringEntity, ValueFlagEntity,
       FlagEntity, FlagStringEntity, FlagFlagEntity,
       LangEntity, LangStringEntity, LangFlagEntity,
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity, Element2flagEntity,

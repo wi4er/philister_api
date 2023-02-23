@@ -3,8 +3,7 @@ import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { DirectoryEntity } from "../../model/directory.entity";
 import { EntityManager, Repository } from "typeorm";
 import { DirectoryInputSchema } from "../../schema/directory-input.schema";
-import { DirectoryInsertOperation } from "../../operation/directory-insert.operation";
-import { DirectoryUpdateOperation } from "../../operation/directory-update.operation";
+import { DirectoryService } from '../../service/directory/directory.service';
 
 @Controller('directory')
 export class DirectoryController {
@@ -14,6 +13,7 @@ export class DirectoryController {
     private directoryRepo: Repository<DirectoryEntity>,
     @InjectEntityManager()
     private entityManager: EntityManager,
+    private directoryService: DirectoryService
   ) {
   }
 
@@ -33,7 +33,7 @@ export class DirectoryController {
     @Body()
       input: DirectoryInputSchema
   ): Promise<DirectoryEntity>  {
-    return new DirectoryInsertOperation(input).save(this.entityManager);
+    return this.directoryService.insert(input);
   }
 
   @Put()
@@ -41,7 +41,7 @@ export class DirectoryController {
     @Body()
       input: DirectoryInputSchema
   ) {
-    return new DirectoryUpdateOperation(input).save(this.entityManager);
+    return this.directoryService.update(input);
   }
 
   @Delete()

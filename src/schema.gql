@@ -659,9 +659,9 @@ type DirectoryMutation {
 
 input DirectoryInput {
   id: String!
-  property: [DirectoryPropertyInput!]
-  value: [String!]
-  flag: [String!]
+  property: [DirectoryPropertyInput!]!
+  value: [String!]!
+  flag: [String!]!
 }
 
 input DirectoryPropertyInput {

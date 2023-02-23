@@ -86,10 +86,6 @@ describe('ElementString entity', () => {
       query.orderBy()
 
       const res = await query.getRawMany();
-
-      console.log(res);
-
-
     });
   });
 });

@@ -6,7 +6,7 @@ import { PropertyEntity } from "./property/model/property.entity";
 import { PropertyPropertyEntity } from "./property/model/property-property.entity";
 import { createConnectionOptions } from "./createConnectionOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
-import { DirectoryStringEntity } from "./directory/model/directory-string.entity";
+import { Directory2stringEntity } from "./directory/model/directory2string.entity";
 import { ValueEntity } from "./directory/model/value.entity";
 import { User2stringEntity } from "./user/model/user2string.entity";
 import { User2valueEntity } from "./user/model/user2value.entity";
@@ -85,9 +85,9 @@ describe('App mocks', () => {
     for (let i = 0; i < 100; i++) {
       const parent = await Object.assign(new DirectoryEntity(), { id: `DIRECT_${i}` }).save();
 
-      await Object.assign(new DirectoryStringEntity(), { string: `VALUE_${i}`, property: name, parent }).save();
-      await Object.assign(new DirectoryStringEntity(), { string: `SECOND_${i}`, property: second, parent }).save();
-      await Object.assign(new DirectoryStringEntity(), { string: `DESCRIPTION_${i}`, property: descr, parent }).save();
+      await Object.assign(new Directory2stringEntity(), { string: `VALUE_${i}`, property: name, parent }).save();
+      await Object.assign(new Directory2stringEntity(), { string: `SECOND_${i}`, property: second, parent }).save();
+      await Object.assign(new Directory2stringEntity(), { string: `DESCRIPTION_${i}`, property: descr, parent }).save();
     }
 
     for (let i = 0; i < 1000; i++) {
