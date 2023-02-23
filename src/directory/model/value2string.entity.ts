@@ -5,16 +5,14 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { PropertyEntity } from "../../property/model/property.entity";
-import { ValueEntity } from "./value.entity";
-import { LangEntity } from "../../lang/model/lang.entity";
-import { CommonStringEntity } from "../../common/model/common-string.entity";
+  UpdateDateColumn, VersionColumn,
+} from 'typeorm';
+import { PropertyEntity } from '../../property/model/property.entity';
+import { ValueEntity } from './value.entity';
+import { LangEntity } from '../../lang/model/lang.entity';
+import { CommonStringEntity } from '../../common/model/common-string.entity';
 
-@Entity({
-  name: 'value-string'
-})
+@Entity('directory-value2string')
 export class Value2stringEntity extends BaseEntity implements CommonStringEntity<ValueEntity> {
 
   @PrimaryGeneratedColumn()
@@ -39,7 +37,7 @@ export class Value2stringEntity extends BaseEntity implements CommonStringEntity
     () => ValueEntity,
     directory => directory.string,
     {
-      onDelete: "CASCADE",
+      onDelete: 'CASCADE',
       nullable: false,
     },
   )
@@ -48,7 +46,7 @@ export class Value2stringEntity extends BaseEntity implements CommonStringEntity
   @ManyToOne(
     () => PropertyEntity,
     {
-      onDelete: "CASCADE",
+      onDelete: 'CASCADE',
       nullable: false,
     },
   )
@@ -57,7 +55,7 @@ export class Value2stringEntity extends BaseEntity implements CommonStringEntity
   @ManyToOne(
     () => LangEntity,
     {
-      onDelete: "CASCADE",
+      onDelete: 'CASCADE',
       nullable: true,
     },
   )

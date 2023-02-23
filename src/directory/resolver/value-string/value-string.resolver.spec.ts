@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { ValueStringResolver } from './value-string.resolver';
 import { AppModule } from "../../../app.module";
 import { createConnection } from "typeorm";
@@ -69,6 +69,7 @@ describe('ValueStringResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Value properties', () => {
     test("Should get item with property", async () => {

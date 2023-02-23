@@ -32,6 +32,7 @@ describe('ValueQueryResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Value list', () => {
     test("Should get empty list", async () => {

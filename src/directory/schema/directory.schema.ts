@@ -1,7 +1,7 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { DirectoryStringSchema } from "./directory-string.schema";
-import { ValueSchema } from "./value.schema";
-import { LangFlagSchema } from "../../lang/schema/lang-flag.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { DirectoryStringSchema } from './directory-string.schema';
+import { ValueSchema } from './value.schema';
+import { LangFlagSchema } from '../../lang/schema/lang-flag.schema';
 
 @ObjectType('Directory')
 export class DirectorySchema {

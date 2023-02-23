@@ -9,9 +9,9 @@ import {
 import { FlagEntity } from "../../flag/model/flag.entity";
 import { ValueEntity } from "./value.entity";
 
-@Entity('value-flag')
+@Entity('directory-value2flag')
 @Index([ 'parent', 'flag' ], { unique: true })
-export class ValueFlagEntity extends BaseEntity {
+export class Value2flagEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;

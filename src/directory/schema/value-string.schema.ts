@@ -1,13 +1,13 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { PropertySchema } from "../../property/schema/property.schema";
-import { ValuePropertySchema } from "./value-property.schema";
-import { LangSchema } from "../../lang/schema/lang.schema";
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { PropertySchema } from '../../property/schema/property.schema';
+import { ValuePropertySchema } from './value-property.schema';
+import { LangSchema } from '../../lang/schema/lang.schema';
 
 @ObjectType(
   'ValueString',
   {
-    implements: () => [ ValuePropertySchema ]
-  }
+    implements: () => [ ValuePropertySchema ],
+  },
 )
 export class ValueStringSchema {
 

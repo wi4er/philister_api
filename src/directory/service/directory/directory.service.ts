@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { EntityManager, In } from 'typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { DirectoryEntity } from '../../model/directory.entity';
-import { InjectEntityManager } from '@nestjs/typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { PropertyInsertOperation } from '../../../common/operation/property-insert.operation';
 import { FlagInsertOperation } from '../../../common/operation/flag-insert.operation';
 import { Directory2stringEntity } from '../../model/directory2string.entity';
@@ -18,11 +18,12 @@ export class DirectoryService {
   constructor(
     @InjectEntityManager()
     private manager: EntityManager,
+    @InjectRepository(DirectoryEntity)
+    private directoryRepo: Repository<DirectoryEntity>,
   ) {
   }
 
   async insert(input: DirectoryInputSchema): Promise<DirectoryEntity> {
-    const directoryRepo = this.manager.getRepository(DirectoryEntity);
     const created = new DirectoryEntity();
 
     await this.manager.transaction(async (trans: EntityManager) => {
@@ -34,17 +35,15 @@ export class DirectoryService {
       await new ValueInsertOperation(trans).save(created, input);
     });
 
-    return directoryRepo.findOne({
+    return this.directoryRepo.findOne({
       where: { id: created.id },
       loadRelationIds: true,
     });
   }
 
   async update(input: DirectoryInputSchema): Promise<DirectoryEntity> {
-    const directoryRepo = this.manager.getRepository(DirectoryEntity);
-
     await this.manager.transaction(async (trans: EntityManager) => {
-      const beforeItem = await directoryRepo.findOne({
+      const beforeItem = await this.directoryRepo.findOne({
         where: { id: input.id },
         relations: {
           string: { property: true },
@@ -59,20 +58,18 @@ export class DirectoryService {
       await new ValueUpdateOperation(trans).save(beforeItem, input);
     });
 
-    return directoryRepo.findOne({
+    return this.directoryRepo.findOne({
       where: { id: input.id },
       loadRelationIds: true,
     });
   }
 
   async delete(id: string[]): Promise<string[]> {
-    const directoryRepo = this.manager.getRepository(DirectoryEntity);
-
     const result = [];
-    const list = await directoryRepo.find({ where: { id: In(id) } });
+    const list = await this.directoryRepo.find({ where: { id: In(id) } });
 
     for (const item of list) {
-      await directoryRepo.delete(item.id);
+      await this.directoryRepo.delete(item.id);
       result.push(item.id);
     }
 

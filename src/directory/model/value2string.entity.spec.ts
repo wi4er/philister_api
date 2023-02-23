@@ -15,6 +15,7 @@ describe("ValueString entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('ValueString fields', () => {
     test('Should get empty list', async () => {

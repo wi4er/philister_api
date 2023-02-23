@@ -1,10 +1,9 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { DirectorySchema } from "./directory.schema";
 import { ValuePropertySchema } from "./value-property.schema";
+import { FlagSchema } from '../../flag/schema/flag.schema';
 
-@ObjectType(
-  'Value'
-)
+@ObjectType('Value')
 export class ValueSchema {
 
   @Field()
@@ -30,5 +29,11 @@ export class ValueSchema {
 
   @Field()
   propertyString: string;
+
+  @Field(type => [ FlagSchema ])
+  flagList: FlagSchema[];
+
+  @Field(type => [ String ])
+  flagString: string[];
 
 }

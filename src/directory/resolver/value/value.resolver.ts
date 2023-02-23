@@ -1,9 +1,11 @@
 import { Args, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { DirectoryEntity } from "../../model/directory.entity";
-import { ValueSchema } from "../../schema/value.schema";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Value2stringEntity } from "../../model/value2string.entity";
+import { DirectoryEntity } from '../../model/directory.entity';
+import { ValueSchema } from '../../schema/value.schema';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Value2stringEntity } from '../../model/value2string.entity';
+import { ValueEntity } from '../../model/value.entity';
+import { Value2flagEntity } from '../../model/value2flag.entity';
 
 @Resolver(of => ValueSchema)
 export class ValueResolver {
@@ -12,14 +14,16 @@ export class ValueResolver {
     @InjectRepository(DirectoryEntity)
     private directoryRepo: Repository<DirectoryEntity>,
     @InjectRepository(Value2stringEntity)
-    private stingRepo: Repository<Value2stringEntity>,
+    private stringRepo: Repository<Value2stringEntity>,
+    @InjectRepository(Value2flagEntity)
+    private flagRepo: Repository<Value2flagEntity>,
   ) {
   }
 
   @ResolveField()
   created_at(
     @Parent()
-      current: DirectoryEntity
+      current: DirectoryEntity,
   ) {
     return new Date(current.created_at).toISOString();
   }
@@ -27,7 +31,7 @@ export class ValueResolver {
   @ResolveField()
   updated_at(
     @Parent()
-      current: DirectoryEntity
+      current: DirectoryEntity,
   ) {
     return new Date(current.updated_at).toISOString();
   }
@@ -35,7 +39,7 @@ export class ValueResolver {
   @ResolveField()
   async directory(
     @Parent()
-      current: { directory: string }
+      current: { directory: string },
   ) {
     return this.directoryRepo.findOne({ where: { id: current.directory } });
   }
@@ -43,9 +47,12 @@ export class ValueResolver {
   @ResolveField()
   async propertyList(
     @Parent()
-      current: { id: string }
+      current: ValueEntity,
   ) {
-    return this.stingRepo.find({ where: { parent: { id: current.id } } });
+    return this.stringRepo.find({
+      where: { parent: { id: current.id } },
+      loadRelationIds: true,
+    });
   }
 
   @ResolveField()
@@ -53,13 +60,14 @@ export class ValueResolver {
     @Args('id')
       id: string,
     @Parent()
-      current: { id: string }
+      current: ValueEntity,
   ) {
-    return this.stingRepo.findOne({
+    return this.stringRepo.findOne({
       where: {
         property: { id },
         parent: { id: current.id },
-      }
+      },
+      loadRelationIds: true,
     });
   }
 
@@ -68,14 +76,39 @@ export class ValueResolver {
     @Args('id')
       id: string,
     @Parent()
-      current: { id: string }
+      current: ValueEntity,
   ) {
-    return this.stingRepo.findOne({
+    return this.stringRepo.findOne({
       where: {
         property: { id },
         parent: { id: current.id },
-      }
-    }).then(item => item.string);
+      },
+    }).then(item => item?.string);
   }
 
+  @ResolveField()
+  async flagList(
+    @Parent()
+      current: { id: string },
+  ) {
+    return this.flagRepo.find({
+      where: {
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    });
+  }
+
+  @ResolveField()
+  async flagString(
+    @Parent()
+      current: { id: string },
+  ) {
+    return this.flagRepo.find({
+      where: {
+        parent: { id: current.id },
+      },
+      loadRelationIds: true,
+    }).then(list => list.map(item => item?.flag ?? ''));
+  }
 }

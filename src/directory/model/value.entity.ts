@@ -1,26 +1,25 @@
 import {
   BaseEntity, Check,
-  Column,
   CreateDateColumn, DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryColumn,
-  UpdateDateColumn, VersionColumn
+  UpdateDateColumn, VersionColumn,
 } from 'typeorm';
-import { DirectoryEntity } from "./directory.entity";
-import { Value2stringEntity } from "./value2string.entity";
-import { Directory2flagEntity } from "./directory2flag.entity";
-import { ValueFlagEntity } from "./value-flag.entity";
+import { DirectoryEntity } from './directory.entity';
+import { Value2stringEntity } from './value2string.entity';
+import { Value2flagEntity } from './value2flag.entity';
+import { WithFlagEntity } from '../../common/model/with-flag.entity';
+import { WithStringEntity } from '../../common/model/with-string.entity';
 
-@Entity({
-  name: 'value'
-})
+@Entity('directory-value')
 @Check('not_empty_id', '"id" > \'\'')
-export class ValueEntity extends BaseEntity {
+export class ValueEntity extends BaseEntity
+  implements WithFlagEntity<ValueEntity>, WithStringEntity<ValueEntity> {
 
   @PrimaryColumn({
-    type: "varchar"
+    type: 'varchar',
   })
   id: string;
 
@@ -40,7 +39,7 @@ export class ValueEntity extends BaseEntity {
     type => Value2stringEntity,
     string => string.parent,
   )
-  string: Value2stringEntity;
+  string: Value2stringEntity[];
 
   @ManyToOne(
     type => DirectoryEntity,
@@ -52,11 +51,10 @@ export class ValueEntity extends BaseEntity {
   )
   directory: DirectoryEntity;
 
-
   @OneToMany(
-    type => ValueFlagEntity,
+    type => Value2flagEntity,
     string => string.parent,
   )
-  flag: ValueFlagEntity[];
+  flag: Value2flagEntity[];
 
 }

@@ -32,7 +32,7 @@ import { Element2elementEntity } from "./content/model/element2element.entity";
 import { ChangeLogEntity } from "./log/model/change-log.entity";
 import { FetchLogEntity } from "./log/model/fetch-log.entity";
 import { Directory2flagEntity } from "./directory/model/directory2flag.entity";
-import { ValueFlagEntity } from "./directory/model/value-flag.entity";
+import { Value2flagEntity } from "./directory/model/value2flag.entity";
 import { UserContactEntity } from "./user/model/user-contact.entity";
 import { User2userContactEntity } from "./user/model/user2user-contact.entity";
 import { UserContact2flagEntity } from "./user/model/user-contact2flag.entity";
@@ -61,7 +61,7 @@ export function createConnectionOptions(): DataSourceOptions {
       UserGroupEntity, UserGroup2stringEntity, UserGroup2flagEntity,
       PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
       DirectoryEntity, Directory2stringEntity, Directory2flagEntity,
-      ValueEntity, Value2stringEntity, ValueFlagEntity,
+      ValueEntity, Value2stringEntity, Value2flagEntity,
       FlagEntity, FlagStringEntity, FlagFlagEntity,
       LangEntity, LangStringEntity, LangFlagEntity,
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity, Element2flagEntity,

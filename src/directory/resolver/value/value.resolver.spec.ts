@@ -34,6 +34,7 @@ describe('ValueResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe("Value fields", () => {
     test('Should get item', async () => {

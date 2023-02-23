@@ -13,6 +13,7 @@ describe("DirectoryFlag entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('DirectoryFlag fields', () => {
     test('Should create', async () => {

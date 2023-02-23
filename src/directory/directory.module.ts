@@ -16,17 +16,18 @@ import { PropertyEntity } from '../property/model/property.entity';
 import { ValueStringResolver } from './resolver/value-string/value-string.resolver';
 import { LangEntity } from '../lang/model/lang.entity';
 import { Directory2flagEntity } from './model/directory2flag.entity';
-import { ValueFlagEntity } from './model/value-flag.entity';
+import { Value2flagEntity } from './model/value2flag.entity';
 import { FlagEntity } from '../flag/model/flag.entity';
 import { DirectoryController } from './controller/directory/directory.controller';
 import { ValueController } from './controller/value/value.controller';
 import { DirectoryService } from './service/directory/directory.service';
+import { ValueService } from './service/value/value.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       DirectoryEntity, Directory2stringEntity, Directory2flagEntity,
-      ValueEntity, Value2stringEntity, ValueFlagEntity,
+      ValueEntity, Value2stringEntity, Value2flagEntity,
       PropertyEntity,
       LangEntity,
       FlagEntity,
@@ -42,7 +43,8 @@ import { DirectoryService } from './service/directory/directory.service';
     ValueMutationResolver,
     ValueResolver,
     ValueStringResolver,
-    DirectoryService
+    DirectoryService,
+    ValueService
   ],
   controllers: [DirectoryController, ValueController]
 })

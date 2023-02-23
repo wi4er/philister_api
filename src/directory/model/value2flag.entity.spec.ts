@@ -3,9 +3,8 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../createConnectionOptions";
 import { DirectoryEntity } from "./directory.entity";
 import { FlagEntity } from "../../flag/model/flag.entity";
-import { Directory2flagEntity } from "./directory2flag.entity";
 import { ValueEntity } from "./value.entity";
-import { ValueFlagEntity } from "./value-flag.entity";
+import { Value2flagEntity } from "./value2flag.entity";
 
 describe("ValueFlag entity", () => {
   let source: DataSource;
@@ -15,6 +14,7 @@ describe("ValueFlag entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('ValueFlag fields', () => {
     test('Should create', async () => {
@@ -22,7 +22,7 @@ describe("ValueFlag entity", () => {
       const parent = await Object.assign(new ValueEntity(), { id: 'London', directory }).save();
       const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
 
-      const inst = new ValueFlagEntity();
+      const inst = new Value2flagEntity();
       inst.parent = parent;
       inst.flag = flag;
 

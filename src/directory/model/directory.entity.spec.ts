@@ -11,6 +11,7 @@ describe("Directory entity", () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Directory fields', () => {
     test('Should create with id', async () => {

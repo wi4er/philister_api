@@ -62,6 +62,7 @@ describe('DirectoryQueryResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Directory list', () => {
     test("Should get empty list", async () => {

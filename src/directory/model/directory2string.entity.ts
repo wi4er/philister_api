@@ -12,9 +12,7 @@ import { DirectoryEntity } from "./directory.entity";
 import { LangEntity } from "../../lang/model/lang.entity";
 import { CommonStringEntity } from "../../common/model/common-string.entity";
 
-@Entity({
-  name: 'directory-string'
-})
+@Entity('directory2string')
 export class Directory2stringEntity extends BaseEntity implements CommonStringEntity<DirectoryEntity>{
   @PrimaryGeneratedColumn()
   id: number;

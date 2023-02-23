@@ -1,15 +1,15 @@
 import { Test } from '@nestjs/testing';
 import { DirectoryResolver } from './directory.resolver';
-import { AppModule } from "../../../app.module";
-import { createConnection } from "typeorm";
-import { createConnectionOptions } from "../../../createConnectionOptions";
-import request from "supertest-graphql";
-import { gql } from "apollo-server-express";
-import { DirectoryEntity } from "../../model/directory.entity";
-import { PropertyEntity } from "../../../property/model/property.entity";
-import { Directory2stringEntity } from "../../model/directory2string.entity";
-import { ValueEntity } from "../../model/value.entity";
-import { LangEntity } from "../../../lang/model/lang.entity";
+import { AppModule } from '../../../app.module';
+import { createConnection } from 'typeorm';
+import { createConnectionOptions } from '../../../createConnectionOptions';
+import request from 'supertest-graphql';
+import { gql } from 'apollo-server-express';
+import { DirectoryEntity } from '../../model/directory.entity';
+import { PropertyEntity } from '../../../property/model/property.entity';
+import { Directory2stringEntity } from '../../model/directory2string.entity';
+import { ValueEntity } from '../../model/value.entity';
+import { LangEntity } from '../../../lang/model/lang.entity';
 
 const directoryItemQuery = gql`
   query getDirectoryItem($id: String!) {
@@ -24,7 +24,7 @@ const directoryItemQuery = gql`
           property {
             id
           }
-          
+
           ... on DirectoryString {
             lang {
               id
@@ -49,14 +49,15 @@ describe('DirectoryResolver', () => {
   beforeAll(async () => {
     const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
     app = moduleBuilder.createNestApplication();
-    app.init()
+    app.init();
 
     source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
-  describe("Directory fields", () => {
+  describe('Directory fields', () => {
     test('Should get item', async () => {
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
 
@@ -73,7 +74,7 @@ describe('DirectoryResolver', () => {
   describe('Directory with property', () => {
     test('Should get with property', async () => {
       const property = await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
-      const parent = await Object.assign(new DirectoryEntity(), {id: 'CITY'}).save();
+      const parent = await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
       const lang = await Object.assign(new LangEntity(), { id: 'EN' }).save();
 
       await Object.assign(new Directory2stringEntity(), { string: 'City name', property, parent, lang }).save();

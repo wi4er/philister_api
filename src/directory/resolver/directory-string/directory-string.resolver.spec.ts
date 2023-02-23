@@ -45,6 +45,7 @@ describe('DirectoryStringResolver', () => {
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('DirectoryString fields', () => {
     test("Should get directory string", async () => {

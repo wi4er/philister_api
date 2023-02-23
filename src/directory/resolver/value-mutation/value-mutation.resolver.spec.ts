@@ -1,12 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { ValueMutationResolver } from './value-mutation.resolver';
-import { AppModule } from "../../../app.module";
-import { createConnection } from "typeorm";
-import { createConnectionOptions } from "../../../createConnectionOptions";
-import request from "supertest-graphql";
-import { gql } from "apollo-server-express";
-import { DirectoryEntity } from "../../model/directory.entity";
-import { ValueEntity } from "../../model/value.entity";
+import { AppModule } from '../../../app.module';
+import { createConnection } from 'typeorm';
+import { createConnectionOptions } from '../../../createConnectionOptions';
+import request from 'supertest-graphql';
+import { gql } from 'apollo-server-express';
+import { DirectoryEntity } from '../../model/directory.entity';
+import { ValueEntity } from '../../model/value.entity';
+import { PropertyEntity } from '../../../property/model/property.entity';
+import { FlagEntity } from '../../../flag/model/flag.entity';
 
 const addValueMutation = gql`
   mutation AddValue($item: ValueInput!) {
@@ -16,6 +18,13 @@ const addValueMutation = gql`
         directory {
           id
         }
+        propertyList {
+          string
+          property {
+            id
+          }
+        }
+        flagString
       }
     }
   }
@@ -49,34 +58,92 @@ describe('ValueMutationResolver', () => {
   beforeAll(async () => {
     const moduleBuilder = await Test.createTestingModule({ imports: [ AppModule ] }).compile();
     app = moduleBuilder.createNestApplication();
-    app.init()
+    app.init();
 
     source = await createConnection(createConnectionOptions());
   });
 
   beforeEach(() => source.synchronize(true));
+  afterAll(() => source.destroy());
 
   describe('Value addition', () => {
-    test("Should add value", async () => {
+    test('Should add value', async () => {
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
 
       const res = await request(app.getHttpServer())
-        .mutate(addValueMutation, { item: { id: 'London', directory: 'CITY' } })
+        .mutate(addValueMutation, {
+          item: {
+            id: 'London',
+            directory: 'CITY',
+            property: [],
+            flag: [],
+          },
+        })
         .expectNoErrors();
 
       expect(res.data['value']['add']['id']).toBe('London');
     });
 
-    test("Shouldn't add with wrong directory", async () => {
+    test('Should add with property', async () => {
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(addValueMutation, {
+          item: {
+            id: 'London',
+            directory: 'CITY',
+            property: [ {
+              property: 'NAME',
+              string: 'VALUE',
+            } ],
+            flag: [],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['value']['add']['id']).toBe('London');
+      expect(res.data['value']['add']['propertyList']).toHaveLength(1);
+      expect(res.data['value']['add']['propertyList'][0]['string']).toBe('VALUE');
+      expect(res.data['value']['add']['propertyList'][0]['property']['id']).toBe('NAME');
+    });
+
+    test('Should add with flag', async () => {
+      await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(addValueMutation, {
+          item: {
+            id: 'London',
+            directory: 'CITY',
+            property: [],
+            flag: [ 'ACTIVE' ],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['value']['add']['id']).toBe('London');
+      expect(res.data['value']['add']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Shouldn\'t add with wrong directory', async () => {
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
 
       const res = await request(app.getHttpServer())
-        .mutate(addValueMutation, { item: { id: 'London', directory: 'WRONG' } });
+        .mutate(addValueMutation, {
+          item: {
+            id: 'London',
+            directory: 'WRONG',
+            flag: [],
+            property: [],
+          },
+        });
 
       expect(res.errors[0].path).toEqual([ 'value', 'add' ]);
     });
 
-    test("Shouldn't add without directory", async () => {
+    test('Shouldn\'t add without directory', async () => {
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
 
       const res = await request(app.getHttpServer())
@@ -86,7 +153,7 @@ describe('ValueMutationResolver', () => {
     });
   });
 
-  describe('Directory update', () => {
+  describe('Value update', () => {
     test('Should update value', async () => {
       await Object.assign(new DirectoryEntity(), { id: 'CITY' }).save();
       await Object.assign(new DirectoryEntity(), { id: 'VILLAGE' }).save();
@@ -94,7 +161,14 @@ describe('ValueMutationResolver', () => {
       await Object.assign(new ValueEntity(), { id: 'London', directory: 'CITY' }).save();
 
       const res = await request(app.getHttpServer())
-        .mutate(updateValueMutation, { item: { id: 'London', directory: 'VILLAGE' } })
+        .mutate(updateValueMutation, {
+          item: {
+            id: 'London',
+            directory: 'VILLAGE',
+            flag: [],
+            property: [],
+          },
+        })
         .expectNoErrors();
 
       expect(res.data['value']['update']['id']).toBe('London');

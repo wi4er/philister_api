@@ -4,10 +4,10 @@ import {
   DeleteDateColumn,
   Entity, Index, ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
+  UpdateDateColumn, VersionColumn,
 } from 'typeorm';
-import { FlagEntity } from "../../flag/model/flag.entity";
-import { DirectoryEntity } from "./directory.entity";
+import { FlagEntity } from '../../flag/model/flag.entity';
+import { DirectoryEntity } from './directory.entity';
 
 @Entity('directory-flag')
 @Index([ 'parent', 'flag' ], { unique: true })
