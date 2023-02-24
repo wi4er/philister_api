@@ -1,12 +1,12 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { BlockStringSchema } from "../../schema/block-string.schema";
-import { InjectRepository } from "@nestjs/typeorm";
-import { PropertyEntity } from "../../../property/model/property.entity";
-import { Repository } from "typeorm";
-import { LangEntity } from "../../../lang/model/lang.entity";
+import { PropertyEntity } from '../../model/property.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { LangEntity } from '../../../lang/model/lang.entity';
+import { PropertyStringSchema } from '../../schema/property-string.schema';
 
-@Resolver(of => BlockStringSchema)
-export class BlockStringResolver {
+@Resolver(of => PropertyStringSchema)
+export class Property2stringResolver {
 
   constructor(
     @InjectRepository(PropertyEntity)
@@ -19,7 +19,7 @@ export class BlockStringResolver {
   @ResolveField()
   async property(
     @Parent()
-      current: { property: string }
+      current: { property: string },
   ) {
     return await this.propertyRepo.findOne({
       where: { id: current.property },
@@ -30,7 +30,7 @@ export class BlockStringResolver {
   @ResolveField()
   async lang(
     @Parent()
-      current: { lang: string }
+      current: { lang: string },
   ) {
     if (!current.lang) {
       return null;

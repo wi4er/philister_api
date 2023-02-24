@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager, In } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { ElementEntity } from '../../model/element.entity';
 import { BlockEntity } from '../../model/block.entity';
 import { PropertyInsertOperation } from '../../../common/operation/property-insert.operation';
@@ -17,35 +17,33 @@ export class ElementService {
   constructor(
     @InjectEntityManager()
     private manager: EntityManager,
+    @InjectRepository(ElementEntity)
+    private elementRepo: Repository<ElementEntity>,
+    @InjectRepository(BlockEntity)
+    private blockRepo: Repository<BlockEntity>,
   ) {
   }
 
   async insert(input: ElementInputSchema): Promise<ElementEntity> {
     const created = new ElementEntity();
 
-    const elementRepo = this.manager.getRepository(ElementEntity);
-    const blockRepo = this.manager.getRepository(BlockEntity)
-
     await this.manager.transaction(async (trans: EntityManager) => {
-      created.block = await blockRepo.findOne({ where: { id: input.block }});
+      created.block = await this.blockRepo.findOne({ where: { id: input.block }});
       await trans.save(created);
 
       await new PropertyInsertOperation(trans, Element2stringEntity).save(created, input);
       await new FlagInsertOperation(trans, Element2flagEntity).save(created, input);
     });
 
-    return elementRepo.findOne({
+    return this.elementRepo.findOne({
       where: { id: created.id },
       loadRelationIds: true,
     });
   }
 
   async update(input: ElementInputSchema): Promise<ElementEntity> {
-    const elementRepo = this.manager.getRepository(ElementEntity);
-    const blockRepo = this.manager.getRepository(BlockEntity)
-
     await this.manager.transaction(async (trans: EntityManager) => {
-      const beforeItem = await elementRepo.findOne({
+      const beforeItem = await this.elementRepo.findOne({
         where: { id: input.id },
         relations: {
           string: { property: true },
@@ -53,27 +51,25 @@ export class ElementService {
           block: true,
         },
       });
-      beforeItem.block = await blockRepo.findOne({ where: { id: input.block }});
+      beforeItem.block = await this.blockRepo.findOne({ where: { id: input.block }});
       await beforeItem.save();
 
       await new PropertyUpdateOperation(trans, Element2stringEntity).save(beforeItem, input);
       await new FlagUpdateOperation(trans, Element2flagEntity).save(beforeItem, input);
     });
 
-    return elementRepo.findOne({
+    return this.elementRepo.findOne({
       where: { id: input.id },
       loadRelationIds: true,
     });
   }
 
   async delete(id: number[]): Promise<number[]> {
-    const elementRepo = this.manager.getRepository(ElementEntity);
-
     const result = [];
-    const list = await elementRepo.find({ where: { id: In(id) } });
+    const list = await this.elementRepo.find({ where: { id: In(id) } });
 
     for (const item of list) {
-      await elementRepo.delete(item.id);
+      await this.elementRepo.delete(item.id);
       result.push(item.id);
     }
 

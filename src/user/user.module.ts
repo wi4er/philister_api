@@ -14,7 +14,7 @@ import { PropertyEntity } from "../property/model/property.entity";
 import { AuthMutationResolver } from './resolver/auth-mutation/auth-mutation.resolver';
 import { UserService } from './service/user/user.service';
 import { EncodeService } from "./service/encode/encode.service";
-import { PropertyPropertyEntity } from "../property/model/property-property.entity";
+import { Property2stringEntity } from "../property/model/property2string.entity";
 import { UserValueResolver } from './resolver/user-value/user-value.resolver';
 import { UserUserResolver } from './resolver/user-user/user-user.resolver';
 import { User2userEntity } from "./model/user2user.entity";
@@ -52,7 +52,7 @@ import { MyselfController } from './controller/myself/myself.controller';
       User2userContactEntity, User2userGroupEntity, User2descriptionEntity,
       UserGroupEntity, UserGroup2stringEntity, UserGroup2flagEntity,
       UserContactEntity, UserContact2flagEntity, UserContact2stringEntity,
-      PropertyEntity, PropertyPropertyEntity,
+      PropertyEntity, Property2stringEntity,
       LangEntity, FlagEntity,
       ValueEntity,
     ])

@@ -10,7 +10,6 @@ import {
 import { ElementEntity } from "./element.entity";
 import { SectionEntity } from "./section.entity";
 import { Block2stringEntity } from "./block2string.entity";
-import { Element2flagEntity } from './element2flag.entity';
 import { Block2flagEntity } from './block2flag.entity';
 
 @Entity('content-block')

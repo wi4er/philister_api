@@ -6,18 +6,17 @@ import {
   Entity,
   OneToMany,
   PrimaryColumn,
-  UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { PropertyPropertyEntity } from "./property-property.entity";
+  UpdateDateColumn, VersionColumn,
+} from 'typeorm';
+import { Property2stringEntity } from './property2string.entity';
+import { Property2flagEntity } from './property2flag.entity';
 
-@Entity({
-  name: "property"
-})
+@Entity('property')
 @Check('not_empty_id', '"id" > \'\'')
 export class PropertyEntity extends BaseEntity {
 
   @PrimaryColumn({
-    type: "varchar",
+    type: 'varchar',
     length: 50,
   })
   id: string;
@@ -35,9 +34,15 @@ export class PropertyEntity extends BaseEntity {
   version: number;
 
   @OneToMany(
-    type => PropertyPropertyEntity,
+    type => Property2stringEntity,
     propertyProperty => propertyProperty.parent,
   )
-  property: PropertyPropertyEntity[];
+  string: Property2stringEntity[];
+
+  @OneToMany(
+    type => Property2flagEntity,
+    flag => flag.parent,
+  )
+  flag: Property2flagEntity[];
 
 }

@@ -1,14 +1,32 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { PropertySchema } from "./property.schema";
+import { Field, Int, InterfaceType } from '@nestjs/graphql';
+import { PropertySchema } from './property.schema';
 
-@ObjectType("PropertyProperty")
+@InterfaceType(
+  'PropertyProperty',
+  {
+    resolveType: inst => {
+      return 'PropertyString';
+    },
+  },
+)
 export class PropertyPropertySchema {
-  @Field()
-  id: string;
+
+  @Field(type => Int)
+  id: number;
 
   @Field()
-  value: string
+  created_at: string;
+
+  @Field()
+  updated_at: string;
+
+  @Field(type => Int)
+  version: number;
+
+  @Field()
+  string: string;
 
   @Field(type => PropertySchema)
-  property: PropertySchema
+  property: PropertySchema;
+
 }

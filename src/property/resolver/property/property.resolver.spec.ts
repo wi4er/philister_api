@@ -12,9 +12,11 @@ const propertyPropertyQuery = gql`
     property {
       item(id: $id) {
         id
-        property {
+        created_at
+        updated_at
+        propertyList {
           id
-          value
+          string
           property {
             id
           }
@@ -47,6 +49,9 @@ describe('PropertyResolver', () => {
         .expectNoErrors();
 
       expect(res.data['property']['item']['id']).toBe('TEST');
+      expect(res.data['property']['item']['created_at']).toBeDefined();
+      expect(res.data['property']['item']['updated_at']).toBeDefined();
+      expect(res.data['property']['item']['version']).toBe(1);
     });
 
   });

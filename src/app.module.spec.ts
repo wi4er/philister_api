@@ -3,7 +3,7 @@ import { Test } from "@nestjs/testing";
 import { createConnection } from "typeorm";
 import { UserEntity } from "./user/model/user.entity";
 import { PropertyEntity } from "./property/model/property.entity";
-import { PropertyPropertyEntity } from "./property/model/property-property.entity";
+import { Property2stringEntity } from "./property/model/property2string.entity";
 import { createConnectionOptions } from "./createConnectionOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
 import { Directory2stringEntity } from "./directory/model/directory2string.entity";
@@ -75,9 +75,9 @@ describe('App mocks', () => {
       await Object.assign(new PropertyEntity(), {
         id: `PROP_${i}`,
         property: [
-          await Object.assign(new PropertyPropertyEntity(), { value: `VALUE_${i}`, property: name }).save(),
-          await Object.assign(new PropertyPropertyEntity(), { value: `SECOND_${i}`, property: second }).save(),
-          await Object.assign(new PropertyPropertyEntity(), { value: `DESCRIPTION_${i}`, property: descr }).save(),
+          await Object.assign(new Property2stringEntity(), { value: `VALUE_${i}`, property: name }).save(),
+          await Object.assign(new Property2stringEntity(), { value: `SECOND_${i}`, property: second }).save(),
+          await Object.assign(new Property2stringEntity(), { value: `DESCRIPTION_${i}`, property: descr }).save(),
         ]
       }).save();
     }

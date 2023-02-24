@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager, In } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { BlockInputSchema } from '../../schema/block-input.schema';
 import { BlockEntity } from '../../model/block.entity';
 import { PropertyInsertOperation } from '../../../common/operation/property-insert.operation';
@@ -16,11 +16,12 @@ export class BlockService {
   constructor(
     @InjectEntityManager()
     private manager: EntityManager,
+    @InjectRepository(BlockEntity)
+    private blockRepo: Repository<BlockEntity>,
   ) {
   }
 
   async insert(input: BlockInputSchema): Promise<BlockEntity> {
-    const userRepo = this.manager.getRepository(BlockEntity);
     const created = new BlockEntity();
 
     await this.manager.transaction(async (trans: EntityManager) => {
@@ -30,17 +31,15 @@ export class BlockService {
       await new FlagInsertOperation(trans, Block2flagEntity).save(created, input);
     });
 
-    return userRepo.findOne({
+    return this.blockRepo.findOne({
       where: { id: created.id },
       loadRelationIds: true,
     });
   }
 
   async update(input: BlockInputSchema): Promise<BlockEntity> {
-    const blockRepo = this.manager.getRepository(BlockEntity);
-
     await this.manager.transaction(async (trans: EntityManager) => {
-      const beforeItem = await blockRepo.findOne({
+      const beforeItem = await this.blockRepo.findOne({
         where: { id: input.id },
         relations: {
           string: { property: true },
@@ -54,23 +53,22 @@ export class BlockService {
       await new FlagUpdateOperation(trans, Block2flagEntity).save(beforeItem, input);
     });
 
-    return blockRepo.findOne({
+    return this.blockRepo.findOne({
       where: { id: input.id },
       loadRelationIds: true,
     });
   }
 
   async delete(id: number[]): Promise<number[]> {
-    const blockRepo = this.manager.getRepository(BlockEntity);
-
     const result = [];
-    const list = await blockRepo.find({ where: { id: In(id) } });
+    const list = await this.blockRepo.find({ where: { id: In(id) } });
 
     for (const item of list) {
-      await blockRepo.delete(item.id);
+      await this.blockRepo.delete(item.id);
       result.push(item.id);
     }
 
     return result;
   }
+
 }

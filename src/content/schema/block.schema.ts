@@ -4,6 +4,7 @@ import { SectionSchema } from "./section.schema";
 import { ContentSchema } from "./content.schema";
 import { ContentPropertySchema } from "./content-property.schema";
 import { FlagSchema } from '../../flag/schema/flag.schema';
+import { BlockPropertySchema } from './block-property.schema';
 
 @ObjectType(
   'Block',
@@ -35,10 +36,10 @@ export class BlockSchema {
   propertyList: ContentPropertySchema[];
 
   @Field(
-    type => ContentPropertySchema,
+    type => BlockPropertySchema,
     { nullable: true }
   )
-  propertyItem: ContentPropertySchema;
+  propertyItem: BlockPropertySchema;
 
   @Field({ nullable: true })
   propertyString: string;

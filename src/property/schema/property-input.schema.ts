@@ -1,23 +1,34 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql';
+import {
+  WithPropertyInputSchema,
+  WithPropertyPropertyInputSchema,
+} from '../../common/schema/with-property-input.schema';
+import { WithFlagInputSchema } from '../../common/schema/with-flag.input.schema';
 
-@InputType("PropertyPropertyInput")
-export class PropertyPropertyInputSchema {
+@InputType('PropertyPropertyInput')
+export class PropertyPropertyInputSchema implements WithPropertyPropertyInputSchema {
 
   @Field()
   property: string;
 
   @Field()
-  value: string;
+  string: string;
+
+  @Field({ nullable: true })
+  lang: string;
 
 }
 
-@InputType("PropertyInput")
-export class PropertyInputSchema {
+@InputType('PropertyInput')
+export class PropertyInputSchema implements WithPropertyInputSchema, WithFlagInputSchema {
 
   @Field()
   id: string;
 
-  @Field(type => [ PropertyPropertyInputSchema ], { nullable: true })
+  @Field(type => [ PropertyPropertyInputSchema ], { nullable: false })
   property: PropertyPropertyInputSchema[];
+
+  @Field(type => [ String ], { nullable: false })
+  flag: string[];
 
 }

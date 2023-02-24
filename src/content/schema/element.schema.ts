@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BlockSchema } from "./block.schema";
 import { ContentPropertySchema } from './content-property.schema';
 import { FlagSchema } from '../../flag/schema/flag.schema';
+import { ElementPropertySchema } from './element-property.schema';
 
 @ObjectType('Element')
 export class ElementSchema {
@@ -21,14 +22,14 @@ export class ElementSchema {
   @Field(type => BlockSchema)
   block: BlockSchema;
 
-  @Field(type => [ ContentPropertySchema ])
-  propertyList: ContentPropertySchema[];
+  @Field(type => [ ElementPropertySchema ])
+  propertyList: ElementPropertySchema[];
 
   @Field(
-    type => ContentPropertySchema,
+    type => ElementPropertySchema,
     { nullable: true }
   )
-  propertyItem: ContentPropertySchema;
+  propertyItem: ElementPropertySchema;
 
   @Field({ nullable: true })
   propertyString: string;

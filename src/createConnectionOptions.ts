@@ -1,7 +1,7 @@
 import { UserEntity } from "./user/model/user.entity";
 import { User2stringEntity } from "./user/model/user2string.entity";
 import { PropertyEntity } from "./property/model/property.entity";
-import { PropertyPropertyEntity } from "./property/model/property-property.entity";
+import { Property2stringEntity } from "./property/model/property2string.entity";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
 import { DirectoryEntity } from "./directory/model/directory.entity";
 import { Directory2stringEntity } from "./directory/model/directory2string.entity";
@@ -43,6 +43,7 @@ import { User2userGroupEntity } from "./user/model/user2user-group.entity";
 import { Element2flagEntity } from './content/model/element2flag.entity';
 import { Section2flagEntity } from './content/model/section2flag.entity';
 import { Block2flagEntity } from './content/model/block2flag.entity';
+import { Property2flagEntity } from './property/model/property2flag.entity';
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -59,7 +60,7 @@ export function createConnectionOptions(): DataSourceOptions {
       User2userContactEntity, User2userGroupEntity,
       UserContactEntity, UserContact2stringEntity, UserContact2flagEntity,
       UserGroupEntity, UserGroup2stringEntity, UserGroup2flagEntity,
-      PropertyEntity, PropertyPropertyEntity, PropertyUserEntity,
+      PropertyEntity, Property2stringEntity, PropertyUserEntity, Property2flagEntity,
       DirectoryEntity, Directory2stringEntity, Directory2flagEntity,
       ValueEntity, Value2stringEntity, Value2flagEntity,
       FlagEntity, FlagStringEntity, FlagFlagEntity,
