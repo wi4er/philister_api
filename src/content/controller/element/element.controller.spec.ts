@@ -167,11 +167,11 @@ describe('ElementController', () => {
         const parent = await Object.assign(new ElementEntity, { block }).save();
         await Object.assign(
           new Element2stringEntity(),
-          { parent, property: name, string: `VALUE_${(Math.random()*10>>0).toString().padStart(2, '0')}` }
+          { parent, property: name, string: `VALUE_${(Math.random() * 10 >> 0).toString().padStart(2, '0')}` },
         ).save();
         await Object.assign(
           new Element2stringEntity(),
-          { parent, property: gender, string: `GENDER_${i.toString().padStart(2, '0')}` }
+          { parent, property: gender, string: `GENDER_${i.toString().padStart(2, '0')}` },
         ).save();
       }
 
@@ -307,6 +307,67 @@ describe('ElementController', () => {
         .post('/element')
         .send({ block: 2 })
         .expect(500);
+    });
+  });
+
+  describe('Content element update', () => {
+    test('Should update item', async () => {
+      await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block: 1 }).save();
+
+      const item = await request(app.getHttpServer())
+        .put('/element')
+        .send({ id: 1 })
+        .expect(200);
+
+      expect(item.body['id']).toBe(1);
+      expect(item.body['block']).toBe(1);
+      expect(item.body['version']).toBe(1);
+    });
+
+    test('Should update with property', async () => {
+      await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block: 1 }).save();
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+
+      const item = await request(app.getHttpServer())
+        .put('/element')
+        .send({
+          id: 1,
+          property: [ {
+            property: 'NAME',
+            string: 'VALUE'
+          } ],
+        })
+        .expect(200);
+
+      expect(item.body.property).toHaveLength(1);
+      expect(item.body.property[0]['string']).toBe('VALUE');
+      expect(item.body.property[0]['property']).toBe('NAME');
+    });
+  });
+
+  describe('Content element deletion', () => {
+    test('Should delete block', async () => {
+      await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block: 1 }).save();
+
+      const list = await request(app.getHttpServer())
+        .delete('/element/1')
+        .expect(200);
+
+      expect(list.body).toEqual([ 1 ]);
+    });
+
+    test('Should delete with wrong id', async () => {
+      await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block: 1 }).save();
+
+      const list = await request(app.getHttpServer())
+        .delete('/element/22')
+        .expect(200);
+
+      expect(list.body).toEqual([]);
     });
   });
 });

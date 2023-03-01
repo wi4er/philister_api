@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ElementEntity } from '../../model/element.entity';
@@ -27,7 +27,7 @@ export class ElementController {
       created_at: item.created_at,
       updated_at: item.updated_at,
       version: item.version,
-      block: item.block,
+      block: item.block.id,
       property: [
         ...item.string.map(str => ({
           string: str.string,
@@ -119,7 +119,42 @@ export class ElementController {
       input: ElementInputSchema,
   ) {
     return this.elementService.insert(input)
+      .then(res => this.elementRepo.findOne({
+        where: { id: res.id },
+        relations: {
+          string: { property: true },
+          flag: { flag: true },
+          value: { value: { directory: true }, property: true },
+          block: true,
+        },
+      }))
       .then(res => this.toView(res));
+  }
+
+  @Put()
+  async updateItem(
+    @Body()
+      input: ElementInputSchema,
+  ) {
+    return this.elementService.update(input)
+      .then(res => this.elementRepo.findOne({
+        where: { id: res.id },
+        relations: {
+          string: { property: true },
+          flag: { flag: true },
+          value: { value: { directory: true }, property: true },
+          block: true,
+        },
+      }))
+      .then(res => this.toView(res));
+  }
+
+  @Delete('/:id')
+  async deleteItem(
+    @Param('id')
+      id: string,
+  ): Promise<number[]> {
+    return this.elementService.delete([ +id ]);
   }
 
 }
