@@ -28,6 +28,16 @@ export class BlockMutationResolver {
   }
 
   @ResolveField()
+  async toggleFlag(
+    @Args('id', { type: () => Int })
+      id: number,
+    @Args('flag')
+      flag: string,
+  ) {
+    return this.blockService.toggleFlag(id, flag);
+  }
+
+  @ResolveField()
   async delete(
     @Args('id', { type: () => [ Int ] })
       id: number[],

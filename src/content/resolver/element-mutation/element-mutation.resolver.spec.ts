@@ -9,6 +9,7 @@ import { BlockEntity } from '../../model/block.entity';
 import { FlagEntity } from '../../../flag/model/flag.entity';
 import { PropertyEntity } from '../../../property/model/property.entity';
 import { ElementEntity } from '../../model/element.entity';
+import { Element2flagEntity } from '../../model/element2flag.entity';
 
 const addElementMutation = gql`
   mutation AddElement($item: ElementInput!) {
@@ -44,6 +45,17 @@ const updateElementMutation = gql`
             id
           }
         }
+        flagString
+      }
+    }
+  }
+`;
+
+const toggleFlagMutation = gql`
+  mutation ToggleFlag($id: Int!, $flag: String!) {
+    element {
+      toggleFlag(id: $id, flag: $flag) {
+        id
         flagString
       }
     }
@@ -188,6 +200,33 @@ describe('ElementMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['element']['delete']).toEqual([ 1 ]);
+    });
+  });
+
+  describe('Element flag update', () => {
+    test('Should add flag', async () => {
+      const block = await new BlockEntity().save();
+      await Object.assign(new ElementEntity(), { block }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(toggleFlagMutation, { id: 1, flag: 'ACTIVE' })
+        .expectNoErrors();
+
+      expect(res.data['element']['toggleFlag']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should remove flag', async () => {
+      const block = await new BlockEntity().save();
+      const parent = await Object.assign(new ElementEntity(), { block }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new Element2flagEntity(), { parent, flag }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(toggleFlagMutation, { id: 1, flag: 'ACTIVE' })
+        .expectNoErrors();
+
+      expect(res.data['element']['toggleFlag']['flagString']).toEqual([]);
     });
   });
 });

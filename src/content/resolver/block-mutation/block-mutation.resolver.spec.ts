@@ -7,6 +7,7 @@ import { gql } from 'apollo-server-express';
 import { PropertyEntity } from '../../../property/model/property.entity';
 import { FlagEntity } from '../../../flag/model/flag.entity';
 import { BlockEntity } from '../../model/block.entity';
+import { Block2flagEntity } from '../../model/block2flag.entity';
 
 const addBlockItemMutation = gql`
   mutation addBlockItem($item: BlockInput!) {
@@ -44,6 +45,17 @@ const updateBlockItemMutation = gql`
             id
           }
         }
+        flagString
+      }
+    }
+  }
+`;
+
+const toggleBlockFlagMutation = gql`
+  mutation toggleFlag($id: Int!, $flag: String!) {
+    block {
+      toggleFlag(id: $id, flag: $flag) {
+        id
         flagString
       }
     }
@@ -159,6 +171,37 @@ describe('BlockMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['block']['update']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+  });
+
+  describe('Block flag toggle', () => {
+    test('Should add flag', async () => {
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await new BlockEntity().save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(toggleBlockFlagMutation, {
+          id: 1,
+          flag: 'ACTIVE',
+        })
+        .expectNoErrors();
+
+      expect(res.data['block']['toggleFlag']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should remove flag', async () => {
+      const parent = await new BlockEntity().save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new Block2flagEntity(), { parent, flag }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(toggleBlockFlagMutation, {
+          id: 1,
+          flag: 'ACTIVE',
+        })
+        .expectNoErrors();
+
+      expect(res.data['block']['toggleFlag']['flagString']).toEqual([]);
     });
   });
 

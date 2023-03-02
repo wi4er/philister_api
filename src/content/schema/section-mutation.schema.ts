@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { ElementSchema } from './element.schema';
 import { SectionSchema } from './section.schema';
 
 @ObjectType('SectionMutation')
@@ -19,5 +18,15 @@ export class SectionMutationSchema {
     type => SectionSchema,
     { description: 'Updating existent content section' }
   ) update: SectionSchema;
+
+  @Field(
+    type => SectionSchema,
+    {
+      description: `
+        Updating existing content section flags. New content flag will be added, existent flag will be removed. 
+      `,
+    },
+  )
+  toggleFlag: SectionSchema;
 
 }

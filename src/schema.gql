@@ -492,6 +492,9 @@ type BlockMutation {
 
   """Updating existent content block"""
   update(item: BlockInput!): Block!
+
+  """Toggle flag in content block"""
+  toggleFlag(id: Int!, flag: String!): Block!
 }
 
 input BlockInput {
@@ -513,8 +516,11 @@ type ElementMutation {
   """Deletion existent content element"""
   delete(id: [Int!]!): [Int!]!
 
-  """Updating existent content element"""
+  "\n        Updating existing content element with new data. All previous data will be lost and replaced with new. \n      "
   update(item: ElementInput!): Element!
+
+  "\n        Updating existing content element flags. New content flag will be added, existent flag will be removed. \n      "
+  toggleFlag(id: Int!, flag: String!): Element!
 }
 
 input ElementInput {
@@ -539,6 +545,9 @@ type SectionMutation {
 
   """Updating existent content section"""
   update(item: SectionInput!): Section!
+
+  "\n        Updating existing content section flags. New content flag will be added, existent flag will be removed. \n      "
+  toggleFlag(id: Int!, flag: String!): Section!
 }
 
 input SectionInput {

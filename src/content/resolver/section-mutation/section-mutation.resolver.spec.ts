@@ -8,6 +8,7 @@ import { BlockEntity } from '../../model/block.entity';
 import request from 'supertest-graphql';
 import { SectionEntity } from '../../model/section.entity';
 import { FlagEntity } from '../../../flag/model/flag.entity';
+import { Section2flagEntity } from '../../model/section2flag.entity';
 
 const addSectionItemMutation = gql`
   mutation AddSection($item: SectionInput!) {
@@ -48,6 +49,17 @@ const updateSectionItemMutation = gql`
             id
           }
         }
+        flagString
+      }
+    }
+  }
+`;
+
+const toggleSectionFlag = gql`
+  mutation ToggleFlag($id: Int!, $flag: String!) {
+    section {
+      toggleFlag(id: $id, flag: $flag) {
+        id
         flagString
       }
     }
@@ -148,6 +160,39 @@ describe('SectionMutationResolver', () => {
         .expectNoErrors();
 
       expect(res.data['section']['update']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+  });
+
+  describe('Section flag update', () => {
+    test('Should add flag', async () => {
+      await new BlockEntity().save();
+      await Object.assign(new SectionEntity(), { block: 1 }).save();
+      await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(toggleSectionFlag, {
+          id: 1,
+          flag: 'ACTIVE',
+        })
+        .expectNoErrors();
+
+      expect(res.data['section']['toggleFlag']['flagString']).toEqual([ 'ACTIVE' ]);
+    });
+
+    test('Should remove flag', async () => {
+      await new BlockEntity().save();
+      const parent = await Object.assign(new SectionEntity(), { block: 1 }).save();
+      const flag = await Object.assign(new FlagEntity(), { id: 'ACTIVE' }).save();
+      await Object.assign(new Section2flagEntity(), { parent, flag }).save();
+
+      const res = await request(app.getHttpServer())
+        .query(toggleSectionFlag, {
+          id: 1,
+          flag: 'ACTIVE',
+        })
+        .expectNoErrors();
+
+      expect(res.data['section']['toggleFlag']['flagString']).toEqual([]);
     });
   });
 

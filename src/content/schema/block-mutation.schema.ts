@@ -19,4 +19,10 @@ export class BlockMutationSchema {
     { description: 'Updating existent content block' }
   ) update: BlockSchema;
 
+
+  @Field(
+    type => BlockSchema,
+    { description: 'Toggle flag in content block' }
+  ) toggleFlag: BlockSchema;
+
 }

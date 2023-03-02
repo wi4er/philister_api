@@ -19,6 +19,8 @@ export class ElementService {
     private manager: EntityManager,
     @InjectRepository(ElementEntity)
     private elementRepo: Repository<ElementEntity>,
+    @InjectRepository(Element2flagEntity)
+    private elementFlagRepo: Repository<Element2flagEntity>,
     @InjectRepository(BlockEntity)
     private blockRepo: Repository<BlockEntity>,
   ) {
@@ -28,7 +30,7 @@ export class ElementService {
     const created = new ElementEntity();
 
     await this.manager.transaction(async (trans: EntityManager) => {
-      created.block = await this.blockRepo.findOne({ where: { id: input.block }});
+      created.block = await this.blockRepo.findOne({ where: { id: input.block } });
       await trans.save(created);
 
       await new PropertyInsertOperation(trans, Element2stringEntity).save(created, input);
@@ -51,7 +53,7 @@ export class ElementService {
           block: true,
         },
       });
-      beforeItem.block = await this.blockRepo.findOne({ where: { id: input.block }});
+      beforeItem.block = await this.blockRepo.findOne({ where: { id: input.block } });
       await beforeItem.save();
 
       await new PropertyUpdateOperation(trans, Element2stringEntity).save(beforeItem, input);
@@ -60,6 +62,28 @@ export class ElementService {
 
     return this.elementRepo.findOne({
       where: { id: input.id },
+      loadRelationIds: true,
+    });
+  }
+
+  async toggleFlag(id: number, flag: string): Promise<ElementEntity> {
+    await this.manager.transaction(async (trans: EntityManager) => {
+      const item = await this.elementFlagRepo.findOne({
+        where: { parent: { id }, flag: { id: flag } },
+      });
+
+      if (item === null) {
+        await Object.assign(
+          new Element2flagEntity(),
+          { parent: id, flag },
+        ).save();
+      } else {
+        await trans.delete(Element2flagEntity, { id: item.id });
+      }
+    });
+
+    return this.elementRepo.findOne({
+      where: { id },
       loadRelationIds: true,
     });
   }

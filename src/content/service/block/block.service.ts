@@ -9,6 +9,8 @@ import { FlagInsertOperation } from '../../../common/operation/flag-insert.opera
 import { Block2flagEntity } from '../../model/block2flag.entity';
 import { PropertyUpdateOperation } from '../../../common/operation/property-update.operation';
 import { FlagUpdateOperation } from '../../../common/operation/flag-update.operation';
+import { ElementEntity } from '../../model/element.entity';
+import { Element2flagEntity } from '../../model/element2flag.entity';
 
 @Injectable()
 export class BlockService {
@@ -18,6 +20,8 @@ export class BlockService {
     private manager: EntityManager,
     @InjectRepository(BlockEntity)
     private blockRepo: Repository<BlockEntity>,
+    @InjectRepository(Block2flagEntity)
+    private blockFlagRepo: Repository<Block2flagEntity>,
   ) {
   }
 
@@ -55,6 +59,28 @@ export class BlockService {
 
     return this.blockRepo.findOne({
       where: { id: input.id },
+      loadRelationIds: true,
+    });
+  }
+
+  async toggleFlag(id: number, flag: string): Promise<BlockEntity> {
+    await this.manager.transaction(async (trans: EntityManager) => {
+      const item = await this.blockFlagRepo.findOne({
+        where: { parent: { id }, flag: { id: flag } },
+      });
+
+      if (item === null) {
+        await Object.assign(
+          new Block2flagEntity(),
+          { parent: id, flag },
+        ).save();
+      } else {
+        await trans.delete(Block2flagEntity, { id: item.id });
+      }
+    });
+
+    return this.blockRepo.findOne({
+      where: { id },
       loadRelationIds: true,
     });
   }

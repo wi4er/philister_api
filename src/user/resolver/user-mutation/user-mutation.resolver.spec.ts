@@ -9,7 +9,6 @@ import { FlagEntity } from "../../../flag/model/flag.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { UserContactEntity, UserContactType } from "../../model/user-contact.entity";
 import { User2stringEntity } from "../../model/user2string.entity";
-import { UserContact2flagEntity } from "../../model/user-contact2flag.entity";
 import { User2flagEntity } from "../../model/user2flag.entity";
 import { User2userContactEntity } from "../../model/user2user-contact.entity";
 import { UserGroupEntity } from "../../model/user-group.entity";

@@ -2,12 +2,14 @@ import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
 import { SectionInputSchema } from '../../schema/section-input.schema';
 import { SectionMutationSchema } from '../../schema/section-mutation.schema';
 import { SectionService } from '../../service/section/section.service';
+import { ElementEntity } from '../../model/element.entity';
+import { SectionEntity } from '../../model/section.entity';
 
 @Resolver(of => SectionMutationSchema)
 export class SectionMutationResolver {
 
   constructor(
-    private sectionService: SectionService
+    private sectionService: SectionService,
   ) {
   }
 
@@ -25,6 +27,16 @@ export class SectionMutationResolver {
       item: SectionInputSchema,
   ) {
     return this.sectionService.update(item);
+  }
+
+  @ResolveField()
+  async toggleFlag(
+    @Args('id', { type: () => Int })
+      id: number,
+    @Args('flag')
+      flag: string,
+  ): Promise<SectionEntity> {
+    return this.sectionService.toggleFlag(id, flag);
   }
 
   @ResolveField()

@@ -1,13 +1,13 @@
 import { Args, Int, ResolveField, Resolver } from '@nestjs/graphql';
-import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
-import { EntityManager, Repository } from "typeorm";
-import { UserUpdateOperation } from "../../operation/user-update.operation";
-import { UserInputSchema } from "../../schema/user-input.schema";
-import { UserEntity } from "../../model/user.entity";
-import { UserMutationSchema } from "../../schema/user-mutation.schema";
-import { UserInsertOperation } from "../../operation/user-insert.operation";
-import { UserService } from "../../service/user/user.service";
-import { User2flagEntity } from "../../model/user2flag.entity";
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
+import { UserUpdateOperation } from '../../operation/user-update.operation';
+import { UserInputSchema } from '../../schema/user-input.schema';
+import { UserEntity } from '../../model/user.entity';
+import { UserMutationSchema } from '../../schema/user-mutation.schema';
+import { UserInsertOperation } from '../../operation/user-insert.operation';
+import { UserService } from '../../service/user/user.service';
+import { User2flagEntity } from '../../model/user2flag.entity';
 
 @Resolver(of => UserMutationSchema)
 export class UserMutationResolver {
@@ -26,7 +26,7 @@ export class UserMutationResolver {
   @ResolveField()
   async add(
     @Args('item')
-      item: UserInputSchema
+      item: UserInputSchema,
   ): Promise<UserEntity> {
     return new UserInsertOperation(this.entityManager).save(item);
   }
@@ -34,7 +34,7 @@ export class UserMutationResolver {
   @ResolveField()
   async update(
     @Args('item')
-      item: UserInputSchema
+      item: UserInputSchema,
   ) {
     return new UserUpdateOperation(this.entityManager).save(item);
   }
@@ -44,13 +44,13 @@ export class UserMutationResolver {
     @Args('id', { type: () => Int })
       id: number,
     @Args('flag')
-      flag: string
+      flag: string,
   ): Promise<UserEntity> {
     const rel = await this.flagRepo.findOne({
       where: {
         parent: { id },
         flag: { id: flag },
-      }
+      },
     });
 
     if (rel) {
@@ -68,7 +68,7 @@ export class UserMutationResolver {
   @ResolveField()
   async delete(
     @Args('id', { type: () => [ Int ] })
-      id: number[]
+      id: number[],
   ): Promise<number[]> {
     return this.userService.deleteUser(id);
   }
