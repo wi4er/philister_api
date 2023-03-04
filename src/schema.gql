@@ -438,7 +438,7 @@ type Block implements Content {
   created_at: String!
   updated_at: String!
   version: Int!
-  propertyList: [ContentProperty!]!
+  propertyList: [BlockProperty!]!
   propertyItem(id: String!): BlockProperty
   propertyString(id: String!): String
   flagList: [Flag!]!

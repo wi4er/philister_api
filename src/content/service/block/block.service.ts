@@ -9,8 +9,6 @@ import { FlagInsertOperation } from '../../../common/operation/flag-insert.opera
 import { Block2flagEntity } from '../../model/block2flag.entity';
 import { PropertyUpdateOperation } from '../../../common/operation/property-update.operation';
 import { FlagUpdateOperation } from '../../../common/operation/flag-update.operation';
-import { ElementEntity } from '../../model/element.entity';
-import { Element2flagEntity } from '../../model/element2flag.entity';
 
 @Injectable()
 export class BlockService {

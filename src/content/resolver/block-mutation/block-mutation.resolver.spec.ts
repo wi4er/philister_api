@@ -8,6 +8,7 @@ import { PropertyEntity } from '../../../property/model/property.entity';
 import { FlagEntity } from '../../../flag/model/flag.entity';
 import { BlockEntity } from '../../model/block.entity';
 import { Block2flagEntity } from '../../model/block2flag.entity';
+import { LangEntity } from '../../../lang/model/lang.entity';
 
 const addBlockItemMutation = gql`
   mutation addBlockItem($item: BlockInput!) {
@@ -22,6 +23,11 @@ const addBlockItemMutation = gql`
           string
           property {
             id
+          }
+          ... on BlockString {
+            lang {
+              id
+            }
           }
         }
         flagString
@@ -108,6 +114,65 @@ describe('BlockMutationResolver', () => {
       expect(res.data['block']['add']['propertyList']).toHaveLength(1);
       expect(res.data['block']['add']['propertyList'][0]['property']['id']).toBe('NAME');
       expect(res.data['block']['add']['propertyList'][0]['string']).toBe('VALUE');
+      expect(res.data['block']['add']['propertyList'][0]['lang']).toBe(null);
+    });
+
+    test('Should add item with lang string', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new LangEntity(), { id: 'EN' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(addBlockItemMutation, {
+          item: {
+            flag: [],
+            property: [ {
+              property: 'NAME',
+              string: 'VALUE',
+              lang: 'EN',
+            } ],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['block']['add']['propertyList']).toHaveLength(1);
+      expect(res.data['block']['add']['propertyList'][0]['property']['id']).toBe('NAME');
+      expect(res.data['block']['add']['propertyList'][0]['string']).toBe('VALUE');
+      expect(res.data['block']['add']['propertyList'][0]['lang']['id']).toBe('EN');
+    });
+
+    test('Should add item with many properties', async () => {
+      await Object.assign(new PropertyEntity(), { id: 'NAME' }).save();
+      await Object.assign(new PropertyEntity(), { id: 'GENDER' }).save();
+      await Object.assign(new LangEntity(), { id: 'EN' }).save();
+
+      const res = await request(app.getHttpServer())
+        .mutate(addBlockItemMutation, {
+          item: {
+            flag: [],
+            property: [ {
+              property: 'NAME',
+              string: 'VALUE',
+              lang: 'EN',
+            }, {
+              property: 'GENDER',
+              string: 'F',
+              lang: 'EN',
+            }, {
+              property: 'NAME',
+              string: 'LANG_LESS',
+            }, {
+              property: 'GENDER',
+              string: 'LANG_LESS',
+            } ],
+          },
+        })
+        .expectNoErrors();
+
+      expect(res.data['block']['add']['propertyList']).toHaveLength(4);
+      expect(res.data['block']['add']['propertyList'][0]['lang']['id']).toBe('EN');
+      expect(res.data['block']['add']['propertyList'][1]['lang']['id']).toBe('EN');
+      expect(res.data['block']['add']['propertyList'][2]['lang']).toBe(null);
+      expect(res.data['block']['add']['propertyList'][3]['lang']).toBe(null);
     });
 
     test('Should add item with flag', async () => {

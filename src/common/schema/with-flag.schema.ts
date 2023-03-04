@@ -1,5 +1,5 @@
-import { FlagSchema } from "../../flag/schema/flag.schema";
-import { Field, InterfaceType } from "@nestjs/graphql";
+import { FlagSchema } from '../../flag/schema/flag.schema';
+import { Field, InterfaceType } from '@nestjs/graphql';
 
 @InterfaceType()
 export abstract class WithFlagSchema {

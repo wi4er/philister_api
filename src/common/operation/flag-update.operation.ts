@@ -1,8 +1,8 @@
-import { BaseEntity, EntityManager } from "typeorm";
-import { CommonFlagEntity } from "../model/common-flag.entity";
-import { FlagEntity } from "../../flag/model/flag.entity";
-import { WithFlagInputSchema } from "../schema/with-flag.input.schema";
-import { WithFlagEntity } from "../model/with-flag.entity";
+import { BaseEntity, EntityManager } from 'typeorm';
+import { CommonFlagEntity } from '../model/common-flag.entity';
+import { FlagEntity } from '../../flag/model/flag.entity';
+import { WithFlagInputSchema } from '../schema/with-flag.input.schema';
+import { WithFlagEntity } from '../model/with-flag.entity';
 
 export class FlagUpdateOperation<T extends WithFlagEntity<BaseEntity>> {
 
@@ -32,7 +32,7 @@ export class FlagUpdateOperation<T extends WithFlagEntity<BaseEntity>> {
     for (const item of current) {
       await this.trans.delete(this.entity, {
         parent: beforeItem,
-        flag: item
+        flag: item,
       });
     }
   }

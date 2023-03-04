@@ -1,8 +1,8 @@
-import { WithPropertyInputSchema } from "../schema/with-property-input.schema";
-import { BaseEntity, EntityManager } from "typeorm";
-import { CommonStringEntity } from "../model/common-string.entity";
-import { PropertyEntity } from "../../property/model/property.entity";
-import { LangEntity } from "../../lang/model/lang.entity";
+import { WithPropertyInputSchema } from '../schema/with-property-input.schema';
+import { BaseEntity, EntityManager } from 'typeorm';
+import { CommonStringEntity } from '../model/common-string.entity';
+import { PropertyEntity } from '../../property/model/property.entity';
+import { LangEntity } from '../../lang/model/lang.entity';
 
 export class PropertyInsertOperation<T extends BaseEntity> {
 
@@ -22,7 +22,7 @@ export class PropertyInsertOperation<T extends BaseEntity> {
       inst.parent = created;
       inst.property = await propRepo.findOne({ where: { id: item.property } });
       inst.string = item.string;
-      inst.lang = await langRepo.findOne({ where: { id: item.lang } });
+      inst.lang = item.lang ? await langRepo.findOne({ where: { id: item.lang } }) : null;
 
       await this.trans.save(inst);
     }

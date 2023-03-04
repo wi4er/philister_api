@@ -1,5 +1,3 @@
-import { BaseEntity } from "typeorm";
-
 export class WithPropertySchema<T> {
 
   propertyList: T[];

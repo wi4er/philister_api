@@ -1,7 +1,7 @@
-import { BaseEntity, EntityManager } from "typeorm";
-import { CommonFlagEntity } from "../model/common-flag.entity";
-import { FlagEntity } from "../../flag/model/flag.entity";
-import { WithFlagInputSchema } from "../schema/with-flag.input.schema";
+import { BaseEntity, EntityManager } from 'typeorm';
+import { CommonFlagEntity } from '../model/common-flag.entity';
+import { FlagEntity } from '../../flag/model/flag.entity';
+import { WithFlagInputSchema } from '../schema/with-flag.input.schema';
 
 export class FlagInsertOperation<T extends BaseEntity> {
 

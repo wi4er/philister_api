@@ -1,5 +1,5 @@
-import { FlagEntity } from "../../flag/model/flag.entity";
-import { BaseEntity } from "typeorm";
+import { FlagEntity } from '../../flag/model/flag.entity';
+import { BaseEntity } from 'typeorm';
 
 export class CommonFlagEntity<T extends BaseEntity> {
 

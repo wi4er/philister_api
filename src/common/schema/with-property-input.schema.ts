@@ -1,11 +1,10 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { ApiProperty } from "@nestjs/swagger";
+import { Field } from '@nestjs/graphql';
 
 export class WithPropertyPropertyInputSchema {
 
   property: string;
 
-  string: string
+  string: string;
 
   lang: string;
 

@@ -32,8 +32,8 @@ export class BlockSchema {
   @Field(type => [ SectionSchema ])
   section: SectionSchema[];
 
-  @Field(type => [ ContentPropertySchema ])
-  propertyList: ContentPropertySchema[];
+  @Field(type => [ BlockPropertySchema ])
+  propertyList: BlockPropertySchema[];
 
   @Field(
     type => BlockPropertySchema,
