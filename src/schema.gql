@@ -71,6 +71,15 @@ interface ContentProperty {
   property: Property!
 }
 
+interface BlockProperty implements ContentProperty {
+  id: Int!
+  created_at: String!
+  updated_at: String!
+  version: Int!
+  string: String!
+  property: Property!
+}
+
 interface ElementProperty implements ContentProperty {
   id: Int!
   created_at: String!
@@ -81,15 +90,6 @@ interface ElementProperty implements ContentProperty {
 }
 
 interface SectionProperty implements ContentProperty {
-  id: Int!
-  created_at: String!
-  updated_at: String!
-  version: Int!
-  string: String!
-  property: Property!
-}
-
-interface BlockProperty implements ContentProperty {
   id: Int!
   created_at: String!
   updated_at: String!
@@ -419,6 +419,11 @@ type Element {
   flagString: [String!]!
 }
 
+type BlockElement {
+  count: Float!
+  list: [Element!]!
+}
+
 type Section {
   id: Int!
   created_at: String!
@@ -433,6 +438,11 @@ type Section {
   flagString: [String!]!
 }
 
+type BlockSection {
+  count: Float!
+  list: [Section!]!
+}
+
 type Block implements Content {
   id: Int!
   created_at: String!
@@ -443,8 +453,8 @@ type Block implements Content {
   propertyString(id: String!): String
   flagList: [Flag!]!
   flagString: [String!]!
-  element: [Element!]!
-  section: [Section!]!
+  element: BlockElement!
+  section: BlockSection!
 }
 
 interface Content {

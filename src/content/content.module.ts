@@ -35,6 +35,8 @@ import { SectionStringResolver } from './resolver/section-string/section-string.
 import { ElementService } from './service/element/element.service';
 import { SectionService } from './service/section/section.service';
 import { BlockService } from './service/block/block.service';
+import { BlockElementResolver } from './resolver/block-element/block-element.resolver';
+import { BlockSectionResolver } from './resolver/block-section/block-section.resolver';
 
 @Module({
   imports: [
@@ -51,7 +53,7 @@ import { BlockService } from './service/block/block.service';
     ElementResolver, ContentRootResolver, ElementQueryResolver,
     SectionQueryResolver, SectionMutationResolver,
     ElementMutationResolver, BlockQueryResolver, BlockMutationResolver, SectionResolver,
-    BlockResolver, BlockStringResolver, ContentResolver, ElementStringResolver, SectionStringResolver, ElementService, SectionService, BlockService,
+    BlockResolver, BlockStringResolver, ContentResolver, ElementStringResolver, SectionStringResolver, ElementService, SectionService, BlockService, BlockElementResolver, BlockSectionResolver,
   ],
   controllers: [ BlockController, ElementController, SectionController ],
 })

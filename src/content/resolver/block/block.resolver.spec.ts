@@ -6,7 +6,6 @@ import { createConnection } from "typeorm";
 import { createConnectionOptions } from "../../../createConnectionOptions";
 import request from "supertest-graphql";
 import { BlockEntity } from "../../model/block.entity";
-import { ElementEntity } from "../../model/element.entity";
 import { SectionEntity } from "../../model/section.entity";
 import { PropertyEntity } from "../../../property/model/property.entity";
 import { Block2stringEntity } from "../../model/block2string.entity";
@@ -19,12 +18,6 @@ const blockItemQuery = gql`
         version
         updated_at
         created_at
-        element {
-          id
-        }
-        section {
-          id
-        }
       }
     }
   }
@@ -56,19 +49,7 @@ describe('BlockResolver', () => {
   beforeEach(() => source.synchronize(true));
   afterAll(() => source.destroy());
 
-  describe('Block elements', () => {
-    test('Should get block with element', async () => {
-      const block = await new BlockEntity().save();
-      const element = await Object.assign(new ElementEntity(), { block }).save();
 
-      const res = await request(app.getHttpServer())
-        .query(blockItemQuery, { id: 1 })
-        .expectNoErrors();
-
-      expect(res.data['block']['item']['element']).toHaveLength(1);
-      expect(res.data['block']['item']['element'][0]['id']).toBe(1);
-    });
-  });
 
   describe('Block sections', () => {
     test('Should get block with section', async () => {

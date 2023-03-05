@@ -1,10 +1,10 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import { ElementSchema } from "./element.schema";
 import { SectionSchema } from "./section.schema";
 import { ContentSchema } from "./content.schema";
-import { ContentPropertySchema } from "./content-property.schema";
 import { FlagSchema } from '../../flag/schema/flag.schema';
 import { BlockPropertySchema } from './block-property.schema';
+import { BlockElementSchema } from './block-element.schema';
+import { BlockSectionSchema } from './block-section.schema';
 
 @ObjectType(
   'Block',
@@ -26,11 +26,11 @@ export class BlockSchema {
   @Field(type => Int)
   version: number;
 
-  @Field(type => [ ElementSchema ])
-  element: ElementSchema[];
+  @Field(type => BlockElementSchema)
+  element: BlockElementSchema[];
 
-  @Field(type => [ SectionSchema ])
-  section: SectionSchema[];
+  @Field(type => BlockSectionSchema)
+  section: BlockSectionSchema[];
 
   @Field(type => [ BlockPropertySchema ])
   propertyList: BlockPropertySchema[];
@@ -39,7 +39,7 @@ export class BlockSchema {
     type => BlockPropertySchema,
     { nullable: true }
   )
-  propertyItem: BlockPropertySchema;
+  propertyItem: BlockPropertySchema | null;
 
   @Field({ nullable: true })
   propertyString: string;
