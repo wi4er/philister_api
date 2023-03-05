@@ -53,7 +53,7 @@ describe('BlockSectionResolver', () => {
   });
 
   describe('Block section list', () => {
-    test('Should get block with element count', async () => {
+    test('Should get block with section list', async () => {
       const block = await new BlockEntity().save();
       await Object.assign(new SectionEntity(), { block }).save();
 
@@ -63,6 +63,22 @@ describe('BlockSectionResolver', () => {
 
       expect(res.data['block']['item']['section']['list']).toHaveLength(1);
       expect(res.data['block']['item']['section']['list'][0]['id']).toBe(1);
+    });
+
+    test('Should get with many blocks', async () => {
+      await new BlockEntity().save();
+      const block = await new BlockEntity().save();
+      await Object.assign(new SectionEntity(), { block }).save();
+
+      const res1 = await request(app.getHttpServer())
+        .query(blockSectionQuery, { id: 1 })
+        .expectNoErrors();
+      expect(res1.data['block']['item']['section']['list']).toHaveLength(0);
+
+      const res2 = await request(app.getHttpServer())
+        .query(blockSectionQuery, { id: 2 })
+        .expectNoErrors();
+      expect(res2.data['block']['item']['section']['list']).toHaveLength(1);
     });
   });
 });

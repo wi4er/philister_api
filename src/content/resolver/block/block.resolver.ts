@@ -51,11 +51,8 @@ export class BlockResolver {
   async section(
     @Parent()
       current: BlockEntity,
-  ): Promise<SectionEntity[]> {
-    return this.sectionRepo.find({
-      where: { block: { id: current.id } },
-      loadRelationIds: true,
-    });
+  ) {
+    return current;
   }
 
   @ResolveField()
@@ -97,7 +94,7 @@ export class BlockResolver {
         property: { id },
         parent: { id: current.id },
       },
-    }).then(item => item?.string ?? '');
+    }).then(item => item?.string);
   }
 
   @ResolveField()
