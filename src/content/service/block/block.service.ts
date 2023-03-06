@@ -9,6 +9,8 @@ import { FlagInsertOperation } from '../../../common/operation/flag-insert.opera
 import { Block2flagEntity } from '../../model/block2flag.entity';
 import { PropertyUpdateOperation } from '../../../common/operation/property-update.operation';
 import { FlagUpdateOperation } from '../../../common/operation/flag-update.operation';
+import { BlockPermissionEntity } from '../../model/block-permission.entity';
+import { PermissionMethod } from '../../../permission/model/permission-method';
 
 @Injectable()
 export class BlockService {
@@ -20,6 +22,8 @@ export class BlockService {
     private blockRepo: Repository<BlockEntity>,
     @InjectRepository(Block2flagEntity)
     private blockFlagRepo: Repository<Block2flagEntity>,
+    @InjectRepository(BlockPermissionEntity)
+    private permRepo: Repository<BlockPermissionEntity>,
   ) {
   }
 
@@ -32,6 +36,12 @@ export class BlockService {
       await new PropertyInsertOperation(trans, Block2stringEntity).save(created, input);
       await new FlagInsertOperation(trans, Block2flagEntity).save(created, input);
     });
+
+    await Object.assign(new BlockPermissionEntity(), {
+      block: created,
+      group: 1,
+      method: PermissionMethod.ALL,
+    }).save();
 
     return this.blockRepo.findOne({
       where: { id: created.id },

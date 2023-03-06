@@ -37,6 +37,8 @@ import { SectionService } from './service/section/section.service';
 import { BlockService } from './service/block/block.service';
 import { BlockElementResolver } from './resolver/block-element/block-element.resolver';
 import { BlockSectionResolver } from './resolver/block-section/block-section.resolver';
+import { BlockPermissionEntity } from './model/block-permission.entity';
+import { UserEntity } from '../user/model/user.entity';
 
 @Module({
   imports: [
@@ -44,7 +46,8 @@ import { BlockSectionResolver } from './resolver/block-section/block-section.res
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity,
       Element2flagEntity,
       SectionEntity, Section2valueEntity, Section2stringEntity, Section2flagEntity,
-      BlockEntity, Block2stringEntity, Block2flagEntity,
+      BlockEntity, Block2stringEntity, Block2flagEntity, BlockPermissionEntity,
+      UserEntity,
       PropertyEntity,
       LangEntity,
     ]),

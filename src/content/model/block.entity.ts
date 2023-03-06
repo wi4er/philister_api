@@ -5,12 +5,13 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn, VersionColumn
-} from "typeorm";
-import { ElementEntity } from "./element.entity";
-import { SectionEntity } from "./section.entity";
-import { Block2stringEntity } from "./block2string.entity";
+  UpdateDateColumn, VersionColumn,
+} from 'typeorm';
+import { ElementEntity } from './element.entity';
+import { SectionEntity } from './section.entity';
+import { Block2stringEntity } from './block2string.entity';
 import { Block2flagEntity } from './block2flag.entity';
+import { BlockPermissionEntity } from './block-permission.entity';
 
 @Entity('content-block')
 export class BlockEntity extends BaseEntity {
@@ -29,6 +30,12 @@ export class BlockEntity extends BaseEntity {
 
   @VersionColumn()
   version: number;
+
+  @OneToMany(
+    type => BlockPermissionEntity,
+    permission => permission.block,
+  )
+  permission: BlockPermissionEntity[];
 
   @OneToMany(
     type => ElementEntity,

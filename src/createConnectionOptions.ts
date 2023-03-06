@@ -44,6 +44,7 @@ import { Element2flagEntity } from './content/model/element2flag.entity';
 import { Section2flagEntity } from './content/model/section2flag.entity';
 import { Block2flagEntity } from './content/model/block2flag.entity';
 import { Property2flagEntity } from './property/model/property2flag.entity';
+import { BlockPermissionEntity } from './content/model/block-permission.entity';
 
 export function createConnectionOptions(): DataSourceOptions {
   return {
@@ -67,7 +68,7 @@ export function createConnectionOptions(): DataSourceOptions {
       LangEntity, LangStringEntity, LangFlagEntity,
       ElementEntity, Element2sectionEntity, Element2stringEntity, Element2valueEntity, Element2elementEntity, Element2flagEntity,
       SectionEntity, Section2valueEntity, Section2stringEntity, Section2flagEntity,
-      BlockEntity, Block2stringEntity, Block2flagEntity,
+      BlockEntity, Block2stringEntity, Block2flagEntity, BlockPermissionEntity,
       ChangeLogEntity, FetchLogEntity,
     ],
     subscribers: [],

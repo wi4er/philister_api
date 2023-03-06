@@ -1,9 +1,9 @@
 import { DataSource } from 'typeorm/data-source/DataSource';
 import { createConnection } from 'typeorm';
 import { createConnectionOptions } from '../../createConnectionOptions';
-import { BlockEntity } from './block.entity';
+import { BlockPermissionEntity } from './block-permission.entity';
 
-describe('Block entity', () => {
+describe('Block permission entity', () => {
   let source: DataSource;
 
   beforeAll(async () => {
@@ -13,22 +13,12 @@ describe('Block entity', () => {
   beforeEach(() => source.synchronize(true));
   afterAll(() => source.destroy());
 
-  describe('Block fields', () => {
+  describe('Block permission fields', () => {
     test('Should get empty list', async () => {
-      const repo = source.getRepository(BlockEntity);
+      const repo = source.getRepository(BlockPermissionEntity);
       const list = await repo.find();
 
       expect(list).toHaveLength(0);
-    });
-
-    test('Should create item', async () => {
-      const inst = new BlockEntity();
-      await inst.save();
-
-      expect(inst.created_at).toBeDefined();
-      expect(inst.updated_at).toBeDefined();
-      expect(inst.deleted_at).toBeNull();
-      expect(inst.version).toBe(1);
     });
   });
 });
